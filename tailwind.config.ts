@@ -22,11 +22,16 @@ const config: Config = {
         'brand-yellow': '#fcb427',
         'brand-yellow-27': '#fcb42742',
         'brand-dark-grey': '#474747',
-        'brand-dark': '#1a1a1a'
+        'brand-dark': '#1a1a1a',
+        'brand-aqua': '#00ffe0',
+        'brand-black-87': '#000000de'
+      },
+      backgroundImage:{
+        'hero-section-bg-desktop': "url('/images/hero_section_bg_desktop.avif')"
       },
       boxShadow:{
-        'headerShadowLeft': '0 30px 110px 50px rgba(158, 98, 255, 1)',
-        'headerShadowRight': '0 0 250px 100px rgba(158, 98, 255, 1)',
+        'headerShadowLeft': '0 30px 120px 50px rgba(158, 98, 255, 1)',
+        'headerShadowRight': '0 0 300px 110px rgba(158, 98, 255, 1)',
       },
       borderRadius:{
         '9': '0.56rem'

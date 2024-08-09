@@ -55,7 +55,7 @@ export const Header = () => {
     ]
     return (
         <React.Fragment>
-            <div className="max-w-screen-2xl mx-auto px-4 xs:px-[30px] md:px-[50px] pt-9 pb-6 w-full fixed top-0 left-0 right-0">
+            <div className="max-w-screen-2xl z-50 mx-auto px-4 xs:px-[30px] md:px-[50px] pt-9 pb-6 w-full fixed top-0 left-0 right-0">
                 <div className="flex justify-between items-center">
                     <Image src={logoWhite} alt="Logo Image" priority className="w-[97px]   sm:w-[125px] h-auto" />
                     <div className="flex justify-center items-center">
@@ -74,7 +74,7 @@ export const Header = () => {
                         <div className="hidden sm:flex  relative group/menu cursor-pointer items-center rounded-9 bg-transparent border  border-brand-purple py-2 px-3">
                             <Image src={ImgAvatar} alt="Avatar Image" className="mr-3  rounded-full border-white w-6  md:w-[30px] h-auto object-cover border-[0.5px]" />
                             <Image src={IconDropdown} alt="Dropdown Image" className="group-hover/menu:rotate-180 transition-all duration-500 max-md:w-[10px] h-auto " />
-                            <div className="absolute invisible transition-opacity duration-500 opacity-0 group-hover/menu:opacity-100 group-hover/menu:visible border border-brand-purple rounded-9 top-12 -left-24 z-10 w-44 py-5">
+                            <div className="absolute bg-brand-black-87 invisible transition-opacity duration-500 opacity-0 group-hover/menu:opacity-100 group-hover/menu:visible border border-brand-purple rounded-9 top-12 -left-24 z-[999] w-44 py-5">
                                 {
                                     menu.map((item, index) => {
                                         return (
@@ -96,7 +96,7 @@ export const Header = () => {
 
             </div>
             <div className={`fixed top-0 left-0 right-0 bottom-0 border-b border-b-brand-dark-grey bg-black backdrop-blur-md z-50 truncate bg-opacity-15 transition-[height] easy-in-out duration-700 ${openMobileMenu ? 'h-screen' : 'h-0'}`}>
-                <div className="py-12 px-7 overflow-y-auto h-full">
+                <div className="py-10 px-7 overflow-y-auto h-full">
                     <div className="flex justify-between mb-8 items-center">
                         <div className="flex items-center ">
                             <Image src={ImgAvatar} alt="Avatar Image" className="mr-3  rounded-full border-white w-6  md:w-[30px] h-auto object-cover border-[0.5px]" />
