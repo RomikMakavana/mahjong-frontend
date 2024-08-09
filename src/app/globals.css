@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255; */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0; */
+  }
+}
+
+@layer components {
+  .btn-text {
+   @apply text-white font-bold text-sm md:text-base
+  }
+  .scale-15{
+    transform: scale(1.1);
+  }
+
+  @keyframes fadein {
+    from {
+      opacity:0;
+    }
+    to {
+      opacity:1;
+    }
+  }
+
+  @keyframes fadeout {
+    from {
+      opacity:1;
+    }
+    to {
+      opacity:0;
+    }
+  }
+}
+
+@font-face {
+  font-family: 'satoshi';
+  font-weight: bold;
+  src: url("../assets/fonts/satoshi/Satoshi-Bold.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: 'satoshi';
+  font-weight: 500;
+  src: url("../assets/fonts/satoshi/Satoshi-Bold.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: 'satoshi';
+  font-weight: lighter;
+  src: url("../assets/fonts/satoshi/Satoshi-Light.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: 'satoshi';
+  font-weight: 400;
+  src: url("../assets/fonts/satoshi/Satoshi-Medium.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: 'satoshi';
+  src: url("../assets/fonts/satoshi/Satoshi-Regular.ttf") format("opentype");
+}
+
+body {
+padding: 0;
+margin: 0; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'satoshi', Arial, Helvetica, sans-serif !important
+}
+
+@layer utilities {
+  
+}
