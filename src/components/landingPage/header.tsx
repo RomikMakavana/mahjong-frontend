@@ -4,7 +4,7 @@ import Image from "next/image";
 import logoWhite from '@/assets/images/svg/logo_white.svg';
 import IconShuttle from '@/assets/images/svg/shuttle.svg';
 import IconShoppingBag from "@/assets/images/svg/shopping-bag.svg";
-import IconCoin from "@/assets/images/svg/coin.svg";
+import IconGraph from "@/assets/images/svg/graph.svg";
 import ImgAvatar from "@/assets/images/avatar.png";
 import IconDropdown from "@/assets/images/svg/dropdown.svg";
 import IconUser from "@/assets/images/svg/user.svg";
@@ -55,13 +55,13 @@ export const Header = () => {
     ]
     return (
         <React.Fragment>
-            <div className="max-w-screen-2xl z-50 mx-auto px-4 xs:px-[30px] md:px-[50px] pt-9 pb-6 w-full fixed top-0 left-0 right-0">
+            {/*   */}
+            <div className="section-wrapper z-50  pb-5 pt-6 sm:pt-[50px] sm:pb-[30px] md:pt-9 md:pb-5 w-full fixed top-0 left-0 right-0">
                 <div className="flex justify-between items-center">
                     <Image src={logoWhite} alt="Logo Image" priority className="w-[97px]   sm:w-[125px] h-auto" />
                     <div className="flex justify-center items-center">
-                        <button className="hidden sm:flex  items-center border border-brand-yellow bg-brand-yellow-27 py-[10px] rounded-9 mr-[14px] px-3">
-                            <Image src={IconCoin} alt="Icon Points" className="mr-2 w-5  md:w-[27px] h-auto" />
-                            <span className="btn-text">340 pts</span>
+                        <button className="hidden md:flex border border-dashed border-brand-purple rounded-9 p-[13px] mr-2">
+                            <Image src={IconGraph} alt="Graph Image"/>
                         </button>
                         <button className="hidden md:flex items-center border border-brand-purple rounded-9 mr-[14px] py-3 px-6">
                             <Image src={IconShoppingBag} alt="Icon Marketplace" className="mr-2" />
@@ -71,9 +71,9 @@ export const Header = () => {
                             <Image src={IconShuttle} alt="Icon Start Game" className="mr-2" />
                             <span className="btn-text">Start New Game</span>
                         </button>
-                        <div className="hidden sm:flex  relative group/menu cursor-pointer items-center rounded-9 bg-transparent border  border-brand-purple py-2 px-3">
-                            <Image src={ImgAvatar} alt="Avatar Image" className="mr-3  rounded-full border-white w-6  md:w-[30px] h-auto object-cover border-[0.5px]" />
-                            <Image src={IconDropdown} alt="Dropdown Image" className="group-hover/menu:rotate-180 transition-all duration-500 max-md:w-[10px] h-auto " />
+                        <div className="hidden sm:flex  relative group/menu cursor-pointer items-center rounded-9 bg-transparent ">
+                            <Image src={ImgAvatar} alt="Avatar Image" className="mr-3  rounded-full border-white w-11 h-auto object-cover border-[0.5px]" />
+                            <Image src={IconDropdown} alt="Dropdown Image" className="group-hover/menu:rotate-180 transition-all duration-500  " />
                             <div className="absolute bg-brand-black-87 invisible transition-opacity duration-500 opacity-0 group-hover/menu:opacity-100 group-hover/menu:visible border border-brand-purple rounded-9 top-12 -left-24 z-[999] w-44 py-5">
                                 {
                                     menu.map((item, index) => {

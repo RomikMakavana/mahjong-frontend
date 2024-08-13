@@ -17,11 +17,27 @@
 }
 
 @layer components {
+  .scrolls::-webkit-scrollbar-track {
+    @apply rounded-lg bg-[#393939];
+  }
+  .scrolls::-webkit-scrollbar {
+    @apply w-[3px] h-[3px];
+  }
+  .scrolls::-webkit-scrollbar-thumb {
+    @apply rounded-lg bg-[#515151] transition-colors duration-1000;
+  }
+  .scrolls::-webkit-scrollbar-thumb:hover {
+    @apply bg-[#515151];
+  }
+
   .btn-text {
    @apply text-white font-bold text-sm md:text-base
   }
   .scale-15{
     transform: scale(1.1);
+  }
+  .section-wrapper {
+    @apply max-w-screen-2xl  mx-auto px-4 xs:px-[30px] md:px-[50px]
   }
 
   @keyframes fadein {
@@ -51,20 +67,26 @@
 
 @font-face {
   font-family: 'satoshi';
-  font-weight: 500;
+  font-weight: 700;
   src: url("../assets/fonts/satoshi/Satoshi-Bold.ttf") format("opentype");
 }
 
 @font-face {
   font-family: 'satoshi';
-  font-weight: lighter;
+  font-weight: 300;
   src: url("../assets/fonts/satoshi/Satoshi-Light.ttf") format("opentype");
 }
 
 @font-face {
   font-family: 'satoshi';
-  font-weight: 400;
+  font-weight: 500;
   src: url("../assets/fonts/satoshi/Satoshi-Medium.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: 'satoshi';
+  font-weight: 400;
+  src: url("../assets/fonts/satoshi/Satoshi-Regular.ttf") format("opentype");
 }
 
 @font-face {
