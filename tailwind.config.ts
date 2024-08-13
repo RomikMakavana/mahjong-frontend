@@ -18,6 +18,7 @@ const config: Config = {
       },
       colors:{
         'brand-blue': '#5500df',
+        'light-blue': '#9553FF',
         'brand-purple': '#604685',
         'brand-yellow': '#fcb427',
         'brand-yellow-27': '#fcb42742',
@@ -43,6 +44,7 @@ const config: Config = {
       boxShadow:{
         'headerShadowLeft': '0 30px 120px 50px rgba(158, 98, 255, 1)',
         'headerShadowRight': '0 0 300px 110px rgba(158, 98, 255, 1)',
+        'purpleShadow': '0px 20px 44.9px 0px rgba(63, 0, 166, 0.17)',  
       },
       borderRadius:{
         '9': '0.56rem'
