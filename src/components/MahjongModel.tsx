@@ -28,11 +28,11 @@ export default function MahjongModel(props: Props) {
     } = props;
 
     return (
-        <div onClick={closeModel} className="fixed z-10 bg-black bg-opacity-80 backdrop-blur inset-0 overflow-y-auto h-screen animate-[fadein_1s_forwards]">
-            <div className="absolute z-10 inset-0 flex items-center justify-center flex-col">
+        <div onClick={closeModel} className="fixed z-[1000] bg-black bg-opacity-80 backdrop-blur inset-0 overflow-y-auto h-screen animate-[fadein_1s_forwards]">
+            <div className="absolute z-[1000] inset-0 flex items-center justify-center flex-col">
                 <div
                     onClick={(e) => e.stopPropagation()}
-                    className="border border-neutral-700 p-5 shadow-purpleShadow bg-[#131313] rounded-3xl overflow-auto max-w-[calc(100%_-_3rem)] max-h-[calc(100%_-_18rem)] flex flex-col"
+                    className="border border-neutral-700 p-5 shadow-purpleShadow bg-[#131313] rounded-3xl overflow-auto max-w-[calc(100%_-_54px)] max-h-[calc(100%_-_18rem)] flex flex-col"
                     style={{ width, height, minWidth, backgroundColor: bgColor, minHeight }}
                 >
                     {children}
