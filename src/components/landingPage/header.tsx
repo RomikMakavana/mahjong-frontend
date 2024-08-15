@@ -12,12 +12,24 @@ import IcoNetwork from "@/assets/images/svg/network.svg";
 import IconLanguage from "@/assets/images/svg/language.svg";
 import IconMatchHistory from "@/assets/images/svg/file.svg";
 import IconMenu from "@/assets/images/svg/menu.svg"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconClose from "@/assets/images/svg/close.svg";
+import google_logo from "@/assets/images/svg/google_logo.svg";
+import MahjongModel from "../MahjongModel";
+import InputField from "../InputField";
+import PrimaryButton from "../PrimaryButton";
+import { AuthService } from "@/services/firebase/auth";
 
 export const Header = () => {
 
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
+
+    const [openSignInModel, setOpenSignInModel] = useState(false);
+    const [openSignUpModel, setOpenSignUpModel] = useState(false);
+    const [openVerificationModel, setOpenVerificationModel] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const menu: { label: string, icon: string, alt: string, action: () => void }[] = [
         {
@@ -53,6 +65,70 @@ export const Header = () => {
             }
         }
     ]
+
+    const signInUser = () => {
+        setEmail('');
+        setPassword('');
+        setOpenSignInModel(false);
+        setOpenSignUpModel(false);
+        setOpenVerificationModel(true);
+    }
+
+    const userRegister = () => {
+        setOpenSignInModel(false);
+        setOpenSignUpModel(false);
+        setOpenVerificationModel(true);
+    }
+
+    const closeModal = () => {
+        setOpenSignInModel(false);
+        setOpenSignUpModel(false);
+        setOpenVerificationModel(false);
+    }
+
+    const loginWithGoogle = async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        try {
+            const res = await AuthService.googleSignIn()
+            if (res.status) {
+                closeModal();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        checkIsLoggedIn();
+    }, []);
+
+    const checkIsLoggedIn = async () => {
+        try {
+            const res = await AuthService.getProfile();
+            if (!res) {
+                setIsLoggedIn(false);
+            } else {
+                setIsLoggedIn(true);
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    const logout = async () => {
+        try {
+            const res = await AuthService.logout();
+            if(res.status){
+                setIsLoggedIn(false);
+                setOpenMobileMenu(false);
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
     return (
         <React.Fragment>
             {/*   */}
@@ -61,7 +137,7 @@ export const Header = () => {
                     <Image src={logoWhite} alt="Logo Image" priority className="w-[97px]   sm:w-[125px] h-auto" />
                     <div className="flex justify-center items-center">
                         <button className="hidden md:flex border border-dashed border-brand-purple rounded-9 p-[13px] mr-2">
-                            <Image src={IconGraph} alt="Graph Image"/>
+                            <Image src={IconGraph} alt="Graph Image" />
                         </button>
                         <button className="hidden md:flex items-center border border-brand-purple rounded-9 mr-[14px] py-3 px-6">
                             <Image src={IconShoppingBag} alt="Icon Marketplace" className="mr-2" />
@@ -85,6 +161,16 @@ export const Header = () => {
 
                                         )
                                     })
+                                }
+                                {
+                                    isLoggedIn ?
+                                        <button onClick={logout} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
+                                            <span className="btn-text text-sm">Logout</span>
+                                        </button>
+                                        :
+                                        <button onClick={() => setOpenSignInModel(true)} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
+                                            <span className="btn-text text-sm">Login</span>
+                                        </button>
                                 }
                             </div>
                         </div>
@@ -121,11 +207,94 @@ export const Header = () => {
                                 )
                             })
                         }
+                        {
+                            isLoggedIn ?
+                                <button onClick={logout} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
+                                    <span className="btn-text text-sm">Logout</span>
+                                </button>
+                                :
+                                <button onClick={() => setOpenSignInModel(true)} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
+                                    <span className="btn-text text-sm">Login</span>
+                                </button>
+                        }
                     </div>
 
                 </div>
 
             </div>
+            {openSignInModel || openSignUpModel || openVerificationModel ? <MahjongModel width="363px" showCloseBtn={true} closeModel={closeModal}>
+                {/* Sign In Pop up */}
+                {openSignInModel &&
+                    <form onSubmit={signInUser}>
+                        <div className="animate-[fadein_1s_forwards]">
+                            <h2 className="text-center text-2xl font-[500]">Sign In</h2>
+                            <div className="mt-5 mb-6 flex flex-col gap-[10px]">
+                                <InputField type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                                <InputField type="password" minLength={8} placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+                                <p className="text-right text-sm font-[500px] underline text-white opacity-70">Forgot password</p>
+                            </div>
+                            <div className="flex flex-col">
+                                <PrimaryButton label="Continue" isDisabled={password.length < 8 && !email.length} />
+                                <p className="text-center text-lg font-thin mt-[10px]">Or</p>
+                                <button type="button" onClick={loginWithGoogle} className="border py-3 rounded-[10px] border-neutral-800 mt-[10px]">
+                                    <span className="flex gap-1 justify-center">
+                                        <Image src={google_logo} alt="Google Icon" className="w-[26px] mr-3" />
+                                        <p className="font-[500] text-lg">Signin with Google</p>
+                                    </span>
+                                </button>
+                                <span className="text-center mt-6 font-thin text-[16px]">
+                                    <span className="opacity-70">Dont have an account?</span> <span onClick={() => { setOpenSignInModel(false); setOpenSignUpModel(true) }} className="underline cursor-pointer text-light-blue font-[500] opacity-100">Sign Up</span>
+                                </span>
+                            </div>
+
+                        </div>
+                    </form>
+                }
+
+                {/* Register */}
+                {openSignUpModel &&
+                    <form onSubmit={userRegister}>
+                        <div className="animate-[fadein_1s_forwards]">
+                            <h2 className="text-center text-2xl font-[500]">Register</h2>
+                            <div className="mt-5 mb-6">
+                                <InputField type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                            <div className="flex flex-col">
+                                <PrimaryButton label="Continue" isDisabled={!email.length} />
+                                <p className="text-center text-lg font-thin mt-[10px]">Or</p>
+                                <button className="border py-3 rounded-[10px] border-neutral-800 mt-[10px]">
+                                    <span className="flex gap-1 justify-center">
+                                        <Image src={google_logo} alt="Google Icon" className="w-[26px] mr-3" />
+                                        <p className="font-[500] text-lg">Signin with Google</p>
+                                    </span>
+                                </button>
+                                <span className="text-center mt-6 font-thin text-[16px]">
+                                    <span className="opacity-70">Already a user?</span> <span onClick={() => { setOpenSignInModel(true); setOpenSignUpModel(false) }} className="underline cursor-pointer text-light-blue font-[500] opacity-100">Sign In</span>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                }
+
+                {openVerificationModel &&
+                    <div className="animate-[fadein_1s_forwards]">
+                        <div className="text-center">
+                            <h2 className="font-bold text-xl">
+                                Check your email
+                            </h2>
+                            <p className="text-sm font-thin mt-[10px] mb-6">
+                                To continue, enter the code we just sent to dakshjoshi@gmail.com
+                            </p>
+                        </div>
+                        <div className="">
+                            <InputField type="text" />
+                            <div className="mt-3">
+                                <PrimaryButton label="Continue" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </MahjongModel> : <></>}
         </React.Fragment>
     )
 }
