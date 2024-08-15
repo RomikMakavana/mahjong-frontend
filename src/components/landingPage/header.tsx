@@ -66,6 +66,11 @@ export const Header = () => {
         }
     ]
 
+    useEffect(() => {
+        setEmail('');
+        setPassword('');
+    },[openSignInModel, openSignUpModel])
+
     const signInUser = () => {
         setEmail('');
         setPassword('');
@@ -74,11 +79,11 @@ export const Header = () => {
         setOpenVerificationModel(true);
     }
 
-    const userRegister = () => {
-        setOpenSignInModel(false);
-        setOpenSignUpModel(false);
-        setOpenVerificationModel(true);
-    }
+    // const userRegister = () => {
+    //     setOpenSignInModel(false);
+    //     setOpenSignUpModel(false);
+    //     setOpenVerificationModel(true);
+    // }
 
     const closeModal = () => {
         setOpenSignInModel(false);
@@ -122,6 +127,25 @@ export const Header = () => {
             if(res.status){
                 setIsLoggedIn(false);
                 setOpenMobileMenu(false);
+            }
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+    const registerUser = async (e) => {
+        e.preventDefault()
+        try {
+            const res = await AuthService.createUser(email, password);
+            if(res.status){
+                setOpenSignUpModel(false);
+                setOpenSignInModel(true);
+            }else {
+                if(res.message === 'auth/email-already-in-use'){
+                    console.log('email is already in use.');
+                    
+                }
             }
         } catch (error) {
             console.log(error);
@@ -253,14 +277,17 @@ export const Header = () => {
 
                 {/* Register */}
                 {openSignUpModel &&
-                    <form onSubmit={userRegister}>
+                    <form onSubmit={registerUser}>
                         <div className="animate-[fadein_1s_forwards]">
                             <h2 className="text-center text-2xl font-[500]">Register</h2>
                             <div className="mt-5 mb-6">
                                 <InputField type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                                <div className="mt-[10px]">
+                                <InputField type="password" minLength={8} placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
+                                </div>
                             </div>
                             <div className="flex flex-col">
-                                <PrimaryButton label="Continue" isDisabled={!email.length} />
+                                <PrimaryButton label="Continue" isDisabled={password.length < 8 && !email.length} />
                                 <p className="text-center text-lg font-thin mt-[10px]">Or</p>
                                 <button className="border py-3 rounded-[10px] border-neutral-800 mt-[10px]">
                                     <span className="flex gap-1 justify-center">

@@ -10,6 +10,7 @@ import InputField from "@/components/InputField";
 import PrimaryButton from "@/components/PrimaryButton";
 import google_logo from "@/assets/images/svg/google_logo.svg";
 import Image from "next/image";
+import TaskCenterModel from "@/components/Models/TaskCenterModel";
 
 export default function Home() {
 
@@ -120,7 +121,7 @@ export default function Home() {
             </div>
           </div>
         }
-      </MahjongModel> : <></>}
+      </MahjongModel> : <><TaskCenterModel/></>}
     </div>
   );
 }

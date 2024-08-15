@@ -32,14 +32,14 @@ export default function MahjongModel(props: Props) {
             <div className="absolute z-[1000] inset-0 flex items-center justify-center flex-col">
                 <div
                     onClick={(e) => e.stopPropagation()}
-                    className="border border-neutral-700 p-5 shadow-purpleShadow bg-[#131313] rounded-3xl overflow-auto max-w-[calc(100%_-_54px)] max-h-[calc(100%_-_18rem)] flex flex-col"
+                    className="border border-neutral-700 p-5 m-5 shadow-purpleShadow bg-[#131313] rounded-3xl overflow-auto max-w-[calc(100%_-_2rem)]  max-h-[calc(100vh_-_5rem)] flex flex-col"
                     style={{ width, height, minWidth, backgroundColor: bgColor, minHeight }}
                 >
                     {children}
                 </div>
                 {
                     showCloseBtn &&
-                    <div className="h-full absolute">
+                    <div className="h-fit hidden lg:block  bottom-12 absolute">
                         <div className="relative flex flex-col justify-end h-[calc(100%_-_5rem)]">
                             <button onClick={closeModel} className="rounded-full p-5 outline-none bg-brand-dark">
                                 <Image src={IconClose} alt="Close Icon" className="w-5" />

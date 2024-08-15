@@ -22,7 +22,8 @@ import {
   interface AuthserviceType {
     googleSignIn: () => Promise<{ status: boolean, message: string, user: AuthDetails | null }>,
     getProfile: () => Promise<User | false>,
-    logout: () => Promise<{ status: boolean, message: string }>
+    logout: () => Promise<{ status: boolean, message: string }>,
+    createUser: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
   }
 
   const AuthService: AuthserviceType = {
@@ -75,6 +76,29 @@ import {
             .catch((err) => {
               console.log(err);
               resolve({ status: true, message: "Logged out successfully." });
+            });
+        });
+      },
+
+      createUser(email, password) {
+        return new Promise((resolve) => {
+          const fauth: Auth = getAuth(firebase);
+          createUserWithEmailAndPassword(fauth, email, password)
+            .then(async (userCredential: UserCredential) => {
+              resolve({
+                status: true,
+                message: "Created Successfully",
+                isVerifiedEmail: userCredential.user.emailVerified,
+                user: userCredential.user,
+              });
+            })
+            .catch((error) => {
+              resolve({
+                status: false,
+                message: error.code,
+                isVerifiedEmail: false,
+                user: null,
+              });
             });
         });
       },
