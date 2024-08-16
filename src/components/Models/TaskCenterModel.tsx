@@ -13,6 +13,7 @@ import fourthBadge from "@/assets/images/badgeIcons/4.png";
 import fifthBadge from "@/assets/images/badgeIcons/5.png";
 import sixthBadge from "@/assets/images/badgeIcons/6.png";
 import trophy from "@/assets/images/svg/trophy.svg"
+import { StaticImageData } from "next/image";
 
 type TaskStatus = "inProgress" | "claimed";
 type TaskMethod = "points" | "badge";
@@ -31,16 +32,14 @@ interface Task {
     TaskType: TaskType;
 }
 
-interface badges {
-
+interface Badge {
+    name: string;
+    pointBooster: string;
+    icon: StaticImageData; // Type for the imported image
 }
 
-const matchPercentage = (completedMatches: number, totalMatches: number) => {
-    return (completedMatches / totalMatches) * 100;
-};
-
 export default function TaskCenterModel() {
-
+    
     const [tasks, setTasks] = useState<Task[]>([
         {
             id: 1,
@@ -105,59 +104,62 @@ export default function TaskCenterModel() {
         }
     ]);
 
-    const [badges, setBadges] = useState([
+    const [badges, setBadges] = useState<Badge[]>([
         {
-            name : "Legend",
-            pointBooster : "1.2 daily point booster",
-            icon : firstBadge
+            name: "Legend",
+            pointBooster: "1.2 daily point booster",
+            icon: firstBadge
         },
         {
-            name : "Legend",
-            pointBooster : "1.2 daily point booster",
-            icon : secondBadge
+            name: "Legend",
+            pointBooster: "1.2 daily point booster",
+            icon: secondBadge
         },
         {
-            name : "Legend",
-            pointBooster : "1.2 daily point booster",
-            icon : thirdBadge
+            name: "Legend",
+            pointBooster: "1.2 daily point booster",
+            icon: thirdBadge
         },
         {
-            name : "Legend",
-            pointBooster : "1.2 daily point booster",
-            icon : fourthBadge
+            name: "Legend",
+            pointBooster: "1.2 daily point booster",
+            icon: fourthBadge
         },
         {
-            name : "Legend",
-            pointBooster : "1.2 daily point booster",
-            icon : sixthBadge
+            name: "Legend",
+            pointBooster: "1.2 daily point booster",
+            icon: sixthBadge
         },
         {
-            name : "Legend",
-            pointBooster : "1.2 daily point booster",
-            icon : fifthBadge
+            name: "Legend",
+            pointBooster: "1.2 daily point booster",
+            icon: fifthBadge
         }
     ]);
 
+    const matchPercentage = (completedMatches: number, totalMatches: number) => {
+        return (completedMatches / totalMatches) * 100;
+    };
+    
     return (
         <MahjongModel width="562px">
             <div className="flex flex-col h-full justify-between relative">
-                <div className="flex justify-between mb-5">
-                    <h2 className="text-xl font-[500]">Task Center</h2>
+                <div className="xs:flex justify-between mb-5">
+                    <h2 className="text-xl font-medium">Task Center</h2>
                     <span className="flex items-center group/badge-advantages">
                         <Image src={info} alt="Info" className="w-[14px]" />
-                        <a href="#" className="ml-[10px] underline text-xs text-brand-yellow ">Badge Advantages</a>
-                        <div className="absolute right-0 top-8 bg-brand-black-87 w-fit invisible transition-opacity opacity-0 group-hover/badge-advantages:opacity-100 group-hover/badge-advantages:visible border border-brand-purple rounded-9 py-5">
-                            <h2>Badge Advantages</h2>
+                        <a href="#" className="ml-[10px] underline text-xs text-brand-yellow">Badge Advantages</a>
+                        <div className="absolute shadow-purpleShadow delay-75 z-50 right-0 max-xs:left-0 top-8 max-xs:top-14 p-5 bg-cursed-black w-fit invisible opacity-0 group-hover/badge-advantages:opacity-100 group-hover/badge-advantages:visible border border-white border-opacity-15 rounded-9 py-5">
+                            <h2 className="font-semibold text-lg">Badge Advantages</h2>
                             {
                                 badges.map((badge, index) => (
-                                    <div key={index}>
-                                         <Image src={badge.icon} alt={badge.name} className="w-5" />
-                                         <p>{badge.name}</p>
-                                         <span>
-
-                                         <Image src={trophy} alt="Trophy" className="w-5" />
-                                            <p>{badge.pointBooster}</p>
-                                         </span>
+                                    <div key={index} className="flex mt-5 items-center">
+                                        <Image src={badge.icon} alt={badge.name} className="w-5" />
+                                        <p className="ml-2 text-base max-xs:text-xs ">{badge.name}</p>
+                                        <span className="flex xs:ml-[67px] max-xs:ml-[48px]">
+                                            <Image src={trophy} alt="Trophy" className="w-5" />
+                                            <p className="ml-2 text-base max-xs:text-xs">{badge.pointBooster}</p>
+                                        </span>
                                     </div>
                                 ))
                             }
