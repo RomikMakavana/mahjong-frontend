@@ -66,6 +66,7 @@ export default function Home() {
             const res = await AuthService.googleSignIn()
             if (res.status) {
                 closeModal();
+                setIsLoggedIn(true);
             }
         } catch (error) {
             console.log(error);

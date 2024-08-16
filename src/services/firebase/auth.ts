@@ -170,23 +170,12 @@ import {
     sendResetPasswordLink(email:string){
       return new Promise(async (resolve) => {
         try {
-          const user = await fetchSignInMethodsForEmail(fauth, email);
-          if(user.length > 0){
-            try {
-              await sendPasswordResetEmail(fauth, email, {
-                url: window.location.origin,
-                  handleCodeInApp: true
-              })
-              resolve({status: true, message: 'Password reset email sent! Check your inbox.'})
-            } catch (error) {
-              resolve ({status:false, message: 'Something went wrong.'})
-            }
-          }else {
-            resolve({status: false, message: 'User does not exist.'})
-          }
-          
+          await sendPasswordResetEmail(fauth, email, {
+            url: window.location.origin,
+              handleCodeInApp: true
+          })
+          resolve({status: true, message: 'Password reset email sent! Check your inbox.'})
         } catch (error) {
-          console.log(error);
           resolve ({status:false, message: 'Something went wrong.'})
         }
         
