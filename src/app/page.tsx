@@ -1,8 +1,8 @@
 "use client"
 
-import { Header } from "@/components/landingPage/header";
+import { Header } from "@/components/landingPage/Header";
 import React, { useEffect, useState } from "react";
-import { HeroSection } from "@/components/landingPage/heroSection";
+import { HeroSection } from "@/components/landingPage/HeroSection";
 import { ClaimFreePoints } from "@/components/landingPage/ClaimFreePoints";
 import { TournamentAndLeaderBoard } from "@/components/landingPage/TournamentAndLeaderBoard";
 import MahjongModel from "@/components/MahjongModel";
@@ -196,8 +196,6 @@ export default function Home() {
     return (
         <React.Fragment>
             <div className=" text-white flex flex-col h-screen">
-                <div className="invisible md:visible fixed top-0 left-0 shadow-headerShadowLeft"></div>
-                <div className="invisible md:visible fixed top-0 right-0 shadow-headerShadowRight"></div>
                 <div className="bg-black flex-1 ">
                     <Header
                         startNewGame={startNewGame}

@@ -12,7 +12,7 @@ import IcoNetwork from "@/assets/images/svg/network.svg";
 import IconLanguage from "@/assets/images/svg/language.svg";
 import IconMatchHistory from "@/assets/images/svg/file.svg";
 import IconMenu from "@/assets/images/svg/menu.svg"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconClose from "@/assets/images/svg/close.svg";
 import { AuthService } from "@/services/firebase/auth";
 
@@ -22,14 +22,15 @@ interface HeaderProps {
     startNewGame: () => void;
     sendEmailVerificationLink: () => void;
     isLoggedIn: boolean;
-    setIsLoggedIn: (value:boolean) => void
+    setIsLoggedIn: (value: boolean) => void
 }
 
 export const Header = (props: HeaderProps) => {
 
-    const [openMobileMenu, setOpenMobileMenu] = useState(false);  
-    
-    const {notification} = useNotifications();
+    const [openMobileMenu, setOpenMobileMenu] = useState(false);
+    const [scrollPosition, setScrollPosition] = useState<number | null>(null)
+
+    const { notification } = useNotifications();
 
     const menu: { label: string, icon: string, alt: string, action: () => void }[] = [
         {
@@ -73,20 +74,34 @@ export const Header = (props: HeaderProps) => {
                 props.setIsLoggedIn(false);
                 setOpenMobileMenu(false);
                 notification("Logged out successfully.", 'success');
-            }else {
+            } else {
                 notification("something went wrong", 'error');
             }
         } catch (error) {
             console.log(error);
-    
+
         }
     }
+
+    const updateScroll = () => {
+        setScrollPosition(window.scrollY);
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', updateScroll);
+
+        return (() => {
+            window.removeEventListener('scroll', updateScroll);
+        })
+    })
 
 
     return (
         <React.Fragment>
             {/*   */}
-            <div className="section-wrapper z-50  pb-5 pt-6 sm:pt-[50px] sm:pb-[30px] md:pt-9 md:pb-5 w-full fixed top-0 left-0 right-0">
+            <div className={`transition-opacity duration-300 fixed top-0 left-0 shadow-headerShadowLeft ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'opacity-0' : 'opacity-0 md:opacity-100'}`}></div>
+            <div className={` transition-opacity duration-300  fixed top-0 right-0 shadow-headerShadowRight ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'opacity-0' : 'opacity-0 md:opacity-100'}`}></div>
+            <header className={`section-wrapper z-50 border-b border-transparent pb-5 pt-6 sm:pt-[50px] transition-all duration-300 sm:pb-[30px] md:pt-9 md:pb-5 w-full fixed top-0 left-0 right-0 ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'bg-black  border-brand-dark-grey' : ''}`}>
                 <div className="flex justify-between items-center">
                     <Image src={logoWhite} alt="Logo Image" priority className="w-[97px]   sm:w-[125px] h-auto" />
                     <div className="flex justify-center items-center">
@@ -118,9 +133,9 @@ export const Header = (props: HeaderProps) => {
                                 }
                                 {
                                     props.isLoggedIn &&
-                                        <button onClick={logout} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
-                                            <span className="btn-text text-sm">Logout</span>
-                                        </button>
+                                    <button onClick={logout} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
+                                        <span className="btn-text text-sm">Logout</span>
+                                    </button>
                                 }
                             </div>
                         </div>
@@ -130,7 +145,7 @@ export const Header = (props: HeaderProps) => {
                     </div>
                 </div>
 
-            </div>
+            </header>
             <div className={`fixed top-0 left-0 right-0 bottom-0 border-b border-b-brand-dark-grey bg-black backdrop-blur-md z-50 truncate bg-opacity-15 transition-[height] easy-in-out duration-700 ${openMobileMenu ? 'h-screen' : 'h-0'}`}>
                 <div className="py-10 px-7 overflow-y-auto h-full">
                     <div className="flex justify-between mb-8 items-center">
@@ -159,16 +174,16 @@ export const Header = (props: HeaderProps) => {
                         }
                         {
                             props.isLoggedIn &&
-                                <button onClick={logout} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
-                                    <span className="btn-text text-sm">Logout</span>
-                                </button>
+                            <button onClick={logout} className="rounded-9 bg-brand-blue px-5 py-2 mt-2 mx-5">
+                                <span className="btn-text text-sm">Logout</span>
+                            </button>
                         }
                     </div>
 
                 </div>
 
             </div>
-            
+
         </React.Fragment>
     )
 }
