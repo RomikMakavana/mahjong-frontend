@@ -39,6 +39,31 @@
   .section-wrapper {
     @apply max-w-screen-2xl  mx-auto px-4 xs:px-[30px] md:px-[50px]
   }
+  .embla__dot {
+    @apply inline-flex items-center justify-center bg-transparent touch-manipulation cursor-pointer border-0 p-0 m-0 w-[17px] h-[2px] rounded-[10px] mx-[5px]
+  }
+
+  .notification {
+    @apply fixed -translate-x-2/4 text-base sm:text-lg font-semibold   text-white opacity-0 transition-opacity duration-[1s] ease-[ease-in-out] z-[1000] py-3 px-4 rounded-[5px] left-2/4 top-5;
+  }
+  .notification.slide-in {
+    @apply animate-[slideIn_1s_forwards] opacity-100;
+  }
+  .notification.slide-out {
+    @apply animate-[slideOut_1s_forwards] opacity-0;
+  }
+
+  .embla__dot:after {
+    background-color: #404040;
+    width: 17px;
+    height: 2px;
+    display: flex;
+    align-items: center;
+    content: '';
+  }
+  .embla__dot--selected:after {
+    background-color: #914EFD;
+  }
 
   @keyframes fadein {
     from {
@@ -55,6 +80,23 @@
     }
     to {
       opacity:0;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      @apply top-[-50px] opacity-0;
+    }
+    to {
+      @apply opacity-100 top-[90px];
+    }
+  }
+  @keyframes slideOut {
+    from {
+      @apply opacity-100 top-[90px];
+    }
+    to {
+      @apply top-[-50px] opacity-0;
     }
   }
 }
@@ -105,3 +147,7 @@ margin: 0;
 @layer utilities {
   
 }
+
+
+
+

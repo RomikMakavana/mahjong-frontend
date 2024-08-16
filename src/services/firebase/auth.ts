@@ -11,6 +11,8 @@ import {
     signInWithEmailAndPassword,
     sendEmailVerification,
     UserCredential,
+    sendPasswordResetEmail,
+    fetchSignInMethodsForEmail,
     EmailAuthProvider,
     updatePassword,
     reauthenticateWithCredential
@@ -24,6 +26,9 @@ import {
     getProfile: () => Promise<User | false>,
     logout: () => Promise<{ status: boolean, message: string }>,
     createUser: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
+    login: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
+    sendEmailVerificationLink: () => Promise<{ status: boolean, message: string }>,
+    sendResetPasswordLink: (email:string) => Promise<{status: boolean, message: string}>
   }
 
   const AuthService: AuthserviceType = {
@@ -66,6 +71,7 @@ import {
             })
         })
      },
+
      logout() {
         return new Promise((resolve) => {
           fauth
@@ -113,7 +119,79 @@ import {
               }
             });
           });
-     }
+     },
+
+     login(email, password) {
+      return new Promise((resolve) => {
+        signInWithEmailAndPassword(fauth, email, password)
+          .then(async (userCredential) => {
+            const user = userCredential.user;
+            if (user.emailVerified) {
+              resolve({
+                status: true,
+                isVerifiedEmail: true,
+                message: "logging sussessfully",
+                user: user,
+              });
+            } else {
+              resolve({
+                status: true,
+                isVerifiedEmail: false,
+                message: "logging sussessfully",
+                user: user,
+              });
+            }
+          })
+          .catch((error) => {
+            resolve({
+              status: false,
+              isVerifiedEmail: false,
+              message: error.code,
+              user: null,
+            });
+          });
+      });
+    },
+
+    sendEmailVerificationLink() {
+      return new Promise(async (resolve) => {
+        AuthService.getProfile().then(async (res) => {
+          if (res !== false) {
+            await sendEmailVerification(res, {
+              url: window.location.origin,
+              handleCodeInApp: true
+            });
+          }
+        })
+        resolve({ status: false, message: "userVerified" });
+      });
+    },
+
+    sendResetPasswordLink(email:string){
+      return new Promise(async (resolve) => {
+        try {
+          const user = await fetchSignInMethodsForEmail(fauth, email);
+          if(user.length > 0){
+            try {
+              await sendPasswordResetEmail(fauth, email, {
+                url: window.location.origin,
+                  handleCodeInApp: true
+              })
+              resolve({status: true, message: 'Password reset email sent! Check your inbox.'})
+            } catch (error) {
+              resolve ({status:false, message: 'Something went wrong.'})
+            }
+          }else {
+            resolve({status: false, message: 'User does not exist.'})
+          }
+          
+        } catch (error) {
+          console.log(error);
+          resolve ({status:false, message: 'Something went wrong.'})
+        }
+        
+      })
+    }
   }
 
   export {AuthService, firebase}

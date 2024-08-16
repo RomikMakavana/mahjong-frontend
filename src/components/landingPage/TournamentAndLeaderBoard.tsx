@@ -1,13 +1,19 @@
 "use client"
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { TournamentStat } from "@/interfaces";
 import IconMahjong from "@/assets/images/svg/mahjong.svg";
 import IconMultipleUsers from "@/assets/images/svg/multiple_users.svg";
 import IconCalender from "@/assets/images/svg/calendar.svg";
 import Image from "next/image";
+import { DotButton, useButton } from '@/components/CarouselButton';
+import useEmblaCarousel from 'embla-carousel-react';
+
 
 export const TournamentAndLeaderBoard = () => {
+
+    const [emblaRef, emblaApi] = useEmblaCarousel({loop:true})
+    const { selectedIndex, scrollSnaps, onButtonClick } = useButton(emblaApi)
 
     const [tournamentStats, setTournamentStats] = useState<TournamentStat[]>([
         {
@@ -33,31 +39,67 @@ export const TournamentAndLeaderBoard = () => {
     ]);
 
     return (
-        <div className="section-wrapper py-5">
-            <h6 className="text-lg font-bold">Tournament stats</h6>
-            <div className=" bg-tournament-bg bg-no-repeat rounded-9 bg-cover pt-[22px] mt-[10px] px-5 ">
-                <div className="flex overflow-y-auto scrolls">
-                    {
-                        tournamentStats.map((stat, index) => {
-                            return (
-                                <div key={index} className="border-r mb-[22px] flex items-center text-nowrap  border-brand-spanish-gray-8  w-full last:border-0 mx-4 first:ml-0 last:mr-0">
-                                    <div className="w-11 h-11 flex justify-center items-center border border-brand-white-7 rounded-lg mr-4">
-                                        <Image src={stat.icon} alt="Tournament Icon" />
-                                    </div>
-                                    <div className="mr-9">
-                                        <p className=" text-[#fffc] text-sm font-normal">{stat.label}</p>
-                                        <p className="text-white font-bold text-lg">{stat.value}</p>
-                                    </div>
+        <React.Fragment>
+            <div className="section-wrapper py-5">
+                <h6 className="text-lg font-bold">Tournament stats</h6>
+                <div className="hidden xs:block bg-tournament-bg bg-no-repeat rounded-9 bg-cover pt-[22px] mt-[10px] px-5 ">
+                    <div className="flex overflow-y-auto scrolls">
+                        {
+                            tournamentStats.map((stat, index) => {
+                                return (
+                                    <div key={index} className="border-r mb-[22px] flex items-center text-nowrap  border-brand-spanish-gray-8  w-full last:border-0 mx-4 first:ml-0 last:mr-0">
+                                        <div className="w-11 h-11 flex justify-center items-center border border-brand-white-7 rounded-lg mr-4">
+                                            <Image src={stat.icon} alt="Tournament Icon" />
+                                        </div>
+                                        <div className="mr-9">
+                                            <p className=" text-[#fffc] text-sm font-normal">{stat.label}</p>
+                                            <p className="text-white font-bold text-lg">{stat.value}</p>
+                                        </div>
 
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-                <div>
-
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+            <section className="m-auto xs:hidden">
+                <div className="overflow-hidden" ref={emblaRef}>
+                    <div className="flex touch-pan-y touch-pinch-zoom -ml-4">
+                        {tournamentStats.map((stat, index) => (
+                            <div className="transform translate-x-0 translate-y-0 translate-z-0 flex-none flex-grow-[0] flex-shrink-[0] basis-[70%] min-w-0 pl-4" key={index}>
+                                <div className="bg-gradient-to-r from-[#474747] to-[#000000] rounded-[9px] p-[1px] h-full">
+                                <div className="min-w-[190px] xs:min-w-[265px] h-full bg-[#001924] rounded-[9px] p-5 text-[4rem] font-semibold flex items-center justify-center select-none">
+                                    <div key={index} className="border-r  flex items-center   border-brand-spanish-gray-8  w-full last:border-0 mx-4 first:ml-0 last:mr-0">
+                                        <div className="min-w-11 min-h-11 flex justify-center items-center border border-brand-white-7 rounded-lg mr-2">
+                                            <Image src={stat.icon} alt="Tournament Icon" />
+                                        </div>
+                                        <div className="">
+                                            <p className=" text-[#fffc] text-sm font-normal">{stat.label}</p>
+                                            <p className="text-white font-bold text-sm">{stat.value}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="flex items-center justify-center gap-[1.2rem] mt-[1.8rem] w-full">
+                    <div className="flex flex-wrap justify-end items-center -mr-[0.6rem]">
+                        {scrollSnaps.map((_, index) => (
+                            <DotButton
+                                key={index}
+                                onClick={() => onButtonClick(index)}
+                                className={'embla__dot'.concat(
+                                    index === selectedIndex ? ' embla__dot--selected' : ''
+                                )}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+        </React.Fragment>
     )
 }

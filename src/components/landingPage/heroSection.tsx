@@ -2,7 +2,11 @@ import Image from "next/image";
 import IconShoppingBag from "@/assets/images/svg/shopping-bag.svg";
 import IconShuttle from '@/assets/images/svg/shuttle.svg';
 
-export const HeroSection = () => {
+interface HeroSectionProps {
+    startNewGame: () => void;
+}
+
+export const HeroSection = (props: HeroSectionProps) => {
     return (
         <div className="section-wrapper  w-full">
             <div className="bg-hero-section-bg-mobile xs:bg-hero-section-bg-tab  md:bg-hero-section-bg-desktop pl-[13px] xs:pl-[35px] md:pl-[30px] pt-[13px] xs:pt-6 md:pt-[26px]  flex  bg-cover bg-no-repeat rounded-[14px]  w-full">
@@ -27,7 +31,7 @@ export const HeroSection = () => {
                     <Image src={IconShoppingBag} alt="Icon Marketplace" className="mr-[10px]" />
                     <span className="btn-text">Marketplace</span>
                 </button>
-                <button className="flex flex-1 justify-center items-center mt-[10px] xs:mt-4 max-xs:order-first rounded-lg bg-brand-blue px-5 py-[14px] xs:py-3">
+                <button onClick={props.startNewGame} className="flex flex-1 justify-center items-center mt-[10px] xs:mt-4 max-xs:order-first rounded-lg bg-brand-blue px-5 py-[14px] xs:py-3">
                     <Image src={IconShuttle} alt="Icon Start Game" className="mr-[10px]" />
                     <span className="btn-text">Start New Game</span>
                 </button>

@@ -10,3 +10,8 @@ export interface AuthDetails {
     uid: string;
     loggedInWith?: 'google' | 'password'
   }
+
+  export interface Notification {
+    message: string;
+    type: "success" | "error" | "info";
+  }

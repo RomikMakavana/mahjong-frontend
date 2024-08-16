@@ -14,6 +14,7 @@ interface Props {
     bgColor?: string;
     minHeight?: string;
     showCloseBtn?: boolean;
+    closeModalWhenOutsideClick?:boolean;
 }
 
 export default function MahjongModel(props: Props) {
@@ -24,11 +25,12 @@ export default function MahjongModel(props: Props) {
         height,
         minHeight,
         bgColor = 'bg-[#131313]',
-        showCloseBtn = false
+        showCloseBtn = false,
+        closeModalWhenOutsideClick = true
     } = props;
 
     return (
-        <div onClick={closeModel} className="fixed z-[1000] bg-black bg-opacity-80 backdrop-blur inset-0 overflow-y-auto h-screen animate-[fadein_1s_forwards]">
+        <div onClick={ () => closeModalWhenOutsideClick && closeModel ? closeModel() : ''} className="fixed z-[1000] bg-black bg-opacity-80 backdrop-blur inset-0 overflow-y-auto h-screen animate-[fadein_1s_forwards]">
             <div className="absolute z-[1000] inset-0 flex items-center justify-center flex-col">
                 <div
                     onClick={(e) => e.stopPropagation()}
