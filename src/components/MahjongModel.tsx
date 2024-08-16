@@ -15,6 +15,7 @@ interface Props {
     minHeight?: string;
     showCloseBtn?: boolean;
     closeModalWhenOutsideClick?:boolean;
+    bgImageForWeb?: string;
 }
 
 export default function MahjongModel(props: Props) {
@@ -26,7 +27,8 @@ export default function MahjongModel(props: Props) {
         minHeight,
         bgColor = 'bg-[#131313]',
         showCloseBtn = false,
-        closeModalWhenOutsideClick = true
+        closeModalWhenOutsideClick = true,
+        bgImageForWeb
     } = props;
 
     return (
@@ -34,8 +36,8 @@ export default function MahjongModel(props: Props) {
             <div className="absolute z-[1000] inset-0 flex items-center justify-center flex-col">
                 <div
                     onClick={(e) => e.stopPropagation()}
-                    className="border border-neutral-700 p-5 m-5 shadow-purpleShadow bg-[#131313] rounded-3xl overflow-auto max-w-[calc(100%_-_2rem)]  max-h-[calc(100vh_-_5rem)] flex flex-col"
-                    style={{ width, height, minWidth, backgroundColor: bgColor, minHeight }}
+                    className="border border-neutral-700 p-5 m-5 bg-no-repeat shadow-purpleShadow bg-[#131313] rounded-3xl overflow-auto max-w-[calc(100%_-_2rem)]  max-h-[calc(100vh_-_5rem)] flex flex-col"
+                    style={{ width, height, minWidth, backgroundColor: bgColor, minHeight, backgroundImage: `url(${bgImageForWeb})` }}
                 >
                     {children}
                 </div>
