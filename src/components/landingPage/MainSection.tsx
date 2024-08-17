@@ -2,11 +2,11 @@ import Image from "next/image";
 import IconShoppingBag from "@/assets/images/svg/shopping-bag.svg";
 import IconShuttle from '@/assets/images/svg/shuttle.svg';
 
-interface HeroSectionProps {
+interface MainSectionProps {
     startNewGame: () => void;
 }
 
-export const HeroSection = (props: HeroSectionProps) => {
+export const MainSection = (props: MainSectionProps) => {
     return (
         <div className="section-wrapper  w-full">
             <div className="bg-hero-section-bg-mobile xs:bg-hero-section-bg-tab  md:bg-hero-section-bg-desktop pl-[13px] xs:pl-[35px] md:pl-[30px] pt-[13px] xs:pt-6 md:pt-[26px]  flex  bg-cover bg-no-repeat rounded-[14px]  w-full">

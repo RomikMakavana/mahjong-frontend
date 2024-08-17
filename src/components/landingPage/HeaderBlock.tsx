@@ -18,14 +18,14 @@ import { AuthService } from "@/services/firebase/auth";
 
 import { useNotifications } from "@/utils";
 
-interface HeaderProps {
+interface HeaderBlockProps {
     startNewGame: () => void;
     sendEmailVerificationLink: () => void;
     isLoggedIn: boolean;
     setIsLoggedIn: (value: boolean) => void
 }
 
-export const Header = (props: HeaderProps) => {
+export const HeaderBlock = (props: HeaderBlockProps) => {
 
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
     const [scrollPosition, setScrollPosition] = useState<number | null>(null)
