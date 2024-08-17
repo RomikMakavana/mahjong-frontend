@@ -101,8 +101,8 @@ export const HeaderBlock = (props: HeaderBlockProps) => {
             {/*   */}
             <div className={`transition-opacity duration-300 fixed top-0 left-0 shadow-headerShadowLeft ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'opacity-0' : 'opacity-0 md:opacity-100'}`}></div>
             <div className={` transition-opacity duration-300  fixed top-0 right-0 shadow-headerShadowRight ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'opacity-0' : 'opacity-0 md:opacity-100'}`}></div>
-            <header className={`section-wrapper z-50 border-b border-transparent pb-5 pt-6 sm:pt-[50px] transition-all duration-300 sm:pb-[30px] md:pt-9 md:pb-5 w-full fixed top-0 left-0 right-0 ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'bg-black  border-brand-dark-grey' : ''}`}>
-                <div className="flex justify-between items-center">
+            <header className={`section-wrapper z-50 pb-5 pt-6 sm:pt-[50px] transition-all duration-300 sm:pb-[30px] md:pt-9 md:pb-5 w-full fixed top-0 left-0 right-0 ${typeof scrollPosition === 'number' && scrollPosition > 0 ? 'bg-black' : ''}`}>
+                <div className="flex justify-between items-center ">
                     <Image src={logoWhite} alt="Logo Image" priority className="w-[97px]   sm:w-[125px] h-auto" />
                     <div className="flex justify-center items-center">
                         <button className="hidden md:flex border border-dashed border-brand-purple rounded-9 p-[13px] mr-2">

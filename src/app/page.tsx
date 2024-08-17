@@ -13,6 +13,7 @@ import Image from "next/image";
 import { AuthService } from "@/services/firebase/auth";
 import { useNotifications } from "@/utils";
 import Notification from "@/components/NotificationComponent";
+import { FeaturedTournaments } from "@/components/landingPage/FeaturedTournaments";
 
 export default function Home() {
 
@@ -208,6 +209,7 @@ export default function Home() {
                         <ClaimFreePoints />
                         <MainSection startNewGame={startNewGame} />
                         <TournamentAndLeaderBoard />
+                        <FeaturedTournaments/>
                     </div>
                 </div>
             </div>

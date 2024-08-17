@@ -52,6 +52,10 @@
   .notification.slide-out {
     @apply animate-[slideOut_1s_forwards] opacity-0;
   }
+  
+  .tab-btn {
+    @apply text-[#595959] outline-none font-bold relative after:absolute after:w-5 after:h-1 after:-bottom-2 after:bg-transparent after:left-0 after:rounded-full [&.active]:after:bg-light-blue [&.active]:text-light-blue transition-all duration-300
+  }
 
   .embla__dot:after {
     background-color: #404040;

@@ -14,8 +14,10 @@ import { MyTournaments } from "./MyTournaments";
 
 export const TournamentAndLeaderBoard = () => {
 
-    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true })
-    const { selectedIndex, scrollSnaps, onButtonClick } = useButton(emblaApi)
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+    const { selectedIndex, scrollSnaps, onButtonClick } = useButton(emblaApi);
+
+    const [activeTab, setActiveTab] = useState<'leaderboard' | 'myMatches'>('leaderboard');
 
     const [tournamentStats, setTournamentStats] = useState<TournamentStat[]>([
         {
@@ -102,15 +104,36 @@ export const TournamentAndLeaderBoard = () => {
                     </div>
                 </section>
 
-                <div className="mt-5 hidden lg:block">
-                    <div className="flex ">
-                        <div className="w-[65%] mr-[10px]">
+                <div className="mt-5 ">
+                    <div className="hidden  sm:flex flex-col md:flex-row ">
+                        <div className="w-full md:w-[65%] md:mr-[10px]">
                             <h6 className="text-lg font-bold mb-[15px]">Leaderboard</h6>
                             <LeaderBoard />
                         </div>
-                        <div className="w-[35%]">
+                        <div className="w-full mt-[30px] md:mt-0 md:w-[35%]">
                             <h6 className="text-lg font-bold mb-[15px]">My tournaments</h6>
                             <MyTournaments />
+                        </div>
+                    </div>
+                    <div className="sm:hidden">
+                        <div className="flex ">
+                            <button onClick={() => setActiveTab('leaderboard')} className={`tab-btn mr-9 ${activeTab === 'leaderboard' ? 'active' : ''}`}>Leaderboard</button>
+                            <button onClick={() => setActiveTab('myMatches')} className={`tab-btn ${activeTab === 'myMatches' ? 'active' : ''}`}>My Matches</button>
+                        </div>
+                        <div className="mt-6">
+                            {
+                                activeTab === 'leaderboard' &&
+                                <div className="animate-[fadein_1s_forwards]">
+                                    <LeaderBoard />
+                                </div>
+                            }
+
+                            {
+                                activeTab === 'myMatches' &&
+                                <div className="animate-[fadein_1s_forwards]">
+                                    <MyTournaments />
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
