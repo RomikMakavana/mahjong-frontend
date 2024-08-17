@@ -7,7 +7,7 @@ import trophy from "@/assets/images/svg/trophy.svg";
 
 export default function UnlockedNewBadge() {
     return (
-        <MahjongModel bgImageForWeb={unlock_new_item_layer_web.src} bgImageForMobile={unlock_new_item_layer_mobile}>
+        <MahjongModel bgImageForWeb={unlock_new_item_layer_web.src}>
             <div className="mx-[80px] max-xs:mx-4 my-[10px]">
                 <Image src={firstBadge} alt="First Badge" className="w-[121.06px] h-[144.34px] mx-auto" />
                 <div className="text-center mt-4 ">
