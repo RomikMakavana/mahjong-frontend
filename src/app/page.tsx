@@ -19,6 +19,7 @@ import ReferAndEarn from "@/components/Models/ReferAndEarn";
 import ReferToFriend from "@/components/Models/ReferToFriend";
 import TaskCenterModel from "@/components/Models/TaskCenterModel";
 import RedeemAndBuyPoints from "@/components/Models/RedeemAndBuyPoints";
+import JoinMatch from "@/components/Models/JoinMatch";
 
 export default function Home() {
 
@@ -318,6 +319,7 @@ export default function Home() {
             {/* <ReferToFriend/> */}
             {/* <TaskCenterModel/> */}
             {/* <RedeemAndBuyPoints/> */}
+            {/* <JoinMatch/> */}
         </React.Fragment>
     );
 }
