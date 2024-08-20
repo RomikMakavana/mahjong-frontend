@@ -12,6 +12,7 @@ const config: Config = {
         '2xl': '1600px',
         'lg': '1201px',
         'md': '997px',
+        'between-md-and-sm': '800px',
         'sm': '769px',
         'xs': '583px',
         'xxs': '361px',
@@ -41,7 +42,11 @@ const config: Config = {
         'hero-section-bg-desktop': "url('/images/hero_section_bg_desktop.avif')",
         'hero-section-bg-tab': "url('/images/hero_section_bg_tab.avif')",
         'hero-section-bg-mobile': "url('/images/hero_section_bg_mobile.avif')",
-        'tournament-bg': "url('/images/tournament_bg.png')"
+        'tournament-bg': "url('/images/tournament_bg.avif')",
+        'unlock-badge-bg': "url('/images/unlock_badge_bg.avif')",
+        'unlock-badge-bg-mobile': "url('/images/unlock_badge_bg_mobile.avif')",
+        'redeem-points-coming-soon-bg': "url('/images/redeem_points_coming_soon_bg.avif')",
+        'redeem-points-bg': "url('/images/redeem_points_bg.avif')"
       },
       boxShadow:{
         'headerShadowLeft': '0 30px 120px 50px rgba(158, 98, 255, 1)',

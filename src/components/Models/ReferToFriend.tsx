@@ -7,7 +7,7 @@ import edit_icon from "@/assets/images/svg/edit_icon.svg";
 
 export default function ReferToFriend() {
     return (
-        <MahjongModel width="363px">
+        <MahjongModel open={true} extraCss="xs:w-[363px]">
             <div>
                 <div>
                     <div>

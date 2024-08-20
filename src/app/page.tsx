@@ -14,6 +14,11 @@ import { AuthService } from "@/services/firebase/auth";
 import { useNotifications } from "@/utils";
 import Notification from "@/components/NotificationComponent";
 import { FeaturedTournaments } from "@/components/landingPage/FeaturedTournaments";
+import UnlockedNewBadge from "@/components/Models/UnlockedNewBadge";
+import ReferAndEarn from "@/components/Models/ReferAndEarn";
+import ReferToFriend from "@/components/Models/ReferToFriend";
+import TaskCenterModel from "@/components/Models/TaskCenterModel";
+import RedeemAndBuyPoints from "@/components/Models/RedeemAndBuyPoints";
 
 export default function Home() {
 
@@ -214,7 +219,7 @@ export default function Home() {
                 </div>
             </div>
 
-            {openSignInModel || openSignUpModel || openVerificationModel || openForgotPasswordModal ? <MahjongModel width="363px" showCloseBtn={openVerificationModel || isProcessing ? false : true} closeModalWhenOutsideClick={openVerificationModel || isProcessing ? false : true} closeModel={closeModal} >
+            <MahjongModel extraCss="xs:w-[363px]" open={openSignInModel || openSignUpModel || openVerificationModel || openForgotPasswordModal} showCloseBtn={openVerificationModel || isProcessing ? false : true} closeModalWhenOutsideClick={openVerificationModel || isProcessing ? false : true} closeModel={closeModal} >
                 {/* Sign In Pop up */}
                 {openSignInModel &&
                     <form onSubmit={login}>
@@ -306,8 +311,13 @@ export default function Home() {
                     </div>
 
                 }
-            </MahjongModel> : <></>}
+            </MahjongModel> 
             <Notification />
+            {/* <UnlockedNewBadge/> */}
+            {/* <ReferAndEarn/> */}
+            {/* <ReferToFriend/> */}
+            {/* <TaskCenterModel/> */}
+            {/* <RedeemAndBuyPoints/> */}
         </React.Fragment>
     );
 }

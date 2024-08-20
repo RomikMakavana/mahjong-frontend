@@ -142,14 +142,14 @@ export default function TaskCenterModel() {
     };
     
     return (
-        <MahjongModel width="562px">
-            <div className="flex flex-col h-full justify-between relative">
+        <MahjongModel open={true} extraCss="xs:w-[562px]">
+            <div className="flex flex-col h-full text-white justify-between relative">
                 <div className="xs:flex justify-between mb-5">
                     <h2 className="text-xl font-medium">Task Center</h2>
                     <span className="flex items-center group/badge-advantages">
                         <Image src={info} alt="Info" className="w-[14px]" />
                         <a href="#" className="ml-[10px] underline text-xs text-brand-yellow">Badge Advantages</a>
-                        <div className="absolute shadow-purpleShadow delay-75 z-50 right-0 max-xs:left-0 top-8 max-xs:top-14 p-5 bg-cursed-black w-fit invisible opacity-0 group-hover/badge-advantages:opacity-100 group-hover/badge-advantages:visible border border-white border-opacity-15 rounded-9 py-5">
+                        <div className="absolute shadow-purpleShadow delay-75 z-50 right-0 max-xs:left-0 top-8 max-xs:top-14 p-5 bg-cursed-black transition-all duration-300 w-fit invisible opacity-0 group-hover/badge-advantages:opacity-100 group-hover/badge-advantages:visible border border-white border-opacity-15 rounded-9 py-5">
                             <h2 className="font-semibold text-lg">Badge Advantages</h2>
                             {
                                 badges.map((badge, index) => (

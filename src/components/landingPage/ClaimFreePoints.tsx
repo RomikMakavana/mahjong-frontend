@@ -71,9 +71,9 @@ export const ClaimFreePoints = () => {
                     </div>
                 </div>
             </div>
-            {
-                openFreePointsModal &&
-                <MahjongModel width="562px" closeModel={() => setOpenFreePointsModal(false)} showCloseBtn={true}>
+            
+                
+                <MahjongModel extraCss="xs:w-[562px]" open={openFreePointsModal} closeModel={() => setOpenFreePointsModal(false)} showCloseBtn={true}>
                     <div className="flex flex-col h-full">
                         <h2 className="text-xl mb-5">Claim Daily Free Points</h2>
                         <div className="h-full flex-grow overflow-auto">
@@ -102,7 +102,7 @@ export const ClaimFreePoints = () => {
                         </div>
                     </div>
                 </MahjongModel>
-            }
+            
         </div>
     )
 }

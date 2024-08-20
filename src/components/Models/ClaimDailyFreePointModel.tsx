@@ -45,7 +45,7 @@ export default function ClaimDailyFreePointModel() {
 
     return (
         <div>
-            <MahjongModel width="562px">
+            <MahjongModel extraCss="xs:w-[562px]">
                 <div className="flex flex-col h-full">
                     <h2 className="text-xl mb-5">Claim Daily Free Points</h2>
                     <div className="h-full flex-grow overflow-auto">
