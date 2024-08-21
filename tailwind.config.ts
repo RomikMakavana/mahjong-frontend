@@ -31,6 +31,8 @@ const config: Config = {
         'brand-spanish-gray': '#92929280',
         'brand-spanish-gray-8': '#929292cc',
         'brand-blue-grey': '#4d5a5d',
+        'brand-red' : '#ff2d2d',
+        'lime-green' : '#00ff0a',
         'brand-royal-purple': '#6d1bf0',
         'brand-lavender-purple': '#ab78ff',
         'brand-white-36': '#ffffff36',
@@ -46,7 +48,9 @@ const config: Config = {
         'unlock-badge-bg': "url('/images/unlock_badge_bg.avif')",
         'unlock-badge-bg-mobile': "url('/images/unlock_badge_bg_mobile.avif')",
         'redeem-points-coming-soon-bg': "url('/images/redeem_points_coming_soon_bg.avif')",
-        'redeem-points-bg': "url('/images/redeem_points_bg.avif')"
+        'redeem-points-bg': "url('/images/redeem_points_bg.avif')",
+        'redeem_points_bg_mobile': "url('/images/redeem_points_bg_mobile.avif')",
+        'redeem_points_coming_soon_bg_mobile': "url('/images/redeem_points_coming_soon_bg_mobile.avif')"
       },
       boxShadow:{
         'headerShadowLeft': '0 30px 120px 50px rgba(158, 98, 255, 1)',
