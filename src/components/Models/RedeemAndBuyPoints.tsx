@@ -46,19 +46,19 @@ export default function RedeemAndBuyPoints() {
                     {
                         redeemPointsDetails.map((data, index) => {
                             return (
-                                <div key={index} className={`mr-3 p-7 rounded-[15px] py-[31px] text-center flex-1 last:mr-0 bg-no-repeat bg-cover ${!data.isComingSoon ? 'bg-redeem-points-bg' : 'bg-redeem-points-coming-soon-bg'}`}>
-                                    <div className="flex flex-col justify-between h-full">
-                                        <div>
+                                <div key={index} className={`mr-3 max-between-md-and-sm:mr-0 p-7 max-between-md-and-sm:p-[17px] rounded-[15px] max-between-md-and-sm:rounded-[10px] py-[31px] max-between-md-and-sm:px-6 text-center flex-1 last:mr-0 bg-no-repeat bg-cover ${!data.isComingSoon ? 'bg-redeem-points-bg' : 'bg-redeem-points-coming-soon-bg'}`}>
+                                    <div className="flex flex-col justify-between h-full max-between-md-and-sm:flex-row">
+                                        <div className="max-between-md-and-sm:flex max-between-md-and-sm:items-center">
                                             <div className="flex justify-center items-center">
-                                                <Image src={data.icon} alt="Image" className="w-10 h-10" />
+                                                <Image src={data.icon} alt="Image" className="w-10 h-10 max-between-md-and-sm:w-7 max-between-md-and-sm:h-7" />
                                             </div>
-                                            <div className="mt-[18px]">
-                                                <span className="text-white text-base font-bold">{data.label}</span>
+                                            <div className="between-md-and-sm:mt-[18px] max-between-md-and-sm:ml-3">
+                                                <span className="text-white text-base font-bold max-between-md-and-sm:text-sm">{data.label}</span>
                                             </div>
                                         </div>
-                                        <div className="mt-[18px]">
-                                        <button disabled={data.isComingSoon} className="bg-brand-blue disabled:cursor-not-allowed disabled:bg-[#363636]  text-sm font-bold text-white rounded-9 py-3 px-5">Redeem</button>
-                                        <div className="mt-[18px]">
+                                        <div className="between-md-and-sm:mt-[18px]">
+                                        <button disabled={data.isComingSoon} className="bg-brand-blue disabled:cursor-not-allowed disabled:bg-[#363636]  text-sm font-bold text-white rounded-9 py-3 px-5 max-between-md-and-sm:px-4 max-between-md-and-sm:py-2">Redeem</button>
+                                        <div className="mt-[18px] max-between-md-and-sm:mt-1">
                                             <span className={`text-xs font-bold ${data.isComingSoon ? 'text-[#ffffff80]' : 'text-brand-yellow2'}`}>{data.isComingSoon ? 'Coming Soon!' : data.extraDetails}</span>
                                         </div>
                                         </div>
