@@ -38,7 +38,9 @@ const config: Config = {
         'brand-white-36': '#ffffff36',
         'brand-white-7': '#ffffff12',
         'cursed-black': '#131313',
-        'pale-lavender': '#E1CFFF'
+        'pale-lavender': '#E1CFFF',
+        'sunset-orange' : '#FF8527',
+        'teal-blue' : '#009090'
       },
       backgroundImage:{
         'hero-section-bg-desktop': "url('/images/hero_section_bg_desktop.avif')",

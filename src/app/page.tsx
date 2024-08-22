@@ -23,6 +23,7 @@ import JoinMatch from "@/components/Models/JoinMatch";
 import MatchHistory from "@/components/Models/MatchHistory";
 import RoomModel from "@/components/Models/RoomModel";
 import CreateRoom from "@/components/Models/CreateRoom";
+import GameOver from "@/components/Models/GameOver";
 
 export default function Home() {
 
@@ -325,6 +326,7 @@ export default function Home() {
             {/* <MatchHistory/> */}
             {/* <RoomModel/> */}
             {/* <CreateRoom/> */}
+            {/* <GameOver/> */}
             {/* <JoinMatch/> */}
         </React.Fragment>
     );

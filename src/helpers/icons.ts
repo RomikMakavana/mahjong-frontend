@@ -8,6 +8,9 @@ import Players from "@/assets/images/svg/players.svg";
 import Players_lavender from "@/assets/images/svg/players_lavender.svg";
 import Plus from "@/assets/images/svg/plus.svg";
 import Plus_lavender from "@/assets/images/svg/plus_lavender.svg";
+import mahjong_text_icon from "@/assets/images/svg/mahjong_text_icon.svg";
+import ImgAvatar from "@/assets/images/avatar.png";
+
 export const ICONS = {
     IconGiftCard: IconGiftCard,
     IconCollection: IconCollection,
@@ -18,5 +21,7 @@ export const ICONS = {
     Players: Players,
     PlayersLavender: Players_lavender,
     Plus: Plus,
-    PlusLavender: Plus_lavender
+    PlusLavender: Plus_lavender,
+    MahjongTextIcon: mahjong_text_icon,
+    ImgAvatar: ImgAvatar
 }

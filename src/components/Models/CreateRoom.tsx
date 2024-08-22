@@ -22,16 +22,16 @@ export default function CreateRoom() {
                     <InputField type="text" placeholder="Enter room name" extraCss="font-medium max-xs:text-xs placeholder:text-white placeholder:text-opacity-50" />
                     <div className="w-full xxs:flex justify-between mt-[10px]">
                         <div className="mr-2 border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:mb-[10px] max-xxs:justify-between max-xxs:px-2 py-[14px]">
-                            <select id="options" name="options" className="text-white text-opacity-50 appearance-none bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                            <select id="options" name="options" className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
                                 <option value="option1">Time limit per turn</option>
                             </select>
-                            <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" />
+                            {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                         </div>
                         <div className="border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:justify-between max-xxs:px-2 py-[14px] ">
-                            <select id="options" name="options" className="text-white text-opacity-50 appearance-none bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                            <select id="options" name="options" className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
                                 <option value="option1">Min level to win</option>
                             </select>
-                            <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" />
+                            {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                         </div>
                     </div>
                     <div className="relative w-full mt-[10px]">
