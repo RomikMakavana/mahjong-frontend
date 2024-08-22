@@ -11,6 +11,7 @@ interface Props {
     showCloseBtn?: boolean;
     closeModalWhenOutsideClick?: boolean;
     extraCss?: string;
+    extraCssForBg?: string;
 }
 
 export default function MahjongModel(props: Props) {
@@ -18,7 +19,8 @@ export default function MahjongModel(props: Props) {
         closeModel,
         showCloseBtn = false,
         closeModalWhenOutsideClick = true,
-        extraCss
+        extraCss,
+        extraCssForBg
     } = props;
 
     const toggleBodyOverflow = () => {
@@ -34,7 +36,7 @@ export default function MahjongModel(props: Props) {
         <React.Fragment>
             {
                 open ?
-                    <div onClick={() => closeModalWhenOutsideClick && closeModel ? closeModel() : ''} className="fixed z-[1000] bg-black left-0 right-0 top-0 bottom-0 bg-opacity-80 backdrop-blur inset-0 overflow-y-auto h-screen animate-[fadein_1s_forwards]">
+                    <div onClick={() => closeModalWhenOutsideClick && closeModel ? closeModel() : ''} className={`fixed z-[1000] left-0 right-0 top-0 bottom-0 inset-0 overflow-y-auto h-screen animate-[fadein_1s_forwards] ${extraCssForBg ? extraCssForBg : 'bg-black bg-opacity-80 backdrop-blur'} `}>
                         <div className="absolute z-[1000] inset-0 flex w-full xs:items-center justify-center flex-col">
                             <div
                                 onClick={(e) => e.stopPropagation()}
