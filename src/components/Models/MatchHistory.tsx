@@ -85,7 +85,7 @@ export default function MatchHistory() {
                             {history.month} {history.year}
                             </p>
                             {history.matches.map((match, index) => (
-                                <div key={index} className="flex items-center justify-between mb-6 last:mb-2 max-xs:mb-[10px]">
+                                <div key={index} className="flex items-center justify-between mb-6 last:mb-2 max-xs:last:mb-1 max-xs:mb-[20px]">
                                     <div className={`flex items-center`}>
                                         <div className=" border border-white border-opacity-10 rounded-lg">
                                         <Image src={ICONS.MahjongIcon} alt="Image" className="w-5 h-5 m-3 max-xs:w-[17px] max-xs:h-[17px] max-xs:m-[9px] " />
@@ -107,7 +107,7 @@ export default function MatchHistory() {
                         </div>
                     ))}
                 </div>
-                <button className="text-white rounded-lg py-4 max-xs:py-[14px] mt-5 border text-opacity-60 border-white border-opacity-15 ">
+                <button className="text-white rounded-lg py-4 max-xs:py-3 mt-5 border max-xs:font-medium font-bold max-xs:text-opacity-60 border-white border-opacity-15 ">
                     Close
                 </button>
             </div>
