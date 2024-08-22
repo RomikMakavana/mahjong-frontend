@@ -22,6 +22,7 @@ import RedeemAndBuyPoints from "@/components/Models/RedeemAndBuyPoints";
 import JoinMatch from "@/components/Models/JoinMatch";
 import MatchHistory from "@/components/Models/MatchHistory";
 import RoomModel from "@/components/Models/RoomModel";
+import CreateRoom from "@/components/Models/CreateRoom";
 
 export default function Home() {
 
@@ -323,6 +324,7 @@ export default function Home() {
             {/* <RedeemAndBuyPoints/> */}
             {/* <MatchHistory/> */}
             {/* <RoomModel/> */}
+            {/* <CreateRoom/> */}
             {/* <JoinMatch/> */}
         </React.Fragment>
     );
