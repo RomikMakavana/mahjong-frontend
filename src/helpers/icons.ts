@@ -3,10 +3,12 @@ import IconCollection from "@/assets/images/svg/collection.svg";
 import IconCurrency from "@/assets/images/svg/currency.svg";
 import IconCoin from "@/assets/images/svg/coin.svg";
 import MahjongIcon from "@/assets/images/svg/mahjong.svg";
+import IconDropdown from "@/assets/images/svg/dropdown.svg";
 export const ICONS = {
     IconGiftCard: IconGiftCard,
     IconCollection: IconCollection,
     IconCurrency: IconCurrency,
     IconCoin: IconCoin,
-    MahjongIcon: MahjongIcon
+    MahjongIcon: MahjongIcon,
+    IconDropdown: IconDropdown
 }

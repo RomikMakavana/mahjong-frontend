@@ -21,6 +21,7 @@ import TaskCenterModel from "@/components/Models/TaskCenterModel";
 import RedeemAndBuyPoints from "@/components/Models/RedeemAndBuyPoints";
 import JoinMatch from "@/components/Models/JoinMatch";
 import MatchHistory from "@/components/Models/MatchHistory";
+import RoomModel from "@/components/Models/RoomModel";
 
 export default function Home() {
 
@@ -321,6 +322,7 @@ export default function Home() {
             {/* <TaskCenterModel/> */}
             {/* <RedeemAndBuyPoints/> */}
             {/* <MatchHistory/> */}
+            {/* <RoomModel/> */}
             {/* <JoinMatch/> */}
         </React.Fragment>
     );
