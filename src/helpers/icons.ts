@@ -10,7 +10,9 @@ import Plus from "@/assets/images/svg/plus.svg";
 import Plus_lavender from "@/assets/images/svg/plus_lavender.svg";
 import mahjong_text_icon from "@/assets/images/svg/mahjong_text_icon.svg";
 import ImgAvatar from "@/assets/images/avatar.png";
-
+import RightArrow from "@/assets/images/svg/right_arrow.svg";
+import GreenRight from "@/assets/images/svg/green_right.svg";
+import RedClose from "@/assets/images/svg/red_close.svg";
 export const ICONS = {
     IconGiftCard: IconGiftCard,
     IconCollection: IconCollection,
@@ -23,5 +25,8 @@ export const ICONS = {
     Plus: Plus,
     PlusLavender: Plus_lavender,
     MahjongTextIcon: mahjong_text_icon,
-    ImgAvatar: ImgAvatar
+    ImgAvatar: ImgAvatar,
+    RightArrow: RightArrow,
+    GreenRight: GreenRight,
+    RedClose: RedClose
 }

@@ -40,7 +40,9 @@ const config: Config = {
         'cursed-black': '#131313',
         'pale-lavender': '#E1CFFF',
         'sunset-orange' : '#FF8527',
-        'teal-blue' : '#009090'
+        'teal-blue' : '#009090',
+        'dark-green' : '#005B04',
+        'dark-red' : '#5B0000'
       },
       backgroundImage:{
         'hero-section-bg-desktop': "url('/images/hero_section_bg_desktop.avif')",
