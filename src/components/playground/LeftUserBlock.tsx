@@ -1,0 +1,41 @@
+import Image from 'next/image';
+import UserProfile from '@/assets/images/svg/user_profile.svg';
+import PickCard from './PickCard';
+import UserProfileBlock from './UserProfileBlock';
+import HiddenCard from '@/assets/images/svg/cards/backside_card.png';
+
+interface LeftUserBlockProps {
+  playerData : {
+    userName : string , 
+    profileImg : string,
+    isWait : boolean,
+  },
+  isAnyPlayerWaiting : boolean
+}
+
+export default function LeftUserBlock({playerData , isAnyPlayerWaiting} : LeftUserBlockProps) {
+    
+    const hiddenCardsBlock = [];
+    for (let i = 0; i < 14; i++) {
+      hiddenCardsBlock.push(
+        <Image src={HiddenCard} alt="Logo Image" priority className="w-[20px]  sm:w-[20px] h-auto mt-[1px]" />
+      );
+    }
+
+    
+    return (
+        <div className="user-2 flex flex-col gap-10 items-end">
+          <div className="pick-card-block rotate-90 w-max">
+            <PickCard isAnyPlayerWaiting={isAnyPlayerWaiting}/>
+          </div>
+          <div className="user-block flex gap-5">
+            <div className="user-profile-block">
+              <UserProfileBlock userName={playerData.userName} profileImg={playerData.profileImg} isWait={playerData.isWait} rotate={true} />
+            </div>
+            <div className="user-card-block">
+              {hiddenCardsBlock}
+            </div>
+          </div>
+        </div>
+    )
+}

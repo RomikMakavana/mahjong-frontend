@@ -24,6 +24,9 @@ import MatchHistory from "@/components/Models/MatchHistory";
 import RoomModel from "@/components/Models/RoomModel";
 import CreateRoom from "@/components/Models/CreateRoom";
 import GameOver from "@/components/Models/GameOver";
+import { useRouter } from "next/navigation";
+import {isTablet, isMobile} from 'react-device-detect';
+import { helpers } from "@/helpers/helpers";
 
 export default function Home() {
 
@@ -35,7 +38,9 @@ export default function Home() {
     const [password, setPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
-    const [isPasswordResetLinkSent, setIsPasswordResetLinkSent] = useState(false)
+    const [isPasswordResetLinkSent, setIsPasswordResetLinkSent] = useState(false);
+
+    const router = useRouter();
 
     const { notification } = useNotifications();
 
@@ -78,6 +83,8 @@ export default function Home() {
             if (res.status) {
                 closeModal();
                 setIsLoggedIn(true);
+                router.push('/playground');
+                helpers.handleFullscreenAndLock();
             }
         } catch (error) {
             console.log(error);
@@ -121,6 +128,8 @@ export default function Home() {
                 closeModal();
                 setIsLoggedIn(true);
                 notification("Logged in successfully.", 'success');
+                router.push('/playground');
+                helpers.handleFullscreenAndLock();
             } else if (res.status && !res.isVerifiedEmail) {
                 setOpenSignInModel(false);
                 setOpenSignUpModel(false);
@@ -200,9 +209,42 @@ export default function Home() {
         if (!isLoggedIn) {
             setOpenSignInModel(true);
         } else {
-
+            router.push('/playground');
+            helpers.handleFullscreenAndLock();
         }
     }
+
+    // async function handleFullscreenAndLock() {
+    //     if(isMobile || isTablet){
+    //         try {
+    //           if (!document.fullscreenElement) {
+    //             await document.documentElement.requestFullscreen();
+    //           }
+        
+    //           if ('orientation' in screen && typeof screen.orientation.lock === 'function') {
+    //             await (screen.orientation as any).lock('landscape-primary');
+    //             // setOrientationType('Orientation locked to portrait');
+    //           } else {
+    //             // setOrientationType('Screen orientation lock not supported');
+    //           }
+    //         } catch (error) {
+    //           if (error instanceof DOMException) {
+    //             switch (error.name) {
+    //               case 'NotAllowedError':
+    //                 // setOrientationType('Permission denied for fullscreen or orientation lock');
+    //                 break;
+    //               case 'AbortError':
+    //                 // setOrientationType('Fullscreen or orientation lock request aborted');
+    //                 break;
+    //               default:
+    //                 // setOrientationType('An unknown error occurred');
+    //             }
+    //           } else {
+    //             // setOrientationType('An unexpected error occurred');
+    //           }
+    //         }
+    //     }
+    //   }
 
     return (
         <React.Fragment>

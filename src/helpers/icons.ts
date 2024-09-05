@@ -13,6 +13,7 @@ import ImgAvatar from "@/assets/images/avatar.png";
 import RightArrow from "@/assets/images/svg/right_arrow.svg";
 import GreenRight from "@/assets/images/svg/green_right.svg";
 import RedClose from "@/assets/images/svg/red_close.svg";
+
 export const ICONS = {
     IconGiftCard: IconGiftCard,
     IconCollection: IconCollection,

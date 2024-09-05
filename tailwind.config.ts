@@ -58,6 +58,8 @@ const config: Config = {
         'room-bg-desktop': "url('/images/room_bg_desktop.avif')",
         'room-bg-mobile': "url('/images/room_bg_mobile.avif')",
         'room-bg-tab': "url('/images/room_bg_tab.avif')",
+        'game-page-bg-image': "url('/images/game_page_bg.avif')",
+
       },
       boxShadow:{
         'headerShadowLeft': '0 30px 120px 50px rgba(158, 98, 255, 1)',
