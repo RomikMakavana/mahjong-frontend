@@ -20,6 +20,8 @@ import ReferToFriend from "@/components/Models/ReferToFriend";
 import TaskCenterModel from "@/components/Models/TaskCenterModel";
 import RedeemAndBuyPoints from "@/components/Models/RedeemAndBuyPoints";
 import JoinMatch from "@/components/Models/JoinMatch";
+import MatchCreated from "@/components/Models/MatchCreated";
+import ViewWiningTile from "@/components/Models/ViewWiningTile";
 import MatchHistory from "@/components/Models/MatchHistory";
 import RoomModel from "@/components/Models/RoomModel";
 import CreateRoom from "@/components/Models/CreateRoom";
@@ -369,7 +371,11 @@ export default function Home() {
             {/* <RoomModel/> */}
             {/* <CreateRoom/> */}
             {/* <GameOver/> */}
-            {/* <JoinMatch/> */}
+            {/* { <JoinMatch/> } */}
+            {/* { <MatchCreated/> } */}
+            {/* <ViewWiningTile/>  */}
+
+            
         </React.Fragment>
     );
 }

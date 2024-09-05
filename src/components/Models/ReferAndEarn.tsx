@@ -6,7 +6,7 @@ import instagram from "@/assets/images/svg/instagram.svg";
 
 export default function ReferAndEarn() {
     return (
-        <MahjongModel extraCss="xs:w-[363px]">
+        <MahjongModel open={true} extraCss="xs:w-[363px]">
             <div>
                 <div className="w-full">
                     <div className="mx-6 mb-7">
