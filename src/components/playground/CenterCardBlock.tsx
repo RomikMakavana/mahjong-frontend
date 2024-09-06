@@ -55,7 +55,7 @@ export default function CenterCardBlock({ isAnyPlayerWaiting }: CenterCardBlockP
             <div className='top-block flex gap-[2px]'>
               {BacksideOfSoftwareCardVerticalCardBlock}
             </div>
-            <div className='center-block w-[100%] h-[100%] flex flex-col'>
+            <div className='center-block w-[100%] h-[100%] flex flex-col bg-campas-bg-image bg-auto bg-center bg-no-repeat '>
               {isAnyPlayerWaiting ? (<p className='m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>

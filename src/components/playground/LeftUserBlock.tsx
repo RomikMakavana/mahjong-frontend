@@ -9,6 +9,7 @@ interface LeftUserBlockProps {
     userName : string , 
     profileImg : string,
     isWait : boolean,
+    showChatBubble : boolean
   },
   isAnyPlayerWaiting : boolean
 }
@@ -18,7 +19,7 @@ export default function LeftUserBlock({playerData , isAnyPlayerWaiting} : LeftUs
     const hiddenCardsBlock = [];
     for (let i = 0; i < 14; i++) {
       hiddenCardsBlock.push(
-        <Image src={HiddenCard} alt="Logo Image" priority className="w-[20px]  sm:w-[20px] h-auto mt-[1px]" />
+        <Image key={i} src={HiddenCard} alt="Logo Image" priority className="w-[20px]  sm:w-[20px] h-auto mt-[1px]" />
       );
     }
 
@@ -30,7 +31,7 @@ export default function LeftUserBlock({playerData , isAnyPlayerWaiting} : LeftUs
           </div>
           <div className="user-block flex gap-5">
             <div className="user-profile-block">
-              <UserProfileBlock userName={playerData.userName} profileImg={playerData.profileImg} isWait={playerData.isWait} rotate={true} />
+              <UserProfileBlock  showChatBubble={playerData.showChatBubble} userName={playerData.userName} profileImg={playerData.profileImg} isWait={playerData.isWait} rotate={true} speechBubbleClasses='left-[150%] z-50 top-[-20%]' arrowSide='left' />
             </div>
             <div className="user-card-block">
               {hiddenCardsBlock}

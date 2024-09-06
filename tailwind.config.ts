@@ -59,6 +59,7 @@ const config: Config = {
         'room-bg-mobile': "url('/images/room_bg_mobile.avif')",
         'room-bg-tab': "url('/images/room_bg_tab.avif')",
         'game-page-bg-image': "url('/images/game_page_bg.avif')",
+        'campas-bg-image': "url('/images/campas_bg.png')",
 
       },
       boxShadow:{
