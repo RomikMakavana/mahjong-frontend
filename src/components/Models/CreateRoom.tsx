@@ -23,13 +23,22 @@ export default function CreateRoom() {
                     <div className="w-full xxs:flex justify-between mt-[10px]">
                         <div className="mr-2 border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:mb-[10px] max-xxs:justify-between max-xxs:px-2 py-[14px]">
                             <select id="options" name="options" className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
-                                <option value="option1">Time limit per turn</option>
+                                <option value="option1" className="text-black">Time limit per turn</option>
+                                <option value="option1" className="text-black">10s</option>
+                                <option value="option1" className="text-black">30s</option>
+                                <option value="option1" className="text-black">60s</option>
+                                <option value="option1" className="text-black">90s</option>
+                                <option value="option1" className="text-black">120s</option>
                             </select>
                             {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                         </div>
                         <div className="border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:justify-between max-xxs:px-2 py-[14px] ">
                             <select id="options" name="options" className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
-                                <option value="option1">Min level to win</option>
+                                <option value="option1" className="text-black">Min level to win</option>
+                                <option value="option1" className="text-black">10</option>
+                                <option value="option1" className="text-black">15</option>
+                                <option value="option1" className="text-black">20</option>
+                                <option value="option1" className="text-black">25</option>
                             </select>
                             {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                         </div>

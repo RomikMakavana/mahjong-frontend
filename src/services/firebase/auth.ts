@@ -1,6 +1,7 @@
 import { FIREBASE_CONFIG } from "@/firebase-config";
 import { AuthDetails } from "@/interfaces";
 import { initializeApp } from "firebase/app";
+import { Database, getDatabase } from "firebase/database";
 import {
     Auth,
     User,
@@ -20,8 +21,10 @@ import {
 
   const firebase = initializeApp(FIREBASE_CONFIG);
   const fauth = getAuth();
+  const database = getDatabase(firebase);
 
   interface AuthserviceType {
+    database: Database,
     googleSignIn: () => Promise<{ status: boolean, message: string, user: AuthDetails | null }>,
     getProfile: () => Promise<User | false>,
     logout: () => Promise<{ status: boolean, message: string }>,
@@ -32,6 +35,7 @@ import {
   }
 
   const AuthService: AuthserviceType = {
+    database,
      googleSignIn(){
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({

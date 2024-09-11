@@ -9,41 +9,82 @@ import TopUserBlock from "@/components/playground/TopUserBlock";
 import RightUserBlock from "@/components/playground/RightUserBlock";
 import BottomUserBlock from "@/components/playground/BottomUserBlock";
 import CenterCardBlock from "@/components/playground/CenterCardBlock";
+import { off, onValue, ref, set } from "firebase/database";
+import { AuthService } from "@/services/firebase/auth";
 
 type Player = {
   userName: string;
   profileImg: string;
   isWait: boolean;
-  showChatBubble: boolean
+  showChatBubble: boolean,
+  player_id: string
 }
 export default function GameLayout() {
   const [orientationType, setOrientationType] = useState<string>('');
+  const [gameId, setGameId] = useState<string>('');
+  const [data, setData] = useState<any>(null);
+  const [userUid, setUserUid] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [gamePlayersData, setGamePlayersData] = useState<{ [kay: string]: Player }>({
     player1: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: false,
-      showChatBubble: false
+      isWait: true,
+      showChatBubble: false,
+      player_id: '1'
     },
     player2: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: false,
-      showChatBubble: false
+      isWait: true,
+      showChatBubble: false,
+      player_id: '2'
     },
     player3: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: false,
-      showChatBubble: false
+      isWait: true,
+      showChatBubble: false,
+      player_id: '3'
     },
     player4: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: false,
-      showChatBubble: false
+      isWait: true,
+      showChatBubble: false,
+      player_id: '4'
     },
   })
+
+  useEffect(() => {
+    setGameId('66dedb315aa9bdf2479dd226');
+    getUserDetail();
+  });
+
+  useEffect(() => {
+    if (!gameId) return;
+    
+    setLoading(true);
+    const dbRef = ref(AuthService.database, 'user-games/' + gameId + '/public');
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      
+      setData(snapshot.val());
+      setLoading(false);
+    });
+
+    // Cleanup subscription on unmount or when gameId changes
+    return () => {
+      off(dbRef, 'value', unsubscribe);
+    };
+  }, [gameId]); // Dependency array includes gameId
+
+  const getUserDetail = async () => {
+    const _user = await AuthService.getProfile();
+    if(_user){
+      setUserUid(_user.uid);
+    }
+  }
+
   const handleOrientationChange = () => {
     setOrientationType(screen.orientation.type);
   }

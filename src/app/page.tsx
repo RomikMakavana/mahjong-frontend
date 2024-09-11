@@ -34,6 +34,7 @@ export default function Home() {
 
     const [openSignInModel, setOpenSignInModel] = useState(false);
     const [openSignUpModel, setOpenSignUpModel] = useState(false);
+    const [openStartGameModel, setOpenStartGameModel] = useState(false);
     const [openVerificationModel, setOpenVerificationModel] = useState(false);
     const [openForgotPasswordModal, setOpenForgotPasswordModal] = useState(false);
     const [email, setEmail] = useState("");
@@ -211,8 +212,10 @@ export default function Home() {
         if (!isLoggedIn) {
             setOpenSignInModel(true);
         } else {
-            router.push('/playground');
-            helpers.handleFullscreenAndLock();
+            console.log('start game');
+            setOpenStartGameModel(true);
+            // router.push('/playground');
+            // helpers.handleFullscreenAndLock();
         }
     }
 
@@ -362,6 +365,7 @@ export default function Home() {
                 }
             </MahjongModel> 
             <Notification />
+            {openStartGameModel && <CreateRoom/>}
             {/* <UnlockedNewBadge/> */}
             {/* <ReferAndEarn/> */}
             {/* <ReferToFriend/> */}
@@ -369,7 +373,6 @@ export default function Home() {
             {/* <RedeemAndBuyPoints/> */}
             {/* <MatchHistory/> */}
             {/* <RoomModel/> */}
-            {/* <CreateRoom/> */}
             {/* <GameOver/> */}
             {/* { <JoinMatch/> } */}
             {/* { <MatchCreated/> } */}
