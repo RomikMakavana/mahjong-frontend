@@ -29,28 +29,28 @@ export default function GameLayout() {
     player1: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: true,
+      isWait: false,
       showChatBubble: false,
       player_id: '1'
     },
     player2: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: true,
+      isWait: false,
       showChatBubble: false,
       player_id: '2'
     },
     player3: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: true,
+      isWait: false,
       showChatBubble: false,
       player_id: '3'
     },
     player4: {
       userName: 'dakshjoshi66758',
       profileImg: UserProfile,
-      isWait: true,
+      isWait: false,
       showChatBubble: false,
       player_id: '4'
     },
@@ -67,6 +67,7 @@ export default function GameLayout() {
     setLoading(true);
     const dbRef = ref(AuthService.database, 'user-games/' + gameId + '/public');
     const unsubscribe = onValue(dbRef, (snapshot) => {
+      console.log('snapshot.val()',snapshot.val());
       
       setData(snapshot.val());
       setLoading(false);

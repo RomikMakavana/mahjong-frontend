@@ -117,6 +117,8 @@ import {
         return new Promise((res) => {
             fauth.onAuthStateChanged((user: User | null) => {
               if (user) {
+                console.log(user);
+                
                 res(user);
               } else {
                 res(false);
@@ -130,6 +132,8 @@ import {
         signInWithEmailAndPassword(fauth, email, password)
           .then(async (userCredential) => {
             const user = userCredential.user;
+            console.log('user', user);
+            
             if (user.emailVerified) {
               resolve({
                 status: true,

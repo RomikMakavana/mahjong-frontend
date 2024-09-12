@@ -1,12 +1,58 @@
+'use client';
+
 import InputField from "../InputField";
 import MahjongModel from "../MahjongModel";
 import { ICONS } from "@/helpers/icons";
 import Image from "next/image";
 import PrimaryButton from "../PrimaryButton";
+import APIService from "@/services/firebase/api";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useNotifications } from "@/utils";
 
-export default function CreateRoom() {
+interface Props {
+    open: boolean;
+    closeModal:(value:boolean) => void;
+}
+
+
+
+export default function CreateRoom(props:Props) {
+
+    const router = useRouter();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const { notification } = useNotifications();
+
+    const  generateRandomNumber = () =>  {
+        return Math.floor(10000 + Math.random() * 90000);
+    }
+
+    const createRoom = async () => {
+        setIsProcessing(true);
+        try {
+            const randomNumber = generateRandomNumber()
+            const res = await APIService.startGame(randomNumber);
+            console.log('res', res);
+            
+            if(res.status === 200 && res.data.success){
+                setIsProcessing(false)
+                router.push(`/playground-duplicate/${res.data.data.game_id}`)
+            }else {
+                setIsProcessing(false);
+                notification('Something went wrong.', 'error');
+
+            }
+        } catch (error) {
+            setIsProcessing(false);
+            notification('Something went wrong.', 'error');
+            console.log(error);
+            
+        }
+    }
+
+
     return (
-        <MahjongModel open={true} extraCss="xs:w-[366px]">
+        <MahjongModel open={props.open} extraCss="xs:w-[366px]" closeModel={() => props.closeModal(false)}>
             <div>
                 <div className="xxs:flex max-xxs:mb-2 justify-between items-center">
                     <h2 className="text-white font-bold text-xl max-xs:text-lg">Create a room</h2>
@@ -55,8 +101,8 @@ export default function CreateRoom() {
                     </div>
                 </div>
                 <div className="mt-6">
-                    <PrimaryButton label="Create room" extraCss="max-xs:text-sm" />
-                    <button className="w-full text-white rounded-lg py-4 max-xs:text-sm max-xs:py-3 mt-[10px] border max-xs:font-medium font-bold max-xs:text-opacity-60 border-neutral-800 ">
+                    <PrimaryButton onClick={() => createRoom()} isDisabled={isProcessing} label="Create room" extraCss="max-xs:text-sm" />
+                    <button onClick={() => props.closeModal(false)} className="w-full text-white rounded-lg py-4 max-xs:text-sm max-xs:py-3 mt-[10px] border max-xs:font-medium font-bold max-xs:text-opacity-60 border-neutral-800 ">
                         Close
                     </button>
                 </div>

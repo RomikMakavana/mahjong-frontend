@@ -131,7 +131,6 @@ export default function Home() {
                 closeModal();
                 setIsLoggedIn(true);
                 notification("Logged in successfully.", 'success');
-                router.push('/playground');
                 helpers.handleFullscreenAndLock();
             } else if (res.status && !res.isVerifiedEmail) {
                 setOpenSignInModel(false);
@@ -372,7 +371,7 @@ export default function Home() {
                 }
             </MahjongModel> 
             <Notification />
-            {openStartGameModel && <CreateRoom/>}
+            <CreateRoom open={openStartGameModel} closeModal={setOpenStartGameModel}/>
             {/* <UnlockedNewBadge/> */}
             {/* <ReferAndEarn/> */}
             {/* <ReferToFriend/> */}
