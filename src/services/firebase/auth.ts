@@ -30,7 +30,7 @@ import {
     logout: () => Promise<{ status: boolean, message: string }>,
     createUser: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
     login: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
-    sendEmailVerificationLink: () => Promise<{ status: boolean, message: string }>,
+    sendEmailVerificationLink: () => Promise<{ status: boolean, code: string}>,
     sendResetPasswordLink: (email:string) => Promise<{status: boolean, message: string}>
   }
 
@@ -165,9 +165,17 @@ import {
               url: window.location.origin,
               handleCodeInApp: true
             });
+            resolve({ status: true, code:'success'});
+          }else {
+            resolve({ status: false, code: 'failed'});
+          }
+        }).catch((error) => {
+          if(error.code == 'auth/too-many-requests'){
+            resolve({status:false, code: 'tooManyAttempts'})
+          }else {
+            resolve({status:false, code: 'failed'})
           }
         })
-        resolve({ status: false, message: "userVerified" });
       });
     },
 

@@ -136,11 +136,13 @@ export default function Home() {
             } else if (res.status && !res.isVerifiedEmail) {
                 setOpenSignInModel(false);
                 setOpenSignUpModel(false);
-                sendEmailVerificationLink();
+                setOpenVerificationModel(true);
             } else if (!res.status && res.message === 'auth/invalid-credential') {
                 console.log('invalid credential');
                 notification("Invalid credential.", 'error');
 
+            }else if (!res.status && res.message === 'auth/too-many-requests'){
+                notification("Too many attempts. Please try again after some time.", 'info');
             } else {
                 console.log('something went wrong');
                 notification("something went wrong", 'error');
@@ -153,19 +155,20 @@ export default function Home() {
     }
 
     const sendEmailVerificationLink = async () => {
-        try {
+            setIsProcessing(true);
             const res = await AuthService.sendEmailVerificationLink();
-            if (res) {
+            if (res.status) {
+                setIsProcessing(false);
                 setOpenVerificationModel(true);
-            } else {
-                console.log('something went wrong.');
+                notification("Link sent successfully.", 'success');
+            } else if(!res.status && res.code == 'tooManyAttempts') {
+                setIsProcessing(false);
+                notification("Too many attempts. Please try again after some time.", 'info');
+            }else {
+                setIsProcessing(false);
                 notification("something went wrong", 'error');
-
             }
-        } catch (error) {
-            console.log(error);
-        }
-    }
+        } 
 
     useEffect(() => {
         checkIsLoggedIn();
@@ -199,7 +202,7 @@ export default function Home() {
                 setIsLoggedIn(false);
             } else {
                 if (!res.emailVerified) {
-                    sendEmailVerificationLink();
+                    setOpenVerificationModel(true);
                 }
                 setIsLoggedIn(true);
             }
@@ -337,6 +340,10 @@ export default function Home() {
                             <p className="text-lg text-center font-thin mt-[10px] mb-6">
                                 {`We've sent a verification link to ${email}. Please check your email to verify your account.`}
                             </p>
+
+                            <button disabled={isProcessing} onClick={() => sendEmailVerificationLink()} className="rounded-9 bg-brand-blue px-5 py-2 w-full transition-all duration-300 disabled:opacity-50">
+                                Resend Link
+                            </button>
                         </div>
                     </div>
                 }
