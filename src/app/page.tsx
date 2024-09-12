@@ -20,7 +20,6 @@ import ReferToFriend from "@/components/Models/ReferToFriend";
 import TaskCenterModel from "@/components/Models/TaskCenterModel";
 import RedeemAndBuyPoints from "@/components/Models/RedeemAndBuyPoints";
 import JoinMatch from "@/components/Models/JoinMatch";
-import MatchCreated from "@/components/Models/MatchCreated";
 import ViewWiningTile from "@/components/Models/ViewWiningTile";
 import MatchHistory from "@/components/Models/MatchHistory";
 import RoomModel from "@/components/Models/RoomModel";
@@ -214,7 +213,6 @@ export default function Home() {
         if (!isLoggedIn) {
             setOpenSignInModel(true);
         } else {
-            console.log('start game');
             setOpenStartGameModel(true);
             // router.push('/playground');
             // helpers.handleFullscreenAndLock();
@@ -381,7 +379,6 @@ export default function Home() {
             {/* <RoomModel/> */}
             {/* <GameOver/> */}
             {/* { <JoinMatch/> } */}
-            {/* { <MatchCreated/> } */}
             {/* <ViewWiningTile/>  */}
 
             

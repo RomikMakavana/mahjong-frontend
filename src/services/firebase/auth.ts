@@ -117,7 +117,7 @@ import {
         return new Promise((res) => {
             fauth.onAuthStateChanged((user: User | null) => {
               if (user) {
-                console.log(user);
+                // console.log(user);
                 
                 res(user);
               } else {

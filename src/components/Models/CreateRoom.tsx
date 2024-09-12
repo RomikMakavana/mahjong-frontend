@@ -32,7 +32,6 @@ export default function CreateRoom(props:Props) {
         try {
             const randomNumber = generateRandomNumber()
             const res = await APIService.startGame(randomNumber);
-            console.log('res', res);
             
             if(res.status === 200 && res.data.success){
                 setIsProcessing(false)
@@ -45,11 +44,9 @@ export default function CreateRoom(props:Props) {
         } catch (error) {
             setIsProcessing(false);
             notification('Something went wrong.', 'error');
-            console.log(error);
-            
+            console.log(error);   
         }
     }
-
 
     return (
         <MahjongModel open={props.open} extraCss="xs:w-[366px]" closeModel={() => props.closeModal(false)}>
