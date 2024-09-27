@@ -4,6 +4,7 @@ const config = {
     baseUrl: 'http://localhost:3031/web/',
     endPoints: {
         startGame:() => `game`,
+        profile:() => `profile`,
         getGameDetails: (gameId:string) => `game/${gameId}` 
     }
 

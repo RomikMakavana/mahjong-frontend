@@ -1,5 +1,5 @@
 import { FIREBASE_CONFIG } from "@/firebase-config";
-import { AuthDetails } from "@/interfaces";
+import { AuthDetails, Profile } from "@/interfaces";
 import { initializeApp } from "firebase/app";
 import { Database, getDatabase } from "firebase/database";
 import {
@@ -20,7 +20,7 @@ import {
   } from "firebase/auth";
 
   const firebase = initializeApp(FIREBASE_CONFIG);
-  const fauth = getAuth();
+  const fauth = getAuth(firebase);
   const database = getDatabase(firebase);
 
   interface AuthserviceType {
@@ -31,7 +31,7 @@ import {
     createUser: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
     login: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
     sendEmailVerificationLink: () => Promise<{ status: boolean, code: string}>,
-    sendResetPasswordLink: (email:string) => Promise<{status: boolean, message: string}>
+    sendResetPasswordLink: (email:string) => Promise<{status: boolean, message: string}>,
   }
 
   const AuthService: AuthserviceType = {
@@ -115,16 +115,19 @@ import {
 
      getProfile(){
         return new Promise((res) => {
+            // res(fauth.currentUser ? fauth.currentUser : false);
             fauth.onAuthStateChanged((user: User | null) => {
               if (user) {
-                // console.log(user);
+                console.log(user);
                 
                 res(user);
               } else {
                 res(false);
               }
             });
-          });
+        
+        });
+        
      },
 
      login(email, password) {

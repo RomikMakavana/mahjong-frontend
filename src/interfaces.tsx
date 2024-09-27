@@ -1,3 +1,5 @@
+import { User } from "firebase/auth";
+
 export interface TournamentStat {
   icon: string;
   label: string;
@@ -56,8 +58,15 @@ export interface GameDetails {
     player_index: number;
     user_id: string | null;
   }[];
-  private_detail:{
+  private_detail: {
     discard_card_list: any;
   }
 
 }
+
+export interface Profile {
+  email: string;
+  _id: string;
+}
+
+export interface MahjongUser { firebaseUser: User, apiUser: Profile }

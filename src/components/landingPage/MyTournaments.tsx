@@ -1,25 +1,52 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import IconMahJong from "@/assets/images/svg/mahjong.svg";
+import { database } from "@/services/firebase/firestore";
+import { onValue, ref } from "firebase/database";
+import { User } from "firebase/auth";
+import { AuthService } from "@/services/firebase/auth";
+import APIService from "@/services/firebase/api";
+import { MahjongUser } from "@/interfaces";
 
 export const MyTournaments = () => {
+    const [tournaments, setTournaments] = useState<{ tournamentName: string, time: string }[]>([])
+    const [user, setUser] = useState<MahjongUser | null>(null);
 
-    const [tournaments, setTournaments] = useState<{ tournamentName: string, time: string }[]>([
-        {
-            tournamentName: 'tournament 01',
-            time: '0.:34 AM | 25th Apr 2024'
-        },
-        {
-            tournamentName: 'tournament 01',
-            time: '0.:34 AM | 25th Apr 2024'
-        },
-        {
-            tournamentName: 'tournament 01',
-            time: '0.:34 AM | 25th Apr 2024'
-        },
-    ])
+    useEffect(() => {
+        // Get user from Firebase Auth
+        loadUser();
+
+    }, []);
+
+    const loadUser = async () => {
+        const user = await APIService.getProfile();
+        setUser(user);
+    }
+
+    useEffect(() => {
+        if (!user) return;
+        const dataRef = ref(database, 'game-list');
+
+        // Set up Firebase Realtime Database listener
+        const unsubscribe = onValue(dataRef, (snapshot) => {
+            const data = snapshot.val();
+
+            // Find game where user is a participant
+            if (data && Array.isArray(data)) {
+                const userGames = data.filter((game: any) => game.players.find((player: any) => player.user_id == user.apiUser._id));
+                console.log(user, userGames);
+            }
+
+            // setto(data);
+        });
+
+        // Cleanup function to unsubscribe when component unmounts
+        return () => {
+            unsubscribe();
+        };
+    }, [user])
 
     return (
         <div className="border p-3 xs:p-5 bg-[#0D0D0D]  border-[#1b1b1b] sm:rounded-lg  overflow-y-hidden">
