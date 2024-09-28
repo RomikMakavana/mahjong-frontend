@@ -21,6 +21,7 @@ export default function CreateRoom(props:Props) {
 
     const router = useRouter();
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isRoomPrivate, setIsRoomPrivate] = useState(false);
     const { notification } = useNotifications();
 
     const  generateRandomNumber = () =>  {
@@ -56,7 +57,7 @@ export default function CreateRoom(props:Props) {
                     <div className="flex items-center">
                         <p className="mr-2 text-white text-xs text-opacity-50 font-semibold">Private room</p>
                         <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" />
+                            <input checked={isRoomPrivate} onChange={(e) => setIsRoomPrivate(e.target.checked)} type="checkbox" className="sr-only peer" />
                             <div className="w-7 h-[14px] bg-white rounded-full peer peer-checked:after:translate-x-full  after:content-[''] after:absolute after:top-[1px] after:left-[0.2px] after:bg-[#6E6E6E] after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-brand-blue peer-checked:after:bg-white peer-checked:after:left-[2.8px] "></div>
                         </label>
                     </div>

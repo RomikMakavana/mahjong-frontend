@@ -21,13 +21,14 @@ const APIService = {
       },
 
 
-    startGame: async (randomNumber: number) => {
+    startGame: async (randomNumber: number, isRoomPrivate: boolean) => {
         const url = `${config.baseUrl}${config.endPoints.startGame()}`;
         const res = await axios.request<ApiResponse<StartGameAPIResponse>>({
             method: 'POST',
             url: url,
             data: {
-                random_number: randomNumber
+                random_number: randomNumber,
+                is_game_private: isRoomPrivate
             },
             headers: await APIService.headers()
         })
