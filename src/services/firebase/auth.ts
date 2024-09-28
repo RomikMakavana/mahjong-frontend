@@ -25,6 +25,7 @@ import {
 
   interface AuthserviceType {
     database: Database,
+    user: User | null,
     googleSignIn: () => Promise<{ status: boolean, message: string, user: AuthDetails | null }>,
     getProfile: () => Promise<User | false>,
     logout: () => Promise<{ status: boolean, message: string }>,
@@ -36,6 +37,7 @@ import {
 
   const AuthService: AuthserviceType = {
     database,
+    user: null,
      googleSignIn(){
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({
@@ -47,6 +49,7 @@ import {
             signInWithPopup(fauth, provider)
             .then((result) => {
                 const user = result.user;
+                AuthService.user = user;
                 if(user){
                     resolve({
                         status: true,
@@ -81,6 +84,7 @@ import {
           fauth
             .signOut()
             .then(() => {
+              AuthService.user = null;
               resolve({ status: true, message: "Logged out successfully." });
             })
             .catch((err) => {
@@ -135,8 +139,7 @@ import {
         signInWithEmailAndPassword(fauth, email, password)
           .then(async (userCredential) => {
             const user = userCredential.user;
-            console.log('user', user);
-            
+            AuthService.user = user;
             if (user.emailVerified) {
               resolve({
                 status: true,

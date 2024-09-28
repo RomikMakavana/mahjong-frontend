@@ -11,8 +11,11 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { LeaderBoard } from "./LeaderBoard";
 import { MyTournaments } from "./MyTournaments";
 
+interface TournamentAndLeaderBoardProps {
+    openLoginModal: () => void;
+}
 
-export const TournamentAndLeaderBoard = () => {
+export const TournamentAndLeaderBoard = (props: TournamentAndLeaderBoardProps) => {
 
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
     const { selectedIndex, scrollSnaps, onButtonClick } = useButton(emblaApi);
@@ -106,13 +109,13 @@ export const TournamentAndLeaderBoard = () => {
 
                 <div className="mt-5 ">
                     <div className="hidden  sm:flex flex-col md:flex-row ">
-                        <div className="w-full md:w-[65%] md:mr-[10px]">
+                        <div className="w-full md:w-[60%] md:mr-[10px]">
                             <h6 className="text-lg font-bold mb-[15px]">Leaderboard</h6>
                             <LeaderBoard />
                         </div>
-                        <div className="w-full mt-[30px] md:mt-0 md:w-[35%]">
+                        <div className="w-full mt-[30px] md:mt-0 md:w-[40%]">
                             <h6 className="text-lg font-bold mb-[15px]">My tournaments</h6>
-                            <MyTournaments />
+                            <MyTournaments openLoginModal={props.openLoginModal}/>
                         </div>
                     </div>
                     <div className="sm:hidden">
@@ -131,7 +134,7 @@ export const TournamentAndLeaderBoard = () => {
                             {
                                 activeTab === 'myMatches' &&
                                 <div className="animate-[fadein_1s_forwards]">
-                                    <MyTournaments />
+                                    <MyTournaments openLoginModal={props.openLoginModal}/>
                                 </div>
                             }
                         </div>

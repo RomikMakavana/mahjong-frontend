@@ -69,4 +69,16 @@ export interface Profile {
   _id: string;
 }
 
+export interface Tournament {
+  game_code: string;
+  is_game_started: boolean;
+  _id: string;
+  players: {
+    player_name: string;
+    user_id: string;
+    _id: string
+  }[]
+
+}
+
 export interface MahjongUser { firebaseUser: User, apiUser: Profile }

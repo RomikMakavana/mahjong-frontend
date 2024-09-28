@@ -119,7 +119,7 @@ export const HeaderBlock = (props: HeaderBlockProps) => {
                         <div className="hidden sm:flex  relative group/menu cursor-pointer items-center rounded-9 bg-transparent ">
                             <Image src={ImgAvatar} alt="Avatar Image" className="mr-3  rounded-full border-white w-11 h-auto object-cover border-[0.5px]" />
                             <Image src={IconDropdown} alt="Dropdown Image" className="group-hover/menu:rotate-180 transition-all duration-500  " />
-                            <div className="absolute bg-brand-black-87 invisible transition-opacity duration-500 opacity-0 group-hover/menu:opacity-100 group-hover/menu:visible border border-brand-purple rounded-9 top-12 -left-24 z-[999] w-44 py-5">
+                            <div className="absolute bg-brand-black-87 invisible transition-opacity duration-500 opacity-0 group-hover/menu:opacity-100 group-hover/menu:visible border border-brand-purple rounded-9 top-11 -left-24 z-[999] w-44 py-5">
                                 {
                                     menu.map((item, index) => {
                                         return (

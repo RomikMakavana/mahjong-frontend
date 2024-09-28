@@ -170,6 +170,7 @@ export default function Home() {
 
     useEffect(() => {
         checkIsLoggedIn();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     const sendPasswordResetLink = async (e: any) => {
@@ -202,6 +203,7 @@ export default function Home() {
                 if (!res.emailVerified) {
                     setOpenVerificationModel(true);
                 }
+                AuthService.user = res;
                 setIsLoggedIn(true);
             }
         } catch (error) {
@@ -265,7 +267,7 @@ export default function Home() {
                     <div className="mt-20 sm:mt-[124px] md:mt-[105px]">
                         <ClaimFreePoints />
                         <MainSection startNewGame={startNewGame} />
-                        <TournamentAndLeaderBoard />
+                        <TournamentAndLeaderBoard openLoginModal={openLoginModal}/>
                         <FeaturedTournaments/>
                     </div>
                 </div>

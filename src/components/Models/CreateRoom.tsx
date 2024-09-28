@@ -32,11 +32,11 @@ export default function CreateRoom(props:Props) {
         setIsProcessing(true);
         try {
             const randomNumber = generateRandomNumber()
-            const res = await APIService.startGame(randomNumber);
+            const res = await APIService.startGame(randomNumber, true);
             
             if(res.status === 200 && res.data.success){
                 setIsProcessing(false)
-                router.push(`/playground-duplicate/${res.data.data.game_id}`)
+                router.push(`/playground/${res.data.data.game_id}`)
             }else {
                 setIsProcessing(false);
                 notification('Something went wrong.', 'error');
