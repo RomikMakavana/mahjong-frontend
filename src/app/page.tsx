@@ -26,14 +26,16 @@ import RoomModel from "@/components/Models/RoomModel";
 import CreateRoom from "@/components/Models/CreateRoom";
 import GameOver from "@/components/Models/GameOver";
 import { useRouter } from "next/navigation";
-import {isTablet, isMobile} from 'react-device-detect';
+import { isTablet, isMobile } from 'react-device-detect';
 import { helpers } from "@/helpers/helpers";
+import APIService from "@/services/firebase/api";
 
 export default function Home() {
 
     const [openSignInModel, setOpenSignInModel] = useState(false);
     const [openSignUpModel, setOpenSignUpModel] = useState(false);
     const [openStartGameModel, setOpenStartGameModel] = useState(false);
+    const [createRoom, setCreateRoom] = useState(false);
     const [openVerificationModel, setOpenVerificationModel] = useState(false);
     const [openForgotPasswordModal, setOpenForgotPasswordModal] = useState(false);
     const [email, setEmail] = useState("");
@@ -139,7 +141,7 @@ export default function Home() {
                 console.log('invalid credential');
                 notification("Invalid credential.", 'error');
 
-            }else if (!res.status && res.message === 'auth/too-many-requests'){
+            } else if (!res.status && res.message === 'auth/too-many-requests') {
                 notification("Too many attempts. Please try again after some time.", 'info');
             } else {
                 console.log('something went wrong');
@@ -153,20 +155,20 @@ export default function Home() {
     }
 
     const sendEmailVerificationLink = async () => {
-            setIsProcessing(true);
-            const res = await AuthService.sendEmailVerificationLink();
-            if (res.status) {
-                setIsProcessing(false);
-                setOpenVerificationModel(true);
-                notification("Link sent successfully.", 'success');
-            } else if(!res.status && res.code == 'tooManyAttempts') {
-                setIsProcessing(false);
-                notification("Too many attempts. Please try again after some time.", 'info');
-            }else {
-                setIsProcessing(false);
-                notification("something went wrong", 'error');
-            }
-        } 
+        setIsProcessing(true);
+        const res = await AuthService.sendEmailVerificationLink();
+        if (res.status) {
+            setIsProcessing(false);
+            setOpenVerificationModel(true);
+            notification("Link sent successfully.", 'success');
+        } else if (!res.status && res.code == 'tooManyAttempts') {
+            setIsProcessing(false);
+            notification("Too many attempts. Please try again after some time.", 'info');
+        } else {
+            setIsProcessing(false);
+            notification("something went wrong", 'error');
+        }
+    }
 
     useEffect(() => {
         checkIsLoggedIn();
@@ -227,7 +229,7 @@ export default function Home() {
     //           if (!document.fullscreenElement) {
     //             await document.documentElement.requestFullscreen();
     //           }
-        
+
     //           if ('orientation' in screen && typeof screen.orientation.lock === 'function') {
     //             await (screen.orientation as any).lock('landscape-primary');
     //             // setOrientationType('Orientation locked to portrait');
@@ -253,6 +255,27 @@ export default function Home() {
     //     }
     //   }
 
+    const joinRandomGame = async () => {
+        setIsProcessing(true);
+        try {
+            const res = await APIService.joinRandomGame();
+            if (res.status === 200 && res.data.success) {
+            router.push(`/playground/${res.data.data.game_id}`)
+            //     helpers.handleFullscreenAndLock();
+            } else {
+                notification(res.data.message, 'error');
+                if(res.data.code === "no_game_found_to_join") {
+                    setOpenStartGameModel(false);
+                    setCreateRoom(true);
+                }
+            }
+            setIsProcessing(false);
+        } catch (error) {
+            console.log(error);
+            notification("something went wrong", 'error');
+        }
+        setIsProcessing(false);
+    }
     return (
         <React.Fragment>
             <div className=" text-white flex flex-col h-screen">
@@ -267,8 +290,8 @@ export default function Home() {
                     <div className="mt-20 sm:mt-[124px] md:mt-[105px]">
                         <ClaimFreePoints />
                         <MainSection startNewGame={startNewGame} />
-                        <TournamentAndLeaderBoard openLoginModal={openLoginModal}/>
-                        <FeaturedTournaments/>
+                        <TournamentAndLeaderBoard openLoginModal={openLoginModal} />
+                        <FeaturedTournaments />
                     </div>
                 </div>
             </div>
@@ -369,21 +392,20 @@ export default function Home() {
                     </div>
 
                 }
-            </MahjongModel> 
+            </MahjongModel>
             <Notification />
-            <CreateRoom open={openStartGameModel} closeModal={setOpenStartGameModel}/>
+            <CreateRoom open={createRoom} closeModal={setCreateRoom}/>
             {/* <UnlockedNewBadge/> */}
             {/* <ReferAndEarn/> */}
             {/* <ReferToFriend/> */}
             {/* <TaskCenterModel/> */}
             {/* <RedeemAndBuyPoints/> */}
             {/* <MatchHistory/> */}
-            {/* <RoomModel/> */}
+            <RoomModel open={openStartGameModel} closeModal={setOpenStartGameModel} joinRandomGame={joinRandomGame} setCreateRoom={setCreateRoom}/>
             {/* <GameOver/> */}
             {/* { <JoinMatch/> } */}
             {/* <ViewWiningTile/>  */}
 
-            
         </React.Fragment>
     );
 }

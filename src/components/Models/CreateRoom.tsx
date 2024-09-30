@@ -12,19 +12,21 @@ import { useNotifications } from "@/utils";
 
 interface Props {
     open: boolean;
-    closeModal:(value:boolean) => void;
+    closeModal: (value: boolean) => void;
 }
 
 
 
-export default function CreateRoom(props:Props) {
+export default function CreateRoom(props: Props) {
 
     const router = useRouter();
     const [isProcessing, setIsProcessing] = useState(false);
     const [isRoomPrivate, setIsRoomPrivate] = useState(false);
+    const [timeLimit, setTimeLimit] = useState(10);
+    const [lavelToWin, setLavelToWin] = useState(10);
     const { notification } = useNotifications();
 
-    const  generateRandomNumber = () =>  {
+    const generateRandomNumber = () => {
         return Math.floor(10000 + Math.random() * 90000);
     }
 
@@ -32,12 +34,12 @@ export default function CreateRoom(props:Props) {
         setIsProcessing(true);
         try {
             const randomNumber = generateRandomNumber()
-            const res = await APIService.startGame(randomNumber, true);
-            
-            if(res.status === 200 && res.data.success){
+            const res = await APIService.startGame(randomNumber, isRoomPrivate);
+
+            if (res.status === 200 && res.data.success) {
                 setIsProcessing(false)
                 router.push(`/playground/${res.data.data.game_id}`)
-            }else {
+            } else {
                 setIsProcessing(false);
                 notification('Something went wrong.', 'error');
 
@@ -45,8 +47,17 @@ export default function CreateRoom(props:Props) {
         } catch (error) {
             setIsProcessing(false);
             notification('Something went wrong.', 'error');
-            console.log(error);   
+            console.log(error);
         }
+    }
+
+    const timeLimitHandle = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setTimeLimit(Number(event.target.value));
+    };
+
+    // lavelToWin
+    const lavelToWinHandle = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setLavelToWin(Number(event.target.value));
     }
 
     return (
@@ -57,7 +68,7 @@ export default function CreateRoom(props:Props) {
                     <div className="flex items-center">
                         <p className="mr-2 text-white text-xs text-opacity-50 font-semibold">Private room</p>
                         <label className="relative inline-flex items-center cursor-pointer">
-                            <input checked={isRoomPrivate} onChange={(e) => setIsRoomPrivate(e.target.checked)} type="checkbox" className="sr-only peer" />
+                            <input checked={isRoomPrivate} onClick={(e) => timeLimitHandle(e)} type="checkbox" className="sr-only peer" />
                             <div className="w-7 h-[14px] bg-white rounded-full peer peer-checked:after:translate-x-full  after:content-[''] after:absolute after:top-[1px] after:left-[0.2px] after:bg-[#6E6E6E] after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-brand-blue peer-checked:after:bg-white peer-checked:after:left-[2.8px] "></div>
                         </label>
                     </div>
@@ -66,23 +77,23 @@ export default function CreateRoom(props:Props) {
                     <InputField type="text" placeholder="Enter room name" extraCss="font-medium max-xs:text-xs placeholder:text-white placeholder:text-opacity-50" />
                     <div className="w-full xxs:flex justify-between mt-[10px]">
                         <div className="mr-2 border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:mb-[10px] max-xxs:justify-between max-xxs:px-2 py-[14px]">
-                            <select id="options" name="options" className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
-                                <option value="option1" className="text-black">Time limit per turn</option>
-                                <option value="option1" className="text-black">10s</option>
-                                <option value="option1" className="text-black">30s</option>
-                                <option value="option1" className="text-black">60s</option>
-                                <option value="option1" className="text-black">90s</option>
-                                <option value="option1" className="text-black">120s</option>
+                            <select id="options" name="options" onChange={timeLimitHandle}  className="w-full  text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                                <option value="0" className="bg-brand-dark text-white text-center">Time limit per turn</option>
+                                <option value="10" className="bg-brand-dark text-white text-center">10s</option>
+                                <option value="30" className="bg-brand-dark text-white text-center">30s</option>
+                                <option value="60" className="bg-brand-dark text-white text-center">60s</option>
+                                <option value="90" className="bg-brand-dark text-white text-center">90s</option>
+                                <option value="120" className="bg-brand-dark text-white text-center">120s</option>
                             </select>
                             {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                         </div>
                         <div className="border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:justify-between max-xxs:px-2 py-[14px] ">
-                            <select id="options" name="options" className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
-                                <option value="option1" className="text-black">Min level to win</option>
-                                <option value="option1" className="text-black">10</option>
-                                <option value="option1" className="text-black">15</option>
-                                <option value="option1" className="text-black">20</option>
-                                <option value="option1" className="text-black">25</option>
+                            <select id="options" name="options" onChange={lavelToWinHandle} className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                                <option value="option1" className="bg-brand-dark text-white text-center">Min level to win</option>
+                                <option value="option1" className="bg-brand-dark text-white text-center">10</option>
+                                <option value="option1" className="bg-brand-dark text-white text-center">15</option>
+                                <option value="option1" className="bg-brand-dark text-white text-center">20</option>
+                                <option value="option1" className="bg-brand-dark text-white text-center">25</option>
                             </select>
                             {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                         </div>

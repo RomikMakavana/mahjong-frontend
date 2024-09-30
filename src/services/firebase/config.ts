@@ -5,7 +5,8 @@ const config = {
     endPoints: {
         startGame:() => `game`,
         profile:() => `profile`,
-        getGameDetails: (gameId:string) => `game/${gameId}` 
+        getGameDetails: (gameId:string) => `game/${gameId}`,
+        joinRandomGame: () => `join-random-game`, 
     }
 
 }

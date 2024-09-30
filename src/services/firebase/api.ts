@@ -65,6 +65,15 @@ const APIService = {
         }
       }
       return APIService.user;
+    },
+    joinRandomGame: async () => {
+      const url = `${config.baseUrl}${config.endPoints.joinRandomGame()}`;
+      const res = await axios.request<ApiResponse<any>>({
+        method: 'GET',
+        url: url,
+        headers: await APIService.headers()
+      })
+      return res;
     }
 }
 
