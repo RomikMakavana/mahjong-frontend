@@ -9,13 +9,14 @@ const APIService = {
     user: null as null | MahjongUser,
 
     headers: async () => {
-        const user = await AuthService.getProfile();
+        const user =  AuthService.getAuthDetails();
+        
         if (user) {
           return {
             Authorization: await user.getIdToken()
           }
         } else {
-          // AuthService.logout();
+          AuthService.logout();
           // window.location.reload();
         }
       },

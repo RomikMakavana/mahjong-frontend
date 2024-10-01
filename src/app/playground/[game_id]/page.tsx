@@ -132,7 +132,10 @@ export default function GameLayout() {
 
     try {
       const res = await APIService.getGameDetails(gameId);
+      
+      
       if (res.status === 200 && res.data.success === true) {
+        
         const data = res.data.data
         
         setGameDetails(data);
@@ -151,10 +154,13 @@ export default function GameLayout() {
               },
             ];
           });
-
+        }
 
           //Set players.
           const players = data.players.map((player) => ({ userName: player.player_name, profileImg: UserProfile, isWait: false, showChatBubble: false, player_id: player._id, userId: player.user_id }))
+          console.log('[playears', players);
+          
+          
           const mainPlayer = players.find((player) => player.userId != null);
           const otherPlayers = players.filter((player) => player.userId == null);
           const playersList: Players = {}
@@ -167,8 +173,7 @@ export default function GameLayout() {
           })
 
           setGamePlayersData({ ...playersList })
-
-        }
+          console.log('ploayear', playersList);
       } else {
         notification('Something went wrong', 'error');
       }
@@ -276,7 +281,7 @@ export default function GameLayout() {
           {/**Playground */}
           <div className="w-full overflow-auto">
             {
-              Object.keys(gamePlayersData).length > 0 &&
+              Object.keys(gamePlayersData).length > 0  &&
             <div className="playground flex flex-col h-full justify-between ml-5 mr-5 sm:pt-9 sm:pb-7 pb-4 pt-4">
               <div className="flex justify-between another-user-block h-[100%]">
                 {/* User 2 Block */}

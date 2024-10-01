@@ -33,6 +33,7 @@ import {
     login: (email: string, password: string) => Promise<{ status: boolean, message: string, isVerifiedEmail: boolean, user: null | User }>,
     sendEmailVerificationLink: () => Promise<{ status: boolean, code: string}>,
     sendResetPasswordLink: (email:string) => Promise<{status: boolean, message: string}>,
+    getAuthDetails: () => User | false
   }
 
   const AuthService: AuthserviceType = {
@@ -200,7 +201,12 @@ import {
         }
         
       })
+    },
+
+    getAuthDetails() {
+      return fauth.currentUser ? fauth.currentUser : false
     }
+
   }
 
   export {AuthService, firebase}

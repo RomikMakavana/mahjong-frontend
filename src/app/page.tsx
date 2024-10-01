@@ -199,6 +199,8 @@ export default function Home() {
     const checkIsLoggedIn = async () => {
         try {
             const res = await AuthService.getProfile();
+            console.log('res', res);
+            
             if (!res) {
                 setIsLoggedIn(false);
             } else {

@@ -11,6 +11,7 @@ import APIService from "@/services/firebase/api";
 import { MahjongUser, Tournament } from "@/interfaces";
 import Loader from "../Loader";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 
 interface MyTournamentsProps {
     openLoginModal: () => void;
@@ -20,7 +21,9 @@ export const MyTournaments = (props: MyTournamentsProps) => {
     const [tournaments, setTournaments] = useState<Tournament[]>([])
     const [user, setUser] = useState<MahjongUser | null>(null);
     const [somethingWentWrong, setSomethingWentWrong] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(true);
+    const router = useRouter();
+
 
     useEffect(() => {
         // Get user from Firebase Auth
@@ -72,6 +75,10 @@ export const MyTournaments = (props: MyTournamentsProps) => {
         return moment(date).format('hh:mm A  |  Do MMM YYYY');
     }
 
+    const goInGame = (gameId: string) => {
+        router.push(`/playground/${gameId}`)
+    }
+
     return (
         <div className="border p-3 xs:p-5 bg-[#0D0D0D]  border-[#1b1b1b] sm:rounded-lg  overflow-y-hidden relative">
             {
@@ -115,7 +122,7 @@ export const MyTournaments = (props: MyTournamentsProps) => {
                                         </div>
                                         <p className="text-white font-bold text-sm xs:text-base">{getFormattedDate(new Date())}</p>
                                     </div>
-                                    <button className="rounded-md bg-brand-blue px-2 py-1 text-sm font-semibold mr-2">Open</button>
+                                    <button onClick={() => goInGame(data._id)} className="rounded-md bg-brand-blue px-2 py-1 text-sm font-semibold mr-2">Open</button>
                                 </div>
 
                             </div>
