@@ -54,7 +54,7 @@ export default function RoomModel(props:Props) {
                         buttons.map((button, index) => {
                             return (
                                 <div onClick={button.action} key={index} className="mt-[10px] cursor-pointer">
-                                    <button onClick={() => {setSelectedBtnIndex(index); console.log("hello this doe")} } className={`text-white py-[14px] px-5 w-full items-center flex flex-1 ${selectedBtnIndex === index ? 'border border-brand-blue rounded-[10px] bg-brand-blue bg-opacity-15 text-pale-lavender text-opacity-80 animate-[fadein_1s_forwards]' : ''}`}>
+                                    <button onClick={() => {setSelectedBtnIndex(index)} } className={`text-white py-[14px] px-5 w-full items-center flex flex-1 ${selectedBtnIndex === index ? 'border border-brand-blue rounded-[10px] bg-brand-blue bg-opacity-15 text-pale-lavender text-opacity-80 animate-[fadein_1s_forwards]' : ''}`}>
                                         <Image src={selectedBtnIndex === index ? button.icon2 as string : button.icon1 as string } alt="Dropdown Image" className={`mr-[10px] w-[18px] max-xs:w-[14px] h-[18px] max-xs:h-[14px]`} />
                                         <label className="text-lg font-bold max-xs:text-sm cursor-pointer">{button.label}</label>
                                     </button>

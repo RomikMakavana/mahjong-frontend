@@ -50,16 +50,18 @@ export const MyTournaments = (props: MyTournamentsProps) => {
 
         // Set up Firebase Realtime Database listener
         const unsubscribe = onValue(dataRef, (snapshot) => {
-            const data = snapshot.val();
-
-            // Find game where user is a participant
-            if (data && Array.isArray(data)) {
-                const userGames = data.filter((game: Tournament) => game.players.find((player) => player.user_id == user.apiUser._id));
-                setTournaments(userGames);
-                setIsProcessing(false);
-                console.log(user, userGames);
-                console.log('data', data);
+            let data = snapshot.val();
+            
+            if(typeof data == 'object' && data != null){
+                data = Object.values(data);
+                // Find game where user is a participant
+                if (data && Array.isArray(data)) {
+                    const userGames = data.filter((game: Tournament) => game.players.find((player) => player.user_id == user.apiUser._id));
+                    setTournaments(userGames);
+                    setIsProcessing(false);
+                }
             }
+
         });
         return () => {
             unsubscribe();

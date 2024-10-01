@@ -85,6 +85,7 @@ export default function GameLayout() {
     setGameId(gameId);
     getUserDetail();
   }, []);
+  
 
   useEffect(() => {
     if (!gameId) return;
@@ -92,8 +93,6 @@ export default function GameLayout() {
     setLoading(true);
     const dbRef = ref(AuthService.database, 'user-games/' + gameId + '/public');
     const unsubscribe = onValue(dbRef, (snapshot) => {
-      console.log('snapshot.val()', snapshot.val());
-
       setData(snapshot.val());
       setLoading(false);
     });
@@ -135,6 +134,7 @@ export default function GameLayout() {
       const res = await APIService.getGameDetails(gameId);
       if (res.status === 200 && res.data.success === true) {
         const data = res.data.data
+        
         setGameDetails(data);
         if (!data.is_game_started) {
           setOpenMatchStartedModal(true);
@@ -167,8 +167,6 @@ export default function GameLayout() {
           })
 
           setGamePlayersData({ ...playersList })
-
-          console.log('gamePlayersData', playersList);
 
         }
       } else {

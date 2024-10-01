@@ -16,7 +16,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
     const isLoggedIn = async () => {
         setIsProcessing(true);
         const res = await AuthService.getProfile();
-        console.log('res',res);
         
         if(res == false){
             router.replace('/');

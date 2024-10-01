@@ -122,8 +122,6 @@ import {
             // res(fauth.currentUser ? fauth.currentUser : false);
             fauth.onAuthStateChanged((user: User | null) => {
               if (user) {
-                console.log(user);
-                
                 res(user);
               } else {
                 res(false);
