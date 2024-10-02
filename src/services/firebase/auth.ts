@@ -107,6 +107,7 @@ const AuthService: AuthserviceType = {
         .signOut()
         .then(() => {
           AuthService.user = null;
+          APIService.user = null;
           resolve({ status: true, message: "Logged out successfully." });
         })
         .catch((err) => {
