@@ -67,7 +67,11 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
             </div>
             <div className='center-block w-[100%] h-[100%] flex flex-col bg-campas-bg-image bg-auto bg-center bg-no-repeat '>
               {
-              isAnyPlayerWaiting ? (gameStatus === 'ready_to_start' ? <p className={`${animate ? 'animate-fade-out' : ''} text-4xl font-bold h-full flex justify-center items-center`}>{seconds}</p> : <p className='m-auto'> Waiting for players...</p>) : (
+              isAnyPlayerWaiting ? (gameStatus === 'ready_to_start' ? 
+                <div className={`text-4xl relative font-bold h-full flex justify-center items-center`}>
+                  <p className='absolute top-4 text-xl'>Match starts in</p>
+                  <p className={`${animate ? 'animate-fade-out' : ''} absolute`}>{seconds}</p>
+                </div> : <p className='m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>
                     <Image src={MainUserCard} alt="Logo Image" priority className="w-[50px]   sm:w-[50px] h-auto m-3" />
