@@ -28,7 +28,7 @@ export default function LeftUserBlock({ playerData, waiting, showBubbleChat }: L
       </div>
       <div className="user-block flex gap-5">
         <div className="user-profile-block">
-          <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={true} speechBubbleClasses='left-[150%] z-50 top-[-20%]' arrowSide='left' />
+          <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={true} speechBubbleClasses='left-[150%] z-50 top-[-20%]' arrowSide='left' />
         </div>
         <div className="user-card-block">
           {hiddenCardsBlock}

@@ -19,6 +19,7 @@ import { GameDetails, MahjongUser, PlayerDetails } from "@/interfaces";
 import { useNotifications } from "@/utils";
 import Loader from "@/components/Loader";
 import { random, reorderList } from "@/libs/utils";
+import moment from "moment";
 
 type Player = {
   _id: string;
@@ -42,6 +43,7 @@ interface GameData {
   game_code: string;
   status: string;
   player_in_sequence: PlayerDetails[];
+  will_starts_at: number | null;
 }
 
 interface MainPlayer {
@@ -58,6 +60,9 @@ export default function GameLayout() {
   const [user, setUser] = useState<MahjongUser | null>(null);
   const [data, setData] = useState<any>(null);
   const [gameData, setGameData] = useState<GameData | null>(null);
+  const [seconds, setSeconds] = useState(0);
+
+  const [gamePlayersData, setGamePlayersData] = useState<Players>({});
   const [userUid, setUserUid] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [openMatchStartedModal, setOpenMatchStartedModal] = useState(true);
@@ -87,7 +92,17 @@ export default function GameLayout() {
     }
   }
 
-  const [gamePlayersData, setGamePlayersData] = useState<Players>({})
+  useEffect(() => {
+    
+    // Set up the timer
+    const timer = setInterval(() => {
+      const _second = gameData !== null && gameData.is_game_started == false && gameData.status == 'ready_to_start' && gameData.will_starts_at !== null && gameData.will_starts_at > 0 ? gameData.will_starts_at - Number(moment().format('X')) : 0;
+      setSeconds((prevSeconds) => _second);
+    }, 1000);
+    
+    // Clean up the timer
+    return () => clearInterval(timer);
+    }, [seconds, gameData]);
 
   // const [gamePlayersData, setGamePlayersData] = useState<{ [kay: string]: Player }>({
   //   player1: {
@@ -138,13 +153,33 @@ export default function GameLayout() {
     const dbRef = gameData.is_game_started ? ref(AuthService.database, 'user-games/' + gameId + '/public') : ref(AuthService.database, 'game-list/' + gameId);
     const unsubscribe = onValue(dbRef, (snapshot) => {
       const snapshotData = snapshot.val();
-      if (!snapshotData || snapshotData.is_game_started != gameData.is_game_started) {
+      if (!snapshotData || snapshotData.is_game_started != gameData.is_game_started || snapshotData.status != gameData.status) {
         loadGameDetails();
       } else {
-        if (gameData.is_game_started) {
+        if (gameData.is_game_started ){
 
         } else {
-
+          
+          const snapshotPlayers = snapshotData.players;
+          if(Array.isArray(snapshotPlayers) && snapshotPlayers.length > 0) {
+            let _player_in_sequence = gameData.player_in_sequence;
+            let _players: Players = {}
+            for (const key in _player_in_sequence) {
+              const player = snapshotPlayers.find(value => value._id == _player_in_sequence[key]._id);
+              
+              _players[player._id] = {
+                _id: player._id,
+                player_name: player.player_name,
+                player_index: player.player_index,
+                user_id: player?.user_id,
+                profile_img: ''
+              }
+            }
+            setGamePlayersData(_players);
+          }else{
+            loadGameDetails();
+          }
+          
         }
       }
     });
@@ -204,7 +239,8 @@ export default function GameLayout() {
             is_game_started: data.is_game_started,
             game_code: data.game_code,
             status: data.status,
-            player_in_sequence: Object.values(_players)
+            player_in_sequence: Object.values(_players),
+            will_starts_at: data.not_started_details.begin_time
           })
 
           setGamePlayersData(_players);

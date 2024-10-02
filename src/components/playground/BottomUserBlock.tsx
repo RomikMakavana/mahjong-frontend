@@ -50,7 +50,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat }:
       <div className="user-block w-full flex justify-between items-center">
         <div className="userSection flex items-center gap-3">
           <PickCard isAnyPlayerWaiting={waiting} />
-          <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
+          <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
           <div className="flex items-center sm:mt-2">
             <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px]   h-auto border-[1px] border-[#ED9108]  rounded-full" />
           </div>

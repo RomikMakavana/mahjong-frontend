@@ -29,7 +29,7 @@ export default function RightUserBlock({playerData, waiting, showBubbleChat} : R
           </div>
           <div className="user-block flex flex-row-reverse gap-5">
             <div className="user-profile-block">
-              <UserProfileBlock  showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={true} arrowSide='right' speechBubbleClasses=' z-50 top-[-20%] right-[150%]' />
+              <UserProfileBlock  showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={true} arrowSide='right' speechBubbleClasses=' z-50 top-[-20%] right-[150%]' />
             </div>
             <div className="user-card-block">
               {hiddenCardsBlock}

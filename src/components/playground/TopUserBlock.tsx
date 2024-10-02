@@ -27,7 +27,7 @@ export default function TopUserBlock({playerData , waiting, showBubbleChat} : To
         </div>
         <div className="user-block flex flex-col gap-[19px]">
           <div className="user-profile-block">
-            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={false} arrowSide='top' speechBubbleClasses='z-50 top-[150%] left-[-20%]' />
+            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} arrowSide='top' speechBubbleClasses='z-50 top-[150%] left-[-20%]' />
           </div>
           <div className="user-card-block flex gap-[1px]">
             {hiddenCardsBlock}

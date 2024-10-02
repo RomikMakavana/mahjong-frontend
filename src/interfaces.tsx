@@ -40,6 +40,10 @@ export interface GameDetails {
   is_game_started: boolean;
   start_with_system_players: boolean;
   is_game_completed: boolean;
+  not_started_details: {
+    begin_in_n_seconds: null | number,
+    begin_time: null | number,
+  }
   win_details: {
     winner: any;
   };
