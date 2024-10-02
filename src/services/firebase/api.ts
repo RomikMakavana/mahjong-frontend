@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "./config";
-import { ApiResponse, GameDetails, MahjongUser, Profile, StartGameAPIResponse } from "@/interfaces";
+import { ApiResponse, CreateRoomDataType, GameDetails, MahjongUser, Profile, StartGameAPIResponse } from "@/interfaces";
 import { AuthService } from "./auth";
 import { User } from "firebase/auth";
 
@@ -22,15 +22,12 @@ const APIService = {
   },
 
 
-  startGame: async (randomNumber: number, isRoomPrivate: boolean) => {
+  startGame: async (data:CreateRoomDataType) => {
     const url = `${config.baseUrl}${config.endPoints.startGame()}`;
     const res = await axios.request<ApiResponse<StartGameAPIResponse>>({
       method: 'POST',
       url: url,
-      data: {
-        random_number: randomNumber,
-        is_game_private: isRoomPrivate
-      },
+      data: data,
       headers: await APIService.headers()
     })
     return res;
