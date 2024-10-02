@@ -95,3 +95,16 @@ export interface PlayerDetails {
   user_id: string | null;
   profile_img: string;
 }
+
+export interface CreateRoomDataType {
+  game_name : string,
+  turn_timeout : string,
+  min_level_to_win : string,
+  bet_amount : string,
+  is_game_private: boolean
+}
+
+export interface Option {
+  value: string;
+  label: string;
+}

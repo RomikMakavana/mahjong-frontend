@@ -39,7 +39,7 @@ export default function RoomModel(props:Props) {
     ]
 
     return (
-        <MahjongModel open={props.open} extraCss="xs:w-[363px]" extraCssForBg="md:bg-room-bg-desktop xxs:bg-room-bg-mobile sm:bg-room-bg-tab bg-cover">
+        <MahjongModel open={props.open} closeModel={() => props.closeModal(false)} extraCss="xs:w-[363px]" extraCssForBg="md:bg-room-bg-desktop xxs:bg-room-bg-mobile sm:bg-room-bg-tab bg-cover">
             <div>
                 <div className="w-full border-b border-white border-opacity-15 pb-[10px]">
                     <div className="border flex justify-center py-[14px] rounded-[14px] border-white border-opacity-15 font-bold max-xs:font-medium">
