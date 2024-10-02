@@ -80,7 +80,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
             <PickCard isAnyPlayerWaiting={waiting} />
             <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} myTurn={myTurn} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
             <div className="flex items-center sm:mt-2">
-              <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px]   h-auto border-[1px] border-[#ED9108]  rounded-full" />
+              <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px] h-auto border-[1px] border-[#ED9108]  rounded-full" />
             </div>
 
           </div>
@@ -108,34 +108,21 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
       </div>
       <MahjongModel open={openStartGameModel && gameData.status == 'created' && gameData.is_game_started == false} extraCss="xs:w-[363px]" closeModel={() => setOpenStartGameModel(false)}>
         <div className='text-white'>
-          <h3 className='text-center font-medium text-xl mb-5'>Start Game</h3>
+          <h3 className='text-center font-bold text-xl mb-5 max-xs:font-medium'>Start Game</h3>
           <div className='text-white'>
             <div className='flex items-center justify-between relative'>
               <div>
-                <label htmlFor='withSystemPlayer' className='text-base font-semibold cursor-pointer'>Start with system player</label>
+                <label htmlFor='withSystemPlayer' className='text-base font-semibold cursor-pointer max-xs:text-sm'>Start with system player</label>
               </div>
-              <div className='absolute right-5 top-1'>
-                <label className="radio-btn">
-                  <input id="withSystemPlayer" checked={gameStartWithSystemPlayers == true} type="radio" value="true" onChange={() => setGameStartWithSystemPlayers(true)} name="radio" />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-            </div>
-            <div className='flex justify-between items-center relative mt-4'>
-              <div>
-                <label htmlFor='withPlayer' className='text-base font-semibold cursor-pointer'>Start with player</label>
-              </div>
-              <div className='absolute right-5 top-1'>
-                <label className="radio-btn">
-                  <input id="withPlayer" type="radio" checked={gameStartWithSystemPlayers == false} value="false" onChange={() => setGameStartWithSystemPlayers(false)} name="radio" />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input checked={gameStartWithSystemPlayers} onChange={() => setGameStartWithSystemPlayers(!gameStartWithSystemPlayers)} type="checkbox" className="sr-only peer"/>
+                <div className="max-xs:w-7 max-xs:h-[14px] w-10 h-[20px] bg-white rounded-full peer peer-checked:after:translate-x-full  after:content-[''] after:absolute after:top-[1px] after:left-[0.2px] after:bg-[#6E6E6E] after:rounded-full max-xs:after:h-3 max-xs:after:w-3 after:h-[18px] after:w-[18px] after:transition-all peer-checked:bg-brand-blue peer-checked:after:bg-white peer-checked:after:left-[2.8px] "></div>
+              </label>
             </div>
           </div>
           <div className='flex items-center gap-2 mt-5'>
-            <button onClick={() => setOpenStartGameModel(false)} className='flex-1 text-white py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9'>Close</button>
-            <button onClick={() => beginGame()} className='flex-1 bg-brand-blue py-3.5 text-base font-bold text-white rounded-9'>{isProcessing ? 'Starting...' : 'Start'}</button>
+            <button onClick={() => setOpenStartGameModel(false)} className='flex-1 text-white py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9 max-xs:text-sm'>Close</button>
+            <button onClick={() => beginGame()} className='flex-1 bg-brand-blue py-3.5 text-base font-bold text-white rounded-9 max-xs:text-sm'>{isProcessing ? 'Starting...' : 'Start'}</button>
           </div>
         </div>
       </MahjongModel>
