@@ -2,18 +2,15 @@ import Image from 'next/image';
 import PickCard from './PickCard';
 import UserProfileBlock from './UserProfileBlock';
 import HiddenCard from '@/assets/images/svg/cards/top_user_card.png';
+import { PlayerDetails } from '@/interfaces';
 
 
 interface TopUserBlockProps {
-  playerData : {
-    userName : string , 
-    profileImg : string,
-    isWait : boolean,
-    showChatBubble : boolean,
-  },
-  isAnyPlayerWaiting : boolean
+  playerData : PlayerDetails,
+  waiting : boolean,
+  showBubbleChat: boolean
 }
-export default function TopUserBlock({playerData , isAnyPlayerWaiting} : TopUserBlockProps) {
+export default function TopUserBlock({playerData , waiting, showBubbleChat} : TopUserBlockProps) {
     
     const hiddenCardsBlock = [];
     for (let i = 0; i < 14; i++) {
@@ -26,11 +23,11 @@ export default function TopUserBlock({playerData , isAnyPlayerWaiting} : TopUser
     return (
       <div className="user-3 flex gap-10 ">
         <div className="pick-card-block rotate-180 w-max">
-          <PickCard isAnyPlayerWaiting={isAnyPlayerWaiting} />
+          <PickCard isAnyPlayerWaiting={waiting} />
         </div>
         <div className="user-block flex flex-col gap-[19px]">
           <div className="user-profile-block">
-            <UserProfileBlock showChatBubble={playerData.showChatBubble} userName={playerData.userName} profileImg={playerData.profileImg} isWait={playerData.isWait} rotate={false} arrowSide='top' speechBubbleClasses='z-50 top-[150%] left-[-20%]' />
+            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={false} arrowSide='top' speechBubbleClasses='z-50 top-[150%] left-[-20%]' />
           </div>
           <div className="user-card-block flex gap-[1px]">
             {hiddenCardsBlock}

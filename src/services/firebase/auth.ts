@@ -144,6 +144,7 @@ const AuthService: AuthserviceType = {
       // res(fauth.currentUser ? fauth.currentUser : false);
       fauth.onAuthStateChanged((user: User | null) => {
         if (user) {
+          AuthService.user = user;
           res(user);
         } else {
           res(false);

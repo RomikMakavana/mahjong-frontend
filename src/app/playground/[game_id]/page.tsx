@@ -10,39 +10,52 @@ import TopUserBlock from "@/components/playground/TopUserBlock";
 import RightUserBlock from "@/components/playground/RightUserBlock";
 import BottomUserBlock from "@/components/playground/BottomUserBlock";
 import CenterCardBlock from "@/components/playground/CenterCardBlock";
-import { off, onValue, ref, set } from "firebase/database";
+import { get, off, onValue, ref, set } from "firebase/database";
 import { AuthService } from "@/services/firebase/auth";
 import MatchCreated from "@/components/Models/MatchCreated";
 import { useParams, useRouter } from "next/navigation";
 import APIService from "@/services/firebase/api";
-import { GameDetails } from "@/interfaces";
+import { GameDetails, MahjongUser, PlayerDetails } from "@/interfaces";
 import { useNotifications } from "@/utils";
 import Loader from "@/components/Loader";
+import { random, reorderList } from "@/libs/utils";
 
 type Player = {
+  _id: string;
+  player_name: string;
+  player_index: number;
+  user_id: string | null;
   userName: string;
   profileImg: string;
   isWait: boolean;
   showChatBubble: boolean,
-  player_id: string
+  isSystemPlayer: boolean;
 }
 
 type Players = {
-  [key: string]: Player;
+  [key: string]: PlayerDetails;
 };
 
 interface GameData {
+  is_game_completed: boolean;
   is_game_started: boolean;
   game_code: string;
+  status: string;
+  player_in_sequence: PlayerDetails[];
 }
 
 interface MainPlayer {
 
 }
 
+interface PlaygroundDetails {
+  game_code: string;
+}
+
 export default function GameLayout() {
   const [orientationType, setOrientationType] = useState<string>('');
   const [gameId, setGameId] = useState<string>('');
+  const [user, setUser] = useState<MahjongUser | null>(null);
   const [data, setData] = useState<any>(null);
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [userUid, setUserUid] = useState<string>('');
@@ -58,7 +71,23 @@ export default function GameLayout() {
   const { notification } = useNotifications();
   const { game_id } = params;
 
-  const [gamePlayersData, setGamePlayersData] = useState<{ [key: string]: Player }>({})
+  useEffect(() => {
+    // Get user from Firebase Auth
+    if (AuthService.user) {
+      loadUser();
+    } else {
+      setUser(null);
+    }
+  }, [AuthService.user]);
+
+  const loadUser = async () => {
+    const user = await APIService.getProfile();
+    if (user) {
+      setUser(user);
+    }
+  }
+
+  const [gamePlayersData, setGamePlayersData] = useState<Players>({})
 
   // const [gamePlayersData, setGamePlayersData] = useState<{ [kay: string]: Player }>({
   //   player1: {
@@ -91,45 +120,48 @@ export default function GameLayout() {
   //   },
   // })
 
-
   useEffect(() => {
-    const gameId = params.game_id as string
-    setGameId(gameId);
-    getUserDetail();
-  }, []);
+    if (!user) return;
+    const _gameId = params.game_id as string
+    setGameId(_gameId);
+  }, [user]);
 
 
   useEffect(() => {
     if (!gameId) return;
-
-    // setLoading(true);
-    getGameDetails();
-    // const dbRef = ref(AuthService.database, 'user-games/' + gameId + '/public');
-    // const unsubscribe = onValue(dbRef, (snapshot) => {
-    //   setData(snapshot.val());
-    //   setLoading(false);
-    // });
-
-
-    // // Cleanup subscription on unmount or when gameId changes
-    // return () => {
-    //   off(dbRef, 'value', unsubscribe);
-    // };
+    loadGameDetails()
   }, [gameId]); // Dependency array includes gameId
 
-  const getUserDetail = async () => {
-    const _user = await AuthService.getProfile();
-    if (_user) {
-      setUserUid(_user.uid);
-    }
-  }
+  useEffect(() => {
+    if (gameData == null || gameData.is_game_completed == true) return;
+
+    const dbRef = gameData.is_game_started ? ref(AuthService.database, 'user-games/' + gameId + '/public') : ref(AuthService.database, 'game-list/' + gameId);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      const snapshotData = snapshot.val();
+      if (!snapshotData || snapshotData.is_game_started != gameData.is_game_started) {
+        loadGameDetails();
+      } else {
+        if (gameData.is_game_started) {
+
+        } else {
+
+        }
+      }
+    });
+
+
+    // Cleanup subscription on unmount or when gameId changes
+    return () => {
+      off(dbRef, 'value', unsubscribe);
+    };
+  }, [gameData]); // Dependency array includes gameId
 
   const handleOrientationChange = () => {
     setOrientationType(screen.orientation.type);
   }
 
   const isAnyPlayerWaiting = () => {
-    return Object.values(gamePlayersData).some(player => player.isWait === true);
+    return gameData !== null ? !gameData.is_game_started : true;
   };
 
   useEffect(() => {
@@ -141,60 +173,79 @@ export default function GameLayout() {
   const router = useRouter();
 
 
-  const getGameDetails = async () => {
-
+  const loadGameDetails = async () => {
     try {
       const res = await APIService.getGameDetails(gameId);
       if (res.status === 200 && res.data.success === true) {
 
         const data = res.data.data
-        if(data.is_game_completed){
+        if (data.is_game_completed) {
           /**
            * TODO : Game completed UI
            */
-          router.replace(`/playground/${gameId}/completed`)          
-        }else{
-          if(data.is_game_started == false){
-            
+          router.replace(`/playground/${gameId}/completed`)
+        } else {
+          // let user = await AuthService.getAuthDetails();
+          let _player_in_sequence = reorderList(data.players, user?.apiUser._id as string);
+          let _players: Players = {}
+          for (const key in _player_in_sequence) {
+            const player = _player_in_sequence[key];
+            _players[player._id] = {
+              _id: player._id,
+              player_name: player.player_name,
+              player_index: player.player_index,
+              user_id: player.user_id,
+              profile_img: ''
+            }
           }
+
+          setGameData({
+            is_game_completed: data.is_game_completed,
+            is_game_started: data.is_game_started,
+            game_code: data.game_code,
+            status: data.status,
+            player_in_sequence: Object.values(_players)
+          })
+
+          setGamePlayersData(_players);
         }
 
-        setGameDetails(data);
-        if (!data.is_game_started) {
-          setOpenMatchStartedModal(true);
-          setOtherDetails(prevItems => {
-            // Ensure it is not added twice
-            if (prevItems.some(item => item.label === 'Get Code')) return prevItems;
-            return [
-              ...prevItems,
-              {
-                label: 'Get Code',
-                action: () => {
-                  setOpenMatchStartedModal(true);
-                },
-              },
-            ];
-          });
-        }
+        // setGameDetails(data);
+        // if (!data.is_game_started) {
+        //   setOpenMatchStartedModal(true);
+        //   setOtherDetails(prevItems => {
+        //     // Ensure it is not added twice
+        //     if (prevItems.some(item => item.label === 'Get Code')) return prevItems;
+        //     return [
+        //       ...prevItems,
+        //       {
+        //         label: 'Get Code',
+        //         action: () => {
+        //           setOpenMatchStartedModal(true);
+        //         },
+        //       },
+        //     ];
+        //   });
+        // }
 
-        //Set players.
-        const players = data.players.map((player) => ({ userName: player.player_name, profileImg: UserProfile, isWait: false, showChatBubble: false, player_id: player._id, userId: player.user_id }))
-        console.log('[playears', players);
+        // //Set players.
+        // const players = data.players.map((player) => ({ userName: player.player_name, profileImg: UserProfile, isWait: false, showChatBubble: false, player_id: player._id, userId: player.user_id }))
+        // console.log('[playears', players);
 
 
-        const mainPlayer = players.find((player) => player.userId != null);
-        const otherPlayers = players.filter((player) => player.userId == null);
-        const playersList: Players = {}
-        if (mainPlayer) {
-          playersList['mainPlayer'] = mainPlayer
-        }
+        // const mainPlayer = players.find((player) => player.userId != null);
+        // const otherPlayers = players.filter((player) => player.userId == null);
+        // const playersList: Players = {}
+        // if (mainPlayer) {
+        //   playersList['mainPlayer'] = mainPlayer
+        // }
 
-        otherPlayers.forEach((player, index) => {
-          playersList[`player${index + 1}`] = player
-        })
+        // otherPlayers.forEach((player, index) => {
+        //   playersList[`player${index + 1}`] = player
+        // })
 
-        setGamePlayersData({ ...playersList })
-        console.log('ploayear', playersList);
+        // setGamePlayersData({ ...playersList })
+        // console.log('ploayear', playersList);
       } else {
         /**
          * TODO: Game not found UI
@@ -311,25 +362,39 @@ export default function GameLayout() {
                   <div className="playground flex flex-col h-full justify-between ml-5 mr-5 sm:pt-9 sm:pb-7 pb-4 pt-4">
                     <div className="flex justify-between another-user-block h-[100%]">
                       {/* User 2 Block */}
-                      <LeftUserBlock playerData={gamePlayersData.player1} isAnyPlayerWaiting={isAnyPlayerWaiting()} />
+                      {
+                        gameData.player_in_sequence.length > 3 ?
+                          <LeftUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[3]._id]} waiting={!gameData.is_game_started} /> :
+                          <Fragment />
+                      }
                       <div className="flex flex-col">
                         {/* User 3 Block */}
                         <div>
-
-                          <TopUserBlock playerData={gamePlayersData.player2} isAnyPlayerWaiting={isAnyPlayerWaiting()} />
+                          {
+                            gameData.player_in_sequence.length > 2 ?
+                              <TopUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[2]._id]} waiting={!gameData.is_game_started} />
+                              : <Fragment />
+                          }
 
                         </div>
                         <div className="h-[100%] flex justify-center flex-col">
-                          <CenterCardBlock isAnyPlayerWaiting={isAnyPlayerWaiting()} />
+                          <CenterCardBlock isAnyPlayerWaiting={!gameData.is_game_started} />
                         </div>
                       </div>
                       <div className="">
                         <div>
-                          <RightUserBlock playerData={gamePlayersData.player3} isAnyPlayerWaiting={isAnyPlayerWaiting()} />
+                          {
+                            gameData.player_in_sequence.length > 1 ?
+                              <RightUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[1]._id]} waiting={!gameData.is_game_started} /> :
+                              <Fragment />
+                          }
                         </div>
                       </div>
                     </div>
-                    <BottomUserBlock playerData={gamePlayersData.mainPlayer} isAnyPlayerWaiting={isAnyPlayerWaiting()} />
+                    {
+                      gameData.player_in_sequence.length > 0 ?
+                        <BottomUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
+                    }
                   </div>
                 }
 

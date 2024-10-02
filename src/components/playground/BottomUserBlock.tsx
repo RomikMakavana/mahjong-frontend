@@ -9,18 +9,15 @@ import MainUserCard from '@/assets/images/svg/main_user_card.svg';
 import SmileEmoji from '@/assets/images/svg/smile.svg';
 import SpeechBubble from './SpeechBubble';
 import { useState } from 'react';
+import { PlayerDetails } from '@/interfaces';
 
 interface BottomUserBlockProps {
-  playerData : {
-    userName : string , 
-    profileImg : string,
-    isWait : boolean,
-    showChatBubble : boolean,
-  },
-  isAnyPlayerWaiting : boolean
+  playerData: PlayerDetails,
+  waiting: boolean,
+  showBubbleChat: boolean
 }
 
-export default function BottomUserBlock({playerData , isAnyPlayerWaiting} : BottomUserBlockProps) {
+export default function BottomUserBlock({ playerData, waiting, showBubbleChat }: BottomUserBlockProps) {
 
   const mainUserCardBlock = [];
   const [activeTile, setActiveTile] = useState<number | null>(null);
@@ -29,19 +26,18 @@ export default function BottomUserBlock({playerData , isAnyPlayerWaiting} : Bott
   for (let i = 0; i < 14; i++) {
     mainUserCardBlock.push(
       <div
-      key={i}
-      className={`tile-wrapper relative transition-transform duration-300 ease-in-out ${
-        (activeTile === i && !isAnyPlayerWaiting)? 'transform -translate-y-3' : ''
-      }`}
-      // Hover effect for desktop
-      onMouseEnter={() => setActiveTile(i)}
-      onMouseLeave={() => setActiveTile(null)}
-      // Touch effect for mobile
-      onTouchStart={() => setActiveTile(i)}
-      onTouchEnd={() => setActiveTile(null)}
-    >
-      <Image src={isAnyPlayerWaiting ? WaitingCardBackSide : MainUserCard} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
-    </div>
+        key={i}
+        className={`tile-wrapper relative transition-transform duration-300 ease-in-out ${(activeTile === i && !waiting) ? 'transform -translate-y-3' : ''
+          }`}
+        // Hover effect for desktop
+        onMouseEnter={() => setActiveTile(i)}
+        onMouseLeave={() => setActiveTile(null)}
+        // Touch effect for mobile
+        onTouchStart={() => setActiveTile(i)}
+        onTouchEnd={() => setActiveTile(null)}
+      >
+        <Image src={waiting ? WaitingCardBackSide : MainUserCard} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
+      </div>
     );
   }
 
@@ -53,27 +49,27 @@ export default function BottomUserBlock({playerData , isAnyPlayerWaiting} : Bott
       </div>
       <div className="user-block w-full flex justify-between items-center">
         <div className="userSection flex items-center gap-3">
-          <PickCard isAnyPlayerWaiting={isAnyPlayerWaiting} />
-          <UserProfileBlock showChatBubble={playerData.showChatBubble} userName={playerData.userName} profileImg={playerData.profileImg} isWait={playerData.isWait} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
+          <PickCard isAnyPlayerWaiting={waiting} />
+          <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
           <div className="flex items-center sm:mt-2">
             <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px]   h-auto border-[1px] border-[#ED9108]  rounded-full" />
           </div>
 
         </div>
-        { isAnyPlayerWaiting ? (<></>) : (<>
+        {waiting ? (<></>) : (<>
           <div className="flex gap-2 ">
-          <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-            <span className="btn-text">Pick</span>
-          </button>
-          <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-            <span className="btn-text text-black">Seung</span>
-          </button>
-          <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-            <span className="btn-text">Gong</span>
-          </button>
-        </div>
-        </>) }
-        
+            <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+              <span className="btn-text">Pick</span>
+            </button>
+            <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+              <span className="btn-text text-black">Seung</span>
+            </button>
+            <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+              <span className="btn-text">Gong</span>
+            </button>
+          </div>
+        </>)}
+
       </div>
     </div>
   )

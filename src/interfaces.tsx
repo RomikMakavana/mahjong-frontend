@@ -35,6 +35,7 @@ export interface StartGameAPIResponse {
 }
 
 export interface GameDetails {
+  status: string;
   game_code: string;
   is_game_started: boolean;
   start_with_system_players: boolean;
@@ -82,3 +83,11 @@ export interface Tournament {
 }
 
 export interface MahjongUser { firebaseUser: User, apiUser: Profile }
+
+export interface PlayerDetails {
+  _id: string;
+  player_name: string;
+  player_index: number;
+  user_id: string | null;
+  profile_img: string;
+}

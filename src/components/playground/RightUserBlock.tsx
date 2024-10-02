@@ -3,19 +3,16 @@ import UserProfile from '@/assets/images/svg/user_profile.svg';
 import PickCard from './PickCard';
 import UserProfileBlock from './UserProfileBlock';
 import HiddenCard from '@/assets/images/svg/cards/backside_card.png';
+import { PlayerDetails } from '@/interfaces';
 
 interface RightUserBlockProps {
-  playerData : {
-    userName : string , 
-    profileImg : string,
-    isWait : boolean,
-    showChatBubble : boolean
-  },
-  isAnyPlayerWaiting : boolean
+  playerData : PlayerDetails,
+  waiting : boolean,
+  showBubbleChat : boolean
 }
 
 
-export default function RightUserBlock({playerData , isAnyPlayerWaiting} : RightUserBlockProps) {
+export default function RightUserBlock({playerData, waiting, showBubbleChat} : RightUserBlockProps) {
     
     const hiddenCardsBlock = [];
     for (let i = 0; i < 14; i++) {
@@ -28,11 +25,11 @@ export default function RightUserBlock({playerData , isAnyPlayerWaiting} : Right
     return (
         <div className="user-2 flex flex-col gap-10 items-start">
           <div className="pick-card-block rotate-[-90deg] w-max">
-            <PickCard isAnyPlayerWaiting={isAnyPlayerWaiting} />
+            <PickCard isAnyPlayerWaiting={waiting} />
           </div>
           <div className="user-block flex flex-row-reverse gap-5">
             <div className="user-profile-block">
-              {/* <UserProfileBlock  showChatBubble={playerData.showChatBubble} userName={playerData.userName} profileImg={playerData.profileImg} isWait={playerData.isWait} rotate={true} arrowSide='right' speechBubbleClasses=' z-50 top-[-20%] right-[150%]' /> */}
+              <UserProfileBlock  showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting} rotate={true} arrowSide='right' speechBubbleClasses=' z-50 top-[-20%] right-[150%]' />
             </div>
             <div className="user-card-block">
               {hiddenCardsBlock}
