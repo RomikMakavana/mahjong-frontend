@@ -107,13 +107,13 @@ export interface PlayerDetails {
 
 export interface CreateRoomDataType {
   game_name : string,
-  turn_timeout : string,
+  turn_timeout : number,
   min_level_to_win : string,
-  bet_amount : string,
+  bet_amount : number,
   is_game_private: boolean
 }
 
 export interface Option {
-  value: string;
+  value: string | number;
   label: string;
 }

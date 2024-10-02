@@ -21,9 +21,9 @@ export default function CreateRoom(props: Props) {
     const router = useRouter();
     const [isProcessing, setIsProcessing] = useState(false);
     const [isRoomPrivate, setIsRoomPrivate] = useState(false);
-    const [turnTimeout, setTurnTimeout] = useState<string>('');
+    const [turnTimeout, setTurnTimeout] = useState<number | null>(null);
     const [minLevelToWin, setMinLevelToWin] = useState<string>('');
-    const [betAmount, setBetAmount] = useState<string>('1000');
+    const [betAmount, setBetAmount] = useState<number>(100);
     const { notification } = useNotifications();
     const [gameName, setGameName] = useState('');
 
@@ -33,10 +33,10 @@ export default function CreateRoom(props: Props) {
 
     const turnTimeoutOptions: Option[] = [
         { value: "", label: "Time limit per turn" },
-        { value: "30", label: "30s" },
-        { value: "60", label: "60s" },
-        { value: "90", label: "90s" },
-        { value: "120", label: "120s" },
+        { value: 30, label: "30s" },
+        { value: 60, label: "60s" },
+        { value: 90, label: "90s" },
+        { value: 120, label: "120s" },
     ];
     
     const minLevelToWinOptions: Option[] = [
@@ -55,7 +55,7 @@ export default function CreateRoom(props: Props) {
             const data = {
                 'random_number': randomNumber,
                 'game_name' : gameName,
-                'turn_timeout' : turnTimeout,
+                'turn_timeout' : turnTimeout as number,
                 'min_level_to_win' : minLevelToWin,
                 'bet_amount' : betAmount,
                 'is_game_private' : isRoomPrivate
@@ -78,7 +78,7 @@ export default function CreateRoom(props: Props) {
     }
 
     const timeLimitHandle = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setTurnTimeout(event.target.value);
+        setTurnTimeout(Number(event.target.value));
     };
 
     
@@ -130,7 +130,7 @@ export default function CreateRoom(props: Props) {
                                 required
                                 min={1}
                                 max={10000000}
-                                onChange={(e) => setBetAmount(e.target.value)}
+                                onChange={(e) => setBetAmount(Number(e.target.value))}
                                 className=" font-medium placeholder:text-white placeholder:max-xs:text-xs placeholder:text-opacity-50 text-sm py-[14px] px-5 border border-neutral-800 w-full rounded-[10px] ring-0 shadow-none focus:shadow-none focus:outline-none bg-transparent max-xs:py-[13.5px] text-white text-opacity-50 placeholder-white placeholder-opacity-50 pl-[40px]"
                                 placeholder="Enter bet amount"
                             />
