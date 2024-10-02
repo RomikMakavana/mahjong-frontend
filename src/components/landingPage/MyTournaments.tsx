@@ -21,7 +21,7 @@ export const MyTournaments = (props: MyTournamentsProps) => {
     const [tournaments, setTournaments] = useState<Tournament[]>([])
     const [user, setUser] = useState<MahjongUser | null>(null);
     const [somethingWentWrong, setSomethingWentWrong] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(true);
+    const [isProcessing, setIsProcessing] = useState(false);
     const router = useRouter();
 
 
