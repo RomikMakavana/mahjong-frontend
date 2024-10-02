@@ -47,11 +47,20 @@ interface GameData {
 }
 
 interface MainPlayer {
-
+  card_list: string[];
+  flower_card_list: string[];
+  matched_list: string[];
 }
 
 interface PlaygroundDetails {
   game_code: string;
+  current_turn_completed: boolean;
+  current_turn_player: string;
+  current_turn_status: string;
+  is_game_completed: boolean;
+  is_game_started: boolean;
+  next_player: string;
+  status: string;
 }
 
 export default function GameLayout() {
@@ -60,6 +69,8 @@ export default function GameLayout() {
   const [user, setUser] = useState<MahjongUser | null>(null);
   const [data, setData] = useState<any>(null);
   const [gameData, setGameData] = useState<GameData | null>(null);
+  const [mainPlayer, setMainPlayer] = useState<MainPlayer | null>(null);
+  const [gamePlaygroundDetails, setGamePlaygroundDetails] = useState<PlaygroundDetails | null>(null);
   const [seconds, setSeconds] = useState(0);
 
   const [gamePlayersData, setGamePlayersData] = useState<Players>({});
@@ -97,7 +108,7 @@ export default function GameLayout() {
     // Set up the timer
     const timer = setInterval(() => {
       const _second = gameData !== null && gameData.is_game_started == false && gameData.status == 'ready_to_start' && gameData.will_starts_at !== null && gameData.will_starts_at > 0 ? gameData.will_starts_at - Number(moment().format('X')) : 0;
-      setSeconds((prevSeconds) => _second);
+      setSeconds((prevSeconds) => _second < 0 ? 0 : _second);
     }, 1000);
     
     // Clean up the timer
@@ -150,36 +161,66 @@ export default function GameLayout() {
   useEffect(() => {
     if (gameData == null || gameData.is_game_completed == true) return;
 
-    const dbRef = gameData.is_game_started ? ref(AuthService.database, 'user-games/' + gameId + '/public') : ref(AuthService.database, 'game-list/' + gameId);
+    const userGamePublicRef = ref(AuthService.database, 'user-games/' + gameId + '/public');
+    const userGamePublicUnsubscribe = onValue(userGamePublicRef, (snapshot) => {
+      const snapshotData = snapshot.val();
+      setGamePlaygroundDetails({
+        game_code: snapshotData?.game_code || '',
+        current_turn_completed: snapshotData?.current_turn_completed || false,
+        current_turn_player: snapshotData?.current_turn_player || '',
+        current_turn_status: snapshotData?.current_turn_status || '',
+        is_game_completed: snapshotData?.is_game_completed || false,
+        is_game_started: snapshotData?.is_game_started || false,
+        next_player: snapshotData?.next_player || '',
+        status: snapshotData?.status || ''
+      })
+    });
+
+    const dbRef = ref(AuthService.database, 'user-games/' + gameId + '/user-details/' + user?.firebaseUser.uid);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      const snapshotData = snapshot.val();
+      setMainPlayer({
+        card_list: snapshotData?.card_list || [],
+        flower_card_list: snapshotData?.flower_card_list || [],
+        matched_list: snapshotData?.matched_list || []
+      })
+    });
+
+
+    // Cleanup subscription on unmount or when gameId changes
+    return () => {
+      off(dbRef, 'value', unsubscribe);
+      off(userGamePublicRef, 'value', userGamePublicUnsubscribe);
+    };
+  }, [gameData]); // Dependency array includes gameId
+
+  useEffect(() => {
+    if (gameData == null || gameData.is_game_completed == true) return;
+
+    const dbRef = ref(AuthService.database, 'game-list/' + gameId);
     const unsubscribe = onValue(dbRef, (snapshot) => {
       const snapshotData = snapshot.val();
       if (!snapshotData || snapshotData.is_game_started != gameData.is_game_started || snapshotData.status != gameData.status) {
         loadGameDetails();
       } else {
-        if (gameData.is_game_started ){
-
-        } else {
-          
-          const snapshotPlayers = snapshotData.players;
-          if(Array.isArray(snapshotPlayers) && snapshotPlayers.length > 0) {
-            let _player_in_sequence = gameData.player_in_sequence;
-            let _players: Players = {}
-            for (const key in _player_in_sequence) {
-              const player = snapshotPlayers.find(value => value._id == _player_in_sequence[key]._id);
-              
-              _players[player._id] = {
-                _id: player._id,
-                player_name: player.player_name,
-                player_index: player.player_index,
-                user_id: player?.user_id,
-                profile_img: ''
-              }
+        const snapshotPlayers = snapshotData.players;
+        if(Array.isArray(snapshotPlayers) && snapshotPlayers.length > 0) {
+          let _player_in_sequence = gameData.player_in_sequence;
+          let _players: Players = {}
+          for (const key in _player_in_sequence) {
+            const player = snapshotPlayers.find(value => value._id == _player_in_sequence[key]._id);
+            
+            _players[player._id] = {
+              _id: player._id,
+              player_name: player.player_name,
+              player_index: player.player_index,
+              user_id: player?.user_id,
+              profile_img: ''
             }
-            setGamePlayersData(_players);
-          }else{
-            loadGameDetails();
           }
-          
+          setGamePlayersData(_players);
+        }else{
+          loadGameDetails();
         }
       }
     });
@@ -207,6 +248,12 @@ export default function GameLayout() {
   }, []);
   const router = useRouter();
 
+  const activePlayerId = () => {
+    if(gamePlaygroundDetails !== null && gamePlaygroundDetails.is_game_started == true){
+      return gamePlaygroundDetails.current_turn_completed == true ? gamePlaygroundDetails.next_player : gamePlaygroundDetails.current_turn_player;
+    }
+    return null;
+  }
 
   const loadGameDetails = async () => {
     try {
@@ -400,7 +447,7 @@ export default function GameLayout() {
                       {/* User 2 Block */}
                       {
                         gameData.player_in_sequence.length > 3 ?
-                          <LeftUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[3]._id]} waiting={!gameData.is_game_started} /> :
+                          <LeftUserBlock myTurn={gameData.player_in_sequence[3]._id == activePlayerId()} showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[3]._id]} waiting={!gameData.is_game_started} /> :
                           <Fragment />
                       }
                       <div className="flex flex-col">
@@ -408,7 +455,7 @@ export default function GameLayout() {
                         <div>
                           {
                             gameData.player_in_sequence.length > 2 ?
-                              <TopUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[2]._id]} waiting={!gameData.is_game_started} />
+                              <TopUserBlock myTurn={gameData.player_in_sequence[2]._id == activePlayerId()} showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[2]._id]} waiting={!gameData.is_game_started} />
                               : <Fragment />
                           }
 
@@ -421,7 +468,7 @@ export default function GameLayout() {
                         <div>
                           {
                             gameData.player_in_sequence.length > 1 ?
-                              <RightUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[1]._id]} waiting={!gameData.is_game_started} /> :
+                              <RightUserBlock myTurn={gameData.player_in_sequence[1]._id == activePlayerId()} showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[1]._id]} waiting={!gameData.is_game_started} /> :
                               <Fragment />
                           }
                         </div>
@@ -429,7 +476,7 @@ export default function GameLayout() {
                     </div>
                     {
                       gameData.player_in_sequence.length > 0 ?
-                        <BottomUserBlock showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
+                        <BottomUserBlock myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}  showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
                     }
                   </div>
                 }

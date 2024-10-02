@@ -8,9 +8,9 @@ import { PlayerDetails } from '@/interfaces';
 interface TopUserBlockProps {
   playerData : PlayerDetails,
   waiting : boolean,
-  showBubbleChat: boolean
+  showBubbleChat: boolean, myTurn: boolean
 }
-export default function TopUserBlock({playerData , waiting, showBubbleChat} : TopUserBlockProps) {
+export default function TopUserBlock({playerData , waiting, showBubbleChat, myTurn} : TopUserBlockProps) {
     
     const hiddenCardsBlock = [];
     for (let i = 0; i < 14; i++) {
@@ -27,7 +27,7 @@ export default function TopUserBlock({playerData , waiting, showBubbleChat} : To
         </div>
         <div className="user-block flex flex-col gap-[19px]">
           <div className="user-profile-block">
-            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} arrowSide='top' speechBubbleClasses='z-50 top-[150%] left-[-20%]' />
+            <UserProfileBlock myTurn={myTurn} showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} arrowSide='top' speechBubbleClasses='z-50 top-[150%] left-[-20%]' />
           </div>
           <div className="user-card-block flex gap-[1px]">
             {hiddenCardsBlock}

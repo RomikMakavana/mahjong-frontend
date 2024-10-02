@@ -8,10 +8,11 @@ import { PlayerDetails } from '@/interfaces';
 interface LeftUserBlockProps {
   playerData: PlayerDetails,
   waiting: boolean,
-  showBubbleChat: boolean
+  showBubbleChat: boolean,
+  myTurn: boolean
 }
 
-export default function LeftUserBlock({ playerData, waiting, showBubbleChat }: LeftUserBlockProps) {
+export default function LeftUserBlock({ playerData, waiting, showBubbleChat, myTurn }: LeftUserBlockProps) {
 
   const hiddenCardsBlock = [];
   for (let i = 0; i < 14; i++) {
@@ -28,7 +29,7 @@ export default function LeftUserBlock({ playerData, waiting, showBubbleChat }: L
       </div>
       <div className="user-block flex gap-5">
         <div className="user-profile-block">
-          <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={true} speechBubbleClasses='left-[150%] z-50 top-[-20%]' arrowSide='left' />
+          <UserProfileBlock myTurn={myTurn} showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={true} speechBubbleClasses='left-[150%] z-50 top-[-20%]' arrowSide='left' />
         </div>
         <div className="user-card-block">
           {hiddenCardsBlock}
