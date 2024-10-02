@@ -8,6 +8,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'fade-out': {
+          '0%': { opacity: '1', transform: 'scale(3)' },
+          '100%': { opacity: '0', transform: 'scale(0)' },
+        },
+      },
+      animation: {
+        'fade-out': 'fade-out 1s ease-in-out forwards', // Adjust duration and easing as needed
+      },
       screens: {
         '2xl': '1600px',
         'lg': '1201px',
