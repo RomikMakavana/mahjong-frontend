@@ -18,6 +18,15 @@ export interface Notification {
   type: "success" | "error" | "info";
 }
 
+export interface GameData {
+  is_game_completed: boolean;
+  is_game_started: boolean;
+  game_code: string;
+  status: string;
+  player_in_sequence: PlayerDetails[];
+  will_starts_at: number | null;
+}
+
 
 
 // API Responses

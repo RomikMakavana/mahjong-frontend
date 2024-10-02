@@ -53,13 +53,14 @@ export default function CreateRoom(props: Props) {
         try {
             const randomNumber = generateRandomNumber();
             const data = {
+                'random_number': randomNumber,
                 'game_name' : gameName,
                 'turn_timeout' : turnTimeout,
                 'min_level_to_win' : minLevelToWin,
                 'bet_amount' : betAmount,
                 'is_game_private' : isRoomPrivate
             }
-            const res = await APIService.startGame(data);
+            const res = await APIService.createRoom(data);
 
             if (res.status === 200 && res.data.success) {
                 setIsProcessing(false)

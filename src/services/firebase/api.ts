@@ -22,8 +22,8 @@ const APIService = {
   },
 
 
-  startGame: async (data:CreateRoomDataType) => {
-    const url = `${config.baseUrl}${config.endPoints.startGame()}`;
+  createRoom: async (data:CreateRoomDataType) => {
+    const url = `${config.baseUrl}${config.endPoints.createRoom()}`;
     const res = await axios.request<ApiResponse<StartGameAPIResponse>>({
       method: 'POST',
       url: url,
@@ -93,6 +93,18 @@ const APIService = {
     } else {
       return { res: null, status: false }
     }
+  },
+  beginGame: async(gameId:string, start_with_system_players:boolean) => {
+    const url = `${config.baseUrl}${config.endPoints.beginGame(gameId)}`;
+    const res = await axios.request<ApiResponse<{}>>({
+      method: 'POST',
+      url: url,
+      data: {
+        start_with_system_players
+      },
+      headers: await APIService.headers()
+    })
+    return res;
   }
 }
 

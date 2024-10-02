@@ -15,7 +15,7 @@ import { AuthService } from "@/services/firebase/auth";
 import MatchCreated from "@/components/Models/MatchCreated";
 import { useParams, useRouter } from "next/navigation";
 import APIService from "@/services/firebase/api";
-import { GameDetails, MahjongUser, PlayerDetails } from "@/interfaces";
+import { GameDetails, MahjongUser, PlayerDetails, GameData } from "@/interfaces";
 import { useNotifications } from "@/utils";
 import Loader from "@/components/Loader";
 import { random, reorderList } from "@/libs/utils";
@@ -37,14 +37,14 @@ type Players = {
   [key: string]: PlayerDetails;
 };
 
-interface GameData {
-  is_game_completed: boolean;
-  is_game_started: boolean;
-  game_code: string;
-  status: string;
-  player_in_sequence: PlayerDetails[];
-  will_starts_at: number | null;
-}
+// interface GameData {
+//   is_game_completed: boolean;
+//   is_game_started: boolean;
+//   game_code: string;
+//   status: string;
+//   player_in_sequence: PlayerDetails[];
+//   will_starts_at: number | null;
+// }
 
 interface MainPlayer {
   card_list: string[];
@@ -289,7 +289,7 @@ export default function GameLayout() {
             player_in_sequence: Object.values(_players),
             will_starts_at: data.not_started_details.begin_time
           })
-
+          
           setGamePlayersData(_players);
         }
 
@@ -476,7 +476,7 @@ export default function GameLayout() {
                     </div>
                     {
                       gameData.player_in_sequence.length > 0 ?
-                        <BottomUserBlock myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}  showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
+                        <BottomUserBlock myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}  showBubbleChat={false} gameData={gameData} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
                     }
                   </div>
                 }

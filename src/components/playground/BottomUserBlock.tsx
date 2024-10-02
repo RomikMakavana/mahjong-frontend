@@ -10,18 +10,33 @@ import SmileEmoji from '@/assets/images/svg/smile.svg';
 import SpeechBubble from './SpeechBubble';
 import { useState } from 'react';
 import { PlayerDetails } from '@/interfaces';
+import { GameData } from '@/interfaces';
+import MahjongModel from '../MahjongModel';
+import APIService from '@/services/firebase/api';
+import { useParams } from 'next/navigation';
+import { useNotifications } from "@/utils";
 
 interface BottomUserBlockProps {
   playerData: PlayerDetails,
   waiting: boolean,
   showBubbleChat: boolean,
   myTurn: boolean
+  gameData: GameData,
+
 }
 
-export default function BottomUserBlock({ playerData, waiting, showBubbleChat, myTurn }: BottomUserBlockProps) {
+export default function BottomUserBlock({ playerData, waiting, showBubbleChat, gameData, myTurn }: BottomUserBlockProps) {
 
   const mainUserCardBlock = [];
   const [activeTile, setActiveTile] = useState<number | null>(null);
+  const [openStartGameModel, setOpenStartGameModel] = useState(false);
+  const [gameStartWithSystemPlayers, setGameStartWithSystemPlayers] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { notification } = useNotifications();
+  
+  const params = useParams();
+
+  const { game_id } = params;
 
 
   for (let i = 0; i < 14; i++) {
@@ -42,37 +57,88 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, m
     );
   }
 
+  const beginGame = async () => {
+    setIsProcessing(true);
+    const res = await APIService.beginGame(game_id as string, gameStartWithSystemPlayers);
+    if(res.status == 200 && res.data.success){
+      setIsProcessing(false);
+      setOpenStartGameModel(false);
+    }else {
+      notification(res.data.message, 'error');
+      setIsProcessing(false);
+    }
+  }
 
   return (
-    <div className="main-user-block flex flex-col items-center sm:gap-5 gap-3">
-      <div className="flex gap-[2px]">
-        {mainUserCardBlock}
-      </div>
-      <div className="user-block w-full flex justify-between items-center">
-        <div className="userSection flex items-center gap-3">
-          <PickCard isAnyPlayerWaiting={waiting} />
-          <UserProfileBlock myTurn={myTurn} showChatBubble={showBubbleChat} userName={playerData.player_name} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
-          <div className="flex items-center sm:mt-2">
-           
-            <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px]   h-auto border-[1px] border-[#ED9108]  rounded-full" />
+    <>
+      <div className="main-user-block flex flex-col items-center sm:gap-5 gap-3">
+        <div className="flex gap-[2px]">
+          {mainUserCardBlock}
+        </div>
+        <div className="user-block w-full flex justify-between items-center">
+          <div className="userSection flex items-center gap-3">
+            <PickCard isAnyPlayerWaiting={waiting} />
+            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} myTurn={myTurn} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
+            <div className="flex items-center sm:mt-2">
+              <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px]   h-auto border-[1px] border-[#ED9108]  rounded-full" />
+            </div>
+
           </div>
+          {
+            gameData.status == 'created' && gameData.is_game_started == false  &&
+          <div>
+            <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue px-5 py-2 font-medium text-sm rounded-9'>Start Game</button>
+          </div>
+          }
+          {waiting ? (<></>) : (<>
+            <div className="flex gap-2 ">
+              <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+                <span className="btn-text">Pick</span>
+              </button>
+              <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+                <span className="btn-text text-black">Seung</span>
+              </button>
+              <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+                <span className="btn-text">Gong</span>
+              </button>
+            </div>
+          </>)}
 
         </div>
-        {waiting ? (<></>) : (<>
-          <div className="flex gap-2 ">
-            <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-              <span className="btn-text">Pick</span>
-            </button>
-            <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-              <span className="btn-text text-black">Seung</span>
-            </button>
-            <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-              <span className="btn-text">Gong</span>
-            </button>
-          </div>
-        </>)}
-
       </div>
-    </div>
+      <MahjongModel open={openStartGameModel && gameData.status == 'created' && gameData.is_game_started == false} extraCss="xs:w-[363px]" closeModel={() => setOpenStartGameModel(false)}>
+        <div className='text-white'>
+          <h3 className='text-center font-medium text-xl mb-5'>Start Game</h3>
+          <div className='text-white'>
+            <div className='flex items-center justify-between relative'>
+              <div>
+                <label htmlFor='withSystemPlayer' className='text-base font-semibold cursor-pointer'>Start with system player</label>
+              </div>
+              <div className='absolute right-5 top-1'>
+                <label className="radio-btn">
+                  <input id="withSystemPlayer" checked={gameStartWithSystemPlayers == true} type="radio" value="true" onChange={() => setGameStartWithSystemPlayers(true)} name="radio" />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+            </div>
+            <div className='flex justify-between items-center relative mt-4'>
+              <div>
+                <label htmlFor='withPlayer' className='text-base font-semibold cursor-pointer'>Start with player</label>
+              </div>
+              <div className='absolute right-5 top-1'>
+                <label className="radio-btn">
+                  <input id="withPlayer" type="radio" checked={gameStartWithSystemPlayers == false} value="false" onChange={() => setGameStartWithSystemPlayers(false)} name="radio" />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className='flex items-center gap-2 mt-5'>
+            <button onClick={() => setOpenStartGameModel(false)} className='flex-1 text-white py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9'>Close</button>
+            <button onClick={() => beginGame()} className='flex-1 bg-brand-blue py-3.5 text-base font-bold text-white rounded-9'>{isProcessing ? 'Starting...' : 'Start'}</button>
+          </div>
+        </div>
+      </MahjongModel>
+    </>
   )
 }

@@ -69,6 +69,34 @@
     background-color: #914EFD;
   }
 
+  .radio-btn {
+    @apply relative cursor-pointer text-[22px] select-none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+  
+  .radio-btn input {
+    @apply absolute opacity-0 cursor-pointer;
+  }
+  
+  .checkmark {
+    @apply absolute h-5 w-5 bg-[#eee] rounded-[50%] left-0 top-0 after:content-[""] after:absolute after:hidden;
+  }
+  
+  .radio-btn:hover input ~ .checkmark {
+    @apply bg-[#ccc];
+  }
+  
+  .radio-btn input:checked ~ .checkmark {
+    @apply bg-brand-blue after:block;
+  }
+  
+  .radio-btn .checkmark:after {
+    @apply w-2.5 h-2.5 rounded-[50%] left-[5.5px] top-[5.5px];
+    background: white;
+  }
+
   @keyframes fadein {
     from {
       opacity:0;
@@ -164,6 +192,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
 
 
 
