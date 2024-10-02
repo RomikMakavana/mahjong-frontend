@@ -414,7 +414,7 @@ export default function GameLayout() {
 
                         </div>
                         <div className="h-[100%] flex justify-center flex-col">
-                          <CenterCardBlock isAnyPlayerWaiting={!gameData.is_game_started} />
+                          <CenterCardBlock gameStatus={gameData.status} seconds={seconds} isAnyPlayerWaiting={!gameData.is_game_started} />
                         </div>
                       </div>
                       <div className="">

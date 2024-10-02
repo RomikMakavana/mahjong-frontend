@@ -5,9 +5,11 @@ import FlowerCard1 from '@/assets/images/svg/cards/flower_card_1.svg';
 import MainUserCard from '@/assets/images/svg/main_user_card.svg';
 
 interface CenterCardBlockProps {
-  isAnyPlayerWaiting: boolean
+  isAnyPlayerWaiting: boolean,
+  gameStatus: string;
+  seconds: number;
 }
-export default function CenterCardBlock({ isAnyPlayerWaiting }: CenterCardBlockProps) {
+export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, seconds }: CenterCardBlockProps) {
 
   const FlowerCardBlock = [];
   for (let i = 0; i < 12; i++) {
@@ -56,14 +58,16 @@ export default function CenterCardBlock({ isAnyPlayerWaiting }: CenterCardBlockP
               {BacksideOfSoftwareCardVerticalCardBlock}
             </div>
             <div className='center-block w-[100%] h-[100%] flex flex-col bg-campas-bg-image bg-auto bg-center bg-no-repeat '>
-              {isAnyPlayerWaiting ? (<p className='m-auto'> Waiting for players...</p>) : (
+              {
+              isAnyPlayerWaiting ? (gameStatus === 'ready_to_start' ? <p >{seconds}</p> : <p className='m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>
                     <Image src={MainUserCard} alt="Logo Image" priority className="w-[50px]   sm:w-[50px] h-auto m-3" />
                   </div>
                   <span>Time left - 45</span>
                 </>
-              )}
+              )
+            }
             </div>
             <div className='bottom-block top-block flex gap-[2px]'>
               {BacksideOfSoftwareCardVerticalCardBlockBottom}
