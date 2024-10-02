@@ -87,7 +87,6 @@ export default function Home() {
             if (res.status) {
                 closeModal();
                 setIsLoggedIn(true);
-                router.push('/playground');
                 helpers.handleFullscreenAndLock();
             }
         } catch (error) {
@@ -198,9 +197,7 @@ export default function Home() {
 
     const checkIsLoggedIn = async () => {
         try {
-            const res = await AuthService.getProfile();
-            console.log('res', res);
-            
+            const res = await AuthService.getProfile();            
             if (!res) {
                 setIsLoggedIn(false);
             } else {

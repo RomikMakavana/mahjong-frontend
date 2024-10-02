@@ -59,7 +59,7 @@ export const MyTournaments = (props: MyTournamentsProps) => {
                 data = Object.values(data);
                 // Find game where user is a participant
                 if (data && Array.isArray(data)) {
-                    const userGames = data.filter((game: Tournament) => game.players.find((player) => player.user_id == user.apiUser._id));
+                    const userGames = data.filter((game: Tournament) => game.players.find((player) => player.user_id == user.apiUser._id));                    
                     setTournaments(userGames);
                     setIsProcessing(false);
                 }

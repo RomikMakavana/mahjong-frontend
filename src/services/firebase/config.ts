@@ -6,7 +6,8 @@ const config = {
         startGame:() => `game`,
         profile:() => `profile`,
         getGameDetails: (gameId:string) => `game/${gameId}`,
-        joinRandomGame: () => `join-random-game`, 
+        joinRandomGame: () => `join-random-game`,
+        login: () => `login`,
     }
 
 }
