@@ -22,7 +22,7 @@ const APIService = {
   },
 
 
-  createRoom: async (data:CreateRoomDataType) => {
+  createRoom: async (data: CreateRoomDataType) => {
     const url = `${config.baseUrl}${config.endPoints.createRoom()}`;
     const res = await axios.request<ApiResponse<StartGameAPIResponse>>({
       method: 'POST',
@@ -51,19 +51,50 @@ const APIService = {
     })
     return res;
   },
+  // getProfile: async (hard = false) => {
+  //   if(!APIService.user || hard){
+  //     const res = await APIService.profile();
+  //     const firebaseUser = await AuthService.getProfile();
+  //     if(res.status == 200 && res.data.success === true && firebaseUser){
+  //       APIService.user = { apiUser: res.data.data, firebaseUser };
+  //     }else{
+  //       APIService.user = null;
+  //       AuthService.user = null;
+  //       AuthService.logout();
+  //     }
+  //   }
+  //   return APIService.user;
+  // },
+
+
   getProfile: async (hard = false) => {
-    if(!APIService.user || hard){
-      const res = await APIService.profile();
-      // const firebaseUser = null;
-      const firebaseUser = await AuthService.getProfile();
-      if(res.data && firebaseUser){
-        APIService.user = { apiUser: res.data.data, firebaseUser };
-      }else{
+    if (!APIService.user || hard) {
+      const firebaseUser = await AuthService.getProfile();      
+      if (firebaseUser) {
+        try {
+          const res = await APIService.profile();
+          if (res.status == 200 && res.data.success === true) {
+            APIService.user = { apiUser: res.data.data, firebaseUser };
+          } else {
+            AuthService.logout();
+            APIService.user = null;
+            AuthService.user = null;
+          }
+        } catch (error) {
+          console.log(error);
+          AuthService.logout();
+          APIService.user = null;
+          AuthService.user = null;
+        }
+      } else {
         APIService.user = null;
+        AuthService.user = null;
+        AuthService.logout();
       }
     }
     return APIService.user;
   },
+
   joinRandomGame: async () => {
     const url = `${config.baseUrl}${config.endPoints.joinRandomGame()}`;
     const res = await axios.request<ApiResponse<any>>({
@@ -94,7 +125,7 @@ const APIService = {
       return { res: null, status: false }
     }
   },
-  beginGame: async(gameId:string, start_with_system_players:boolean) => {
+  beginGame: async (gameId: string, start_with_system_players: boolean) => {
     const url = `${config.baseUrl}${config.endPoints.beginGame(gameId)}`;
     const res = await axios.request<ApiResponse<{}>>({
       method: 'POST',

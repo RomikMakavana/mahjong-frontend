@@ -195,20 +195,43 @@ export default function Home() {
         }
     }
 
+    // const checkIsLoggedIn = async () => {
+    //     try {
+    //         const res = await AuthService.getProfile();            
+    //         if (!res) {
+    //             setIsLoggedIn(false);
+    //         } else {
+    //             if (!res.emailVerified) {
+    //                 setOpenVerificationModel(true);
+    //             }
+    //             AuthService.user = res;
+    //             setIsLoggedIn(true);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
     const checkIsLoggedIn = async () => {
         try {
-            const res = await AuthService.getProfile();            
-            if (!res) {
-                setIsLoggedIn(false);
-            } else {
-                if (!res.emailVerified) {
+            const res = await APIService.getProfile();
+            if (res) {
+                setIsLoggedIn(true);
+                if (!res.firebaseUser.emailVerified) {
                     setOpenVerificationModel(true);
                 }
-                AuthService.user = res;
+                AuthService.user = res.firebaseUser;
+                APIService.user = res;
                 setIsLoggedIn(true);
+            } else {
+                AuthService.logout();
+                setIsLoggedIn(false);
             }
         } catch (error) {
             console.log(error);
+            AuthService.logout();
+            setIsLoggedIn(false);
+
         }
     }
 
@@ -259,11 +282,11 @@ export default function Home() {
         try {
             const res = await APIService.joinRandomGame();
             if (res.status === 200 && res.data.success) {
-            router.push(`/playground/${res.data.data.game_id}`)
-            //     helpers.handleFullscreenAndLock();
+                router.push(`/playground/${res.data.data.game_id}`)
+                //     helpers.handleFullscreenAndLock();
             } else {
                 notification(res.data.message, 'error');
-                if(res.data.code === "no_game_found_to_join") {
+                if (res.data.code === "no_game_found_to_join") {
                     setOpenStartGameModel(false);
                     setCreateRoom(true);
                 }
@@ -393,14 +416,14 @@ export default function Home() {
                 }
             </MahjongModel>
             <Notification />
-            <CreateRoom open={createRoom} closeModal={setCreateRoom}/>
+            <CreateRoom open={createRoom} closeModal={setCreateRoom} />
             {/* <UnlockedNewBadge/> */}
             {/* <ReferAndEarn/> */}
             {/* <ReferToFriend/> */}
             {/* <TaskCenterModel/> */}
             {/* <RedeemAndBuyPoints/> */}
             {/* <MatchHistory/> */}
-            <RoomModel open={openStartGameModel} closeModal={setOpenStartGameModel} joinRandomGame={joinRandomGame} setCreateRoom={setCreateRoom}/>
+            <RoomModel open={openStartGameModel} closeModal={setOpenStartGameModel} joinRandomGame={joinRandomGame} setCreateRoom={setCreateRoom} />
             {/* <GameOver/> */}
             {/* { <JoinMatch/> } */}
             {/* <ViewWiningTile/>  */}

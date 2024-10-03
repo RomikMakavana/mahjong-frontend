@@ -108,7 +108,7 @@ export interface PlayerDetails {
 export interface CreateRoomDataType {
   game_name : string,
   turn_timeout : number,
-  min_level_to_win : string,
+  min_level_to_win : number,
   bet_amount : number,
   is_game_private: boolean
 }

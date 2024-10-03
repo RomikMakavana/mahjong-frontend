@@ -93,7 +93,7 @@ export const HeaderBlock = (props: HeaderBlockProps) => {
         return (() => {
             window.removeEventListener('scroll', updateScroll);
         })
-    })
+    },[])
 
 
     return (

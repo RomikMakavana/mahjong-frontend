@@ -22,7 +22,7 @@ export default function CreateRoom(props: Props) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isRoomPrivate, setIsRoomPrivate] = useState(false);
     const [turnTimeout, setTurnTimeout] = useState<number | null>(null);
-    const [minLevelToWin, setMinLevelToWin] = useState<string>('');
+    const [minLevelToWin, setMinLevelToWin] = useState<number | null>(null);
     const [betAmount, setBetAmount] = useState<number>(100);
     const { notification } = useNotifications();
     const [gameName, setGameName] = useState('');
@@ -38,13 +38,13 @@ export default function CreateRoom(props: Props) {
         { value: 90, label: "90s" },
         { value: 120, label: "120s" },
     ];
-    
+
     const minLevelToWinOptions: Option[] = [
         { value: "", label: "Min level to win" },
-        { value: "10", label: "10" },
-        { value: "15", label: "15" },
-        { value: "20", label: "20" },
-        { value: "25", label: "25" },
+        { value: 10, label: "10" },
+        { value: 15, label: "15" },
+        { value: 20, label: "20" },
+        { value: 25, label: "25" },
     ];
 
     const createRoom = async (e: any) => {
@@ -54,11 +54,11 @@ export default function CreateRoom(props: Props) {
             const randomNumber = generateRandomNumber();
             const data = {
                 'random_number': randomNumber,
-                'game_name' : gameName,
-                'turn_timeout' : turnTimeout as number,
-                'min_level_to_win' : minLevelToWin,
-                'bet_amount' : betAmount,
-                'is_game_private' : isRoomPrivate
+                'game_name': gameName,
+                'turn_timeout': turnTimeout as number,
+                'min_level_to_win': minLevelToWin as number,
+                'bet_amount': betAmount,
+                'is_game_private': isRoomPrivate
             }
             const res = await APIService.createRoom(data);
 
@@ -81,9 +81,16 @@ export default function CreateRoom(props: Props) {
         setTurnTimeout(Number(event.target.value));
     };
 
-    
+
     const levelToWinHandle = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setMinLevelToWin(event.target.value);
+        setMinLevelToWin(Number(event.target.value));
+    }
+
+    const handleChangeBetAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = event.target.value;
+        if (inputValue === '' || /^-?\d+$/.test(inputValue) && Number(inputValue) <= 10000000) {
+            setBetAmount(Number(event.target.value))
+        }
     }
 
     return (
@@ -104,33 +111,31 @@ export default function CreateRoom(props: Props) {
                         <InputField type="text" minLength={1} maxLength={300} isRequired={true} onChange={(e) => setGameName(e.target.value)} placeholder="Enter room name" extraCss="font-medium max-xs:text-xs placeholder:text-white placeholder:text-opacity-50" />
                         <div className="w-full xxs:flex justify-between mt-[10px]">
                             <div className="mr-2 border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:mb-[10px] max-xxs:justify-between max-xxs:px-2 py-[14px]">
-                                <select id="options" required name="options" onChange={timeLimitHandle}  className="w-full  text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
-                                {turnTimeoutOptions.map((option) => (
-                                    <option key={option.value} value={option.value} className="bg-brand-dark text-white text-center">
-                                        {option.label}
-                                    </option>
-                                ))}
+                                <select id="options" required name="options" onChange={timeLimitHandle} className="w-full  text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                                    {turnTimeoutOptions.map((option) => (
+                                        <option key={option.value} value={option.value} className="bg-brand-dark text-white text-center">
+                                            {option.label}
+                                        </option>
+                                    ))}
                                 </select>
                                 {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                             </div>
                             <div className="border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:justify-between max-xxs:px-2 py-[14px] ">
                                 <select id="levelToWin" required name="levelToWin" onChange={levelToWinHandle} className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
-                                {minLevelToWinOptions.map((option) => (
-                                    <option key={option.value} value={option.value} className="bg-brand-dark text-white text-center">
-                                        {option.label}
-                                    </option>
-                                ))}
+                                    {minLevelToWinOptions.map((option) => (
+                                        <option key={option.value} value={option.value} className="bg-brand-dark text-white text-center">
+                                            {option.label}
+                                        </option>
+                                    ))}
                                 </select>
                                 {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
                             </div>
                         </div>
                         <div className="relative w-full mt-[10px]">
                             <input
-                                type="number"
+                                type="text"
                                 required
-                                min={1}
-                                max={10000000}
-                                onChange={(e) => setBetAmount(Number(e.target.value))}
+                                onChange={handleChangeBetAmount}
                                 className=" font-medium placeholder:text-white placeholder:max-xs:text-xs placeholder:text-opacity-50 text-sm py-[14px] px-5 border border-neutral-800 w-full rounded-[10px] ring-0 shadow-none focus:shadow-none focus:outline-none bg-transparent max-xs:py-[13.5px] text-white text-opacity-50 placeholder-white placeholder-opacity-50 pl-[40px]"
                                 placeholder="Enter bet amount"
                             />
@@ -141,13 +146,13 @@ export default function CreateRoom(props: Props) {
                     </div>
                     <div className="mt-6">
                         {/* <PrimaryButton onClick={() => createRoom()} isDisabled={isProcessing} label="Create room" extraCss="max-xs:text-sm" /> */}
-                        <PrimaryButton label="Create room" extraCss="max-xs:text-sm"/>
+                        <PrimaryButton label="Create room" extraCss="max-xs:text-sm" />
                         <button onClick={() => props.closeModal(false)} className="w-full text-white rounded-lg py-4 max-xs:text-sm max-xs:py-3 mt-[10px] border max-xs:font-medium font-bold max-xs:text-opacity-60 border-neutral-800 ">
                             Close
                         </button>
                     </div>
                 </form>
-                </div>
+            </div>
         </MahjongModel>
     )
 }

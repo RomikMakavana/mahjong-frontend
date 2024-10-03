@@ -20,7 +20,6 @@ interface MyTournamentsProps {
 export const MyTournaments = (props: MyTournamentsProps) => {
     const [tournaments, setTournaments] = useState<Tournament[]>([])
     const [user, setUser] = useState<MahjongUser | null>(null);
-    const [somethingWentWrong, setSomethingWentWrong] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const router = useRouter();
 
@@ -40,8 +39,8 @@ export const MyTournaments = (props: MyTournamentsProps) => {
         const user = await APIService.getProfile();
         if (user) {
             setUser(user);
+            setIsProcessing(false);
         } else {
-            setSomethingWentWrong(true);
             setIsProcessing(false);
         }
     }
@@ -82,14 +81,10 @@ export const MyTournaments = (props: MyTournamentsProps) => {
     return (
         <div className="border p-3 xs:p-5 bg-[#0D0D0D]  border-[#1b1b1b] sm:rounded-lg  overflow-y-hidden relative">
             {
-                (user == null || isProcessing || somethingWentWrong) &&
+                (user == null || isProcessing) &&
                 <div className="absolute top-0 bottom-0  sm:rounded-lg left-0 right-0 z-10 backdrop-blur-sm flex justify-center items-center">
                     {
                         isProcessing && <Loader />
-                    }
-
-                    {
-                        somethingWentWrong && <p className="text-red-500 font-semibold">Something went wrong</p>
                     }
                     {
                         !isProcessing && user == null &&

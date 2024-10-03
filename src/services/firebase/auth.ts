@@ -51,7 +51,6 @@ const AuthService: AuthserviceType = {
       signInWithPopup(fauth, provider)
         .then((result) => {
           const user = result.user;
-          AuthService.user = user;
           if (user) {
             APIService.login(user.email as string).then((res) => {
               if (!res.status) {
@@ -62,26 +61,41 @@ const AuthService: AuthserviceType = {
                 })
                 AuthService.logout();
               } else {
-                resolve({
-                  status: true,
-                  message: "Login successfully.",
-                  user: {
-                    name: user.displayName as string,
-                    email: user.email as string,
-                    uid: user.uid
+
+                APIService.profile().then((res) => {
+                  if (res.status == 200 && res.data.success === true) {
+                    APIService.user = { apiUser: res.data.data, firebaseUser: user };
+                    AuthService.user = user;
+                    resolve({
+                      status: true,
+                      message: "Login successfully.",
+                      user: {
+                        name: user.displayName as string,
+                        email: user.email as string,
+                        uid: user.uid
+                      }
+                    })
                   }
+                }).catch((error) => {
+                  console.log(error);
+                  resolve({
+                    status: false,
+                    message: "Something went wrong.",
+                    user: null
+                  })
+                  AuthService.logout();
                 })
               }
+            }).catch((error) => {
+              console.log(error);
+              resolve({
+                status: false,
+                message: "Something went wrong.",
+                user: null
+              })
+              AuthService.logout();
+
             })
-            // resolve({
-            //   status: true,
-            //   message: "Login successfully.",
-            //   user: {
-            //     name: user.displayName as string,
-            //     email: user.email as string,
-            //     uid: user.uid
-            //   }
-            // })
           } else {
             resolve({
               status: false,
@@ -161,7 +175,6 @@ const AuthService: AuthserviceType = {
       signInWithEmailAndPassword(fauth, email, password)
         .then(async (userCredential) => {
           const user = userCredential.user;
-          AuthService.user = user;
           APIService.login(email).then((res) => {
             if (!res.status) {
               resolve({
@@ -172,40 +185,39 @@ const AuthService: AuthserviceType = {
               });
               AuthService.logout();
             } else {
-              if (user.emailVerified) {
+              APIService.profile().then((res) => {
+                if (res.status == 200 && res.data.success === true) {
+                  APIService.user = { apiUser: res.data.data, firebaseUser: user };
+                  AuthService.user = user;
+                  if (user.emailVerified) {
+                    resolve({
+                      status: true,
+                      isVerifiedEmail: true,
+                      message: "logging sussessfully",
+                      user: user,
+                    });
+                  } else {
+                    resolve({
+                      status: true,
+                      isVerifiedEmail: false,
+                      message: "logging sussessfully",
+                      user: user,
+                    });
+                  }
+                }
+              }).catch((error) => {
+                console.log(error);
                 resolve({
-                  status: true,
-                  isVerifiedEmail: true,
-                  message: "logging sussessfully",
-                  user: user,
-                });
-              } else {
-                resolve({
-                  status: true,
+                  status: false,
                   isVerifiedEmail: false,
-                  message: "logging sussessfully",
-                  user: user,
+                  message: "Something went wrong",
+                  user: null,
                 });
-              }
+                AuthService.logout();
+              })
             }
           })
-          // if (user.emailVerified) {
-          //   resolve({
-          //     status: true,
-          //     isVerifiedEmail: true,
-          //     message: "logging sussessfully",
-          //     user: user,
-          //   });
-          // } else {
-          //   resolve({
-          //     status: true,
-          //     isVerifiedEmail: false,
-          //     message: "logging sussessfully",
-          //     user: user,
-          //   });
-          // }
-        })
-        .catch((error) => {
+        }).catch((error) => {
           resolve({
             status: false,
             isVerifiedEmail: false,
