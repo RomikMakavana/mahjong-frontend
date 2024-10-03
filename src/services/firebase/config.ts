@@ -7,6 +7,8 @@ const config = {
         joinRandomGame: () => `join-random-game`,
         login: () => `login`,
         beginGame: (gameId:string) => `game/${gameId}/begin-game`,
+        pickCard: (gameId:string) => `game/${gameId}/pick-card`,
+        dropCard: (gameId:string) => `game/${gameId}/drop-card`,
     }
 
 }

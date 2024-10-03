@@ -136,6 +136,34 @@ const APIService = {
       headers: await APIService.headers()
     })
     return res;
+  },
+
+  pickCard: async (playerId: string, pickFrom:'rest' | 'discarded') => {
+    const url = `${config.baseUrl}${config.endPoints.pickCard(playerId)}`;
+    const res = await axios.request<ApiResponse<{pick_card: string}>>({
+      method: 'POST',
+      url: url,
+      data: {
+        player_id: playerId,
+        pick_from: pickFrom
+      },
+      headers: await APIService.headers()
+    })
+    return res;
+  },
+
+  dropcard: async (playerId:string, dropedCard:string) => {
+    const url = `${config.baseUrl}${config.endPoints.dropCard(playerId)}`;
+    const res = await axios.request<ApiResponse<{}>>({
+      method: 'POST',
+      url: url,
+      data: {
+        player_id: playerId,
+        drop_card: dropedCard
+      },
+      headers: await APIService.headers()
+    })
+    return res;
   }
 }
 

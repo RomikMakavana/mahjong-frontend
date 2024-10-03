@@ -8,7 +8,7 @@ import UserProfileBlock from './UserProfileBlock';
 import MainUserCard from '@/assets/images/svg/main_user_card.svg';
 import SmileEmoji from '@/assets/images/svg/smile.svg';
 import SpeechBubble from './SpeechBubble';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { MainPlayer, PlayerDetails } from '@/interfaces';
 import { GameData } from '@/interfaces';
 import MahjongModel from '../MahjongModel';
@@ -34,11 +34,11 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
   const [gameStartWithSystemPlayers, setGameStartWithSystemPlayers] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const { notification } = useNotifications();
-  
+
   const params = useParams();
 
   const { game_id } = params;
-  const cardLength =  mainPlayer?.card_list.length > 0 ? mainPlayer?.card_list.length : 14;
+  const cardLength = mainPlayer?.card_list.length > 0 ? mainPlayer?.card_list.length : 13;
 
   for (let i = 0; i < cardLength; i++) {
     mainUserCardBlock.push(
@@ -53,7 +53,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
         onTouchStart={() => setActiveTile(i)}
         onTouchEnd={() => setActiveTile(null)}
       >
-        <Image src={waiting ? WaitingCardBackSide : mainPlayer?.card_list.length > 0 ? CARDS[mainPlayer.card_list[i]?.toString()] : WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
+        <Image src={waiting ? WaitingCardBackSide : mainPlayer?.card_list.length > 0 ? CARDS[mainPlayer.card_list[i]] : WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
       </div>
     );
   }
@@ -61,21 +61,49 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
   const beginGame = async () => {
     setIsProcessing(true);
     const res = await APIService.beginGame(game_id as string, gameStartWithSystemPlayers);
-    if(res.status == 200 && res.data.success){
+    if (res.status == 200 && res.data.success) {
       setIsProcessing(false);
       setOpenStartGameModel(false);
-    }else {
+    } else {
       notification(res.data.message, 'error');
       setIsProcessing(false);
     }
   }
 
+  const cards = useMemo(() => {
+    const matchedCardList = mainPlayer?.matched_list.flat(Infinity);
+    return (
+      <div className='flex gap-[2px]'>
+        {
+          Array.from({ length: cardLength }).map((number, index) => {
+            return (
+              <div key={index}
+                className={`tile-wrapper relative transition-transform duration-300 ease-in-out 
+                ${gameData.is_game_started && !matchedCardList?.includes(mainPlayer?.card_list[index]) && myTurn ? 'cursor-pointer hover:transform hover:-translate-y-3' : ''}
+                ${matchedCardList?.includes(mainPlayer?.card_list[index]) ? 'opacity-70 cursor-not-allowed' : ''}
+                `}
+              > {
+                  gameData.is_game_started && mainPlayer ? (
+                    <Image src={CARDS[mainPlayer?.card_list[index]]} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
+                  ) : (
+                    <Image src={WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
+                  )
+                }
+              </div>
+            )
+          })
+        }
+      </div>
+    )
+  }, [mainPlayer, myTurn])
+
   return (
     <>
       <div className="main-user-block flex flex-col items-center sm:gap-5 gap-3">
-        <div className="flex gap-[2px]">
+        {/* <div className="flex gap-[2px]">
           {mainUserCardBlock}
-        </div>
+        </div> */}
+        {cards}
         <div className="user-block w-full flex justify-between items-center">
           <div className="userSection flex items-center gap-3">
             <PickCard flowerCardList={mainPlayer?.flower_card_list.length} isAnyPlayerWaiting={waiting} />
@@ -86,12 +114,12 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
 
           </div>
           {
-            gameData.status == 'created' && gameData.is_game_started == false  &&
-          <div>
-            <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue px-5 py-2 font-medium text-sm rounded-9'>Start Game</button>
-          </div>
+            gameData.status == 'created' && gameData.is_game_started == false &&
+            <div>
+              <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue px-5 py-2 font-medium text-sm rounded-9'>Start Game</button>
+            </div>
           }
-          {waiting ? (<></>) : (<>
+          {/* {waiting ? (<></>) : (<>
             <div className="flex gap-2 ">
               <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
                 <span className="btn-text">Pick</span>
@@ -103,7 +131,21 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
                 <span className="btn-text">Gong</span>
               </button>
             </div>
-          </>)}
+          </>)} */}
+          {
+            gameData.is_game_started && myTurn &&
+            <div className="flex gap-2 ">
+              <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+                <span className="btn-text">Pick</span>
+              </button>
+              <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+                <span className="btn-text text-black">Seung</span>
+              </button>
+              <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
+                <span className="btn-text">Gong</span>
+              </button>
+            </div>
+          }
 
         </div>
       </div>
@@ -116,7 +158,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
                 <label htmlFor='withSystemPlayer' className='text-base font-semibold cursor-pointer max-xs:text-sm'>Start with system player</label>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input checked={gameStartWithSystemPlayers} onChange={() => setGameStartWithSystemPlayers(!gameStartWithSystemPlayers)} type="checkbox" className="sr-only peer"/>
+                <input checked={gameStartWithSystemPlayers} onChange={() => setGameStartWithSystemPlayers(!gameStartWithSystemPlayers)} type="checkbox" className="sr-only peer" />
                 <div className="max-xs:w-7 max-xs:h-[14px] w-10 h-[20px] bg-white rounded-full peer peer-checked:after:translate-x-full  after:content-[''] after:absolute after:top-[1px] after:left-[0.2px] after:bg-[#6E6E6E] after:rounded-full max-xs:after:h-3 max-xs:after:w-3 after:h-[18px] after:w-[18px] after:transition-all peer-checked:bg-brand-blue peer-checked:after:bg-white peer-checked:after:left-[2.8px] "></div>
               </label>
             </div>
