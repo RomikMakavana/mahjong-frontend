@@ -53,7 +53,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
         onTouchStart={() => setActiveTile(i)}
         onTouchEnd={() => setActiveTile(null)}
       >
-        <Image src={waiting ? WaitingCardBackSide : mainPlayer?.card_list.length > 0 ? CARDS[mainPlayer.card_list[i].toString()] : WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
+        <Image src={waiting ? WaitingCardBackSide : mainPlayer?.card_list.length > 0 ? CARDS[mainPlayer.card_list[i]?.toString()] : WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
       </div>
     );
   }
