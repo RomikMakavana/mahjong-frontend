@@ -44,6 +44,7 @@ export interface StartGameAPIResponse {
 }
 
 export interface GameDetails {
+  usersPlayingOtherGames: string[];
   status: string;
   game_code: string;
   is_game_started: boolean;

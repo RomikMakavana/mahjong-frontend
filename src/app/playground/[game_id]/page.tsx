@@ -20,6 +20,7 @@ import { useNotifications } from "@/utils";
 import Loader from "@/components/Loader";
 import { random, reorderList } from "@/libs/utils";
 import moment from "moment";
+import NotificationModal from "@/components/Models/NotificationModal";
 
 type Player = {
   _id: string;
@@ -78,6 +79,8 @@ export default function GameLayout() {
   const [loading, setLoading] = useState<boolean>(false);
   const [openMatchStartedModal, setOpenMatchStartedModal] = useState(true);
   const [isFetchingDetails, setIsFetchingDetails] = useState(true);
+  const [openInformationModal, setOpenInformationModal] = useState(false);
+  const [informationMessage, setInformationMessage] = useState<string | null>(null);
 
   const [otherDetails, setOtherDetails] = useState<{ label: string, action: () => void }[]>([])
 
@@ -104,16 +107,16 @@ export default function GameLayout() {
   }
 
   useEffect(() => {
-    
+
     // Set up the timer
     const timer = setInterval(() => {
       const _second = gameData !== null && gameData.is_game_started == false && gameData.status == 'ready_to_start' && gameData.will_starts_at !== null && gameData.will_starts_at > 0 ? gameData.will_starts_at - Number(moment().format('X')) : 0;
       setSeconds((prevSeconds) => _second < 0 ? 0 : _second);
     }, 1000);
-    
+
     // Clean up the timer
     return () => clearInterval(timer);
-    }, [seconds, gameData]);
+  }, [seconds, gameData]);
 
   // const [gamePlayersData, setGamePlayersData] = useState<{ [kay: string]: Player }>({
   //   player1: {
@@ -204,12 +207,12 @@ export default function GameLayout() {
         loadGameDetails();
       } else {
         const snapshotPlayers = snapshotData.players;
-        if(Array.isArray(snapshotPlayers) && snapshotPlayers.length > 0) {
+        if (Array.isArray(snapshotPlayers) && snapshotPlayers.length > 0) {
           let _player_in_sequence = gameData.player_in_sequence;
           let _players: Players = {}
           for (const key in _player_in_sequence) {
             const player = snapshotPlayers.find(value => value._id == _player_in_sequence[key]._id);
-            
+
             _players[player._id] = {
               _id: player._id,
               player_name: player.player_name,
@@ -219,7 +222,7 @@ export default function GameLayout() {
             }
           }
           setGamePlayersData(_players);
-        }else{
+        } else {
           loadGameDetails();
         }
       }
@@ -249,13 +252,14 @@ export default function GameLayout() {
   const router = useRouter();
 
   const activePlayerId = () => {
-    if(gamePlaygroundDetails !== null && gamePlaygroundDetails.is_game_started == true){
+    if (gamePlaygroundDetails !== null && gamePlaygroundDetails.is_game_started == true) {
       return gamePlaygroundDetails.current_turn_completed == true ? gamePlaygroundDetails.next_player : gamePlaygroundDetails.current_turn_player;
     }
     return null;
   }
 
   const loadGameDetails = async () => {
+
     try {
       const res = await APIService.getGameDetails(gameId);
       if (res.status === 200 && res.data.success === true) {
@@ -264,9 +268,10 @@ export default function GameLayout() {
         if (data.is_game_completed) {
           /**
            * TODO : Game completed UI
-           */
+          */
           router.replace(`/playground/${gameId}/completed`)
         } else {
+          console.log('call load games', data.is_game_started, data.usersPlayingOtherGames.length);
           // let user = await AuthService.getAuthDetails();
           let _player_in_sequence = reorderList(data.players, user?.apiUser._id as string);
           let _players: Players = {}
@@ -281,6 +286,13 @@ export default function GameLayout() {
             }
           }
 
+          if (!data.is_game_started && data.usersPlayingOtherGames.length > 0) {
+
+            const getPlayingOtherGamesUsersName = data.players.filter(player => data.usersPlayingOtherGames.includes(player.user_id as string)).map(player => player.player_name);
+            setInformationMessage(`Players ${getPlayingOtherGamesUsersName.join(', ')} are playing other games.`);
+
+          }
+
           setGameData({
             is_game_completed: data.is_game_completed,
             is_game_started: data.is_game_started,
@@ -289,7 +301,7 @@ export default function GameLayout() {
             player_in_sequence: Object.values(_players),
             will_starts_at: data.not_started_details.begin_time
           })
-          
+
           setGamePlayersData(_players);
         }
 
@@ -476,7 +488,7 @@ export default function GameLayout() {
                     </div>
                     {
                       gameData.player_in_sequence.length > 0 ?
-                        <BottomUserBlock myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}  showBubbleChat={false} gameData={gameData} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
+                        <BottomUserBlock myTurn={gameData.player_in_sequence[0]._id == activePlayerId()} showBubbleChat={false} gameData={gameData} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
                     }
                   </div>
                 }
@@ -487,8 +499,14 @@ export default function GameLayout() {
               </div>
             </div>
           </div>
-          {/* <NotificationModal /> */}
-          {/* <NotificationModal /> */}
+          {
+            informationMessage &&
+            <NotificationModal closeModel={() => setInformationMessage(null)}>
+              <div className="text-white font-medium text-base">
+                <p>{informationMessage}</p>
+              </div>
+            </NotificationModal>
+          }
 
           {/* <CompleteGameModel /> */}
 

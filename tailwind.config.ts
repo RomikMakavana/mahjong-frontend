@@ -76,6 +76,9 @@ const config: Config = {
         'headerShadowRight': '0 0 300px 110px rgba(158, 98, 255, 1)',
         'purpleShadow': '0px 20px 44.9px 0px rgba(63, 0, 166, 0.17)',  
       },
+      dropShadow:{
+        'notification-block-shadow': '0px 20px 4px rgba(57, 0, 150, 0.45)',
+      },
       borderRadius:{
         '9': '0.56rem'
       },
