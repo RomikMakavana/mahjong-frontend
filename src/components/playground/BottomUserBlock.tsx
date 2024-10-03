@@ -38,9 +38,9 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
   const params = useParams();
 
   const { game_id } = params;
+  const cardLength =  mainPlayer?.card_list.length > 0 ? mainPlayer?.card_list.length : 14;
 
-
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < cardLength; i++) {
     mainUserCardBlock.push(
       <div
         key={i}
