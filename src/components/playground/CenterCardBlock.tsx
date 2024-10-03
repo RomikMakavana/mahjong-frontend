@@ -69,8 +69,17 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
               {
               isAnyPlayerWaiting ? (gameStatus === 'ready_to_start' ? 
                 <div className={`text-4xl relative font-bold h-full flex justify-center items-center`}>
-                  <p className='absolute top-4 text-xl'>Match starts in</p>
-                  <p className={`${animate ? 'animate-fade-out' : ''} absolute`}>{seconds}</p>
+                  {seconds != 0 ?
+                  <div>
+                    <p className='absolute top-4 text-xl'>Match starts in</p>
+                    <p className={`${animate ? 'animate-fade-out' : ''} absolute`}>{seconds}</p>
+                  </div> : 
+                    <div className="flex flex-row gap-2">
+                      <div className="w-3 h-3 rounded-full bg-light-blue  animate-bounce"></div>
+                      <div className="w-3 h-3 rounded-full bg-light-blue  animate-bounce [animation-delay:-.3s]"></div>
+                      <div className="w-3 h-3 rounded-full bg-light-blue  animate-bounce [animation-delay:-.5s]"></div>
+                    </div>
+                  }
                 </div> : <p className='m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>
