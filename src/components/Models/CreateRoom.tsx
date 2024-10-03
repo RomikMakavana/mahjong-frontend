@@ -110,26 +110,26 @@ export default function CreateRoom(props: Props) {
                     <div className="mt-5">
                         <InputField type="text" minLength={1} maxLength={300} isRequired={true} onChange={(e) => setGameName(e.target.value)} placeholder="Enter room name" extraCss="font-medium max-xs:text-xs placeholder:text-white placeholder:text-opacity-50" />
                         <div className="w-full xxs:flex justify-between mt-[10px]">
-                            <div className="mr-2 border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:mb-[10px] max-xxs:justify-between max-xxs:px-2 py-[14px]">
-                                <select id="options" required name="options" onChange={timeLimitHandle} className="w-full  text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                            <div className="mr-2 border w-full border-neutral-800 rounded-[10px] flex max-xxs:mb-[10px] py-[14px] px-3 relative">
+                                <select id="options" required name="options" onChange={timeLimitHandle}className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs appearance-none pr-2">
                                     {turnTimeoutOptions.map((option) => (
-                                        <option key={option.value} value={option.value} className="bg-brand-dark text-white text-center">
+                                        <option key={option.value} value={option.value} className="bg-brand-dark text-white">
                                             {option.label}
                                         </option>
                                     ))}
                                 </select>
-                                {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
+                                <Image src={ICONS.IconDropdown} alt="Dropdown Icon" className="absolute right-3 h-[6.01px] w-[9.78px] top-1/2 transform -translate-y-1/2 pointer-events-none"/>
                             </div>
-                            <div className="border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:justify-between max-xxs:px-2 py-[14px] ">
-                                <select id="levelToWin" required name="levelToWin" onChange={levelToWinHandle} className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs">
+                            <div className="border w-full border-neutral-800 rounded-[10px] flex xxs:justify-center max-xxs:justify-between max-xxs:px-2 py-[14px] px-3 relative">
+                                <select id="levelToWin" required name="levelToWin" onChange={levelToWinHandle} className="w-full text-white text-opacity-50 bg-transparent text-sm font-medium focus:outline-none max-xs:text-xs appearance-none pr-8">
                                     {minLevelToWinOptions.map((option) => (
-                                        <option key={option.value} value={option.value} className="bg-brand-dark text-white text-center">
+                                        <option key={option.value} value={option.value} className="bg-brand-dark text-white">
                                             {option.label}
                                         </option>
                                     ))}
                                 </select>
-                                {/* <Image src={ICONS.IconDropdown} alt="Dropdown Image" className=" ml-3" /> */}
-                            </div>
+                                <Image src={ICONS.IconDropdown} alt="Dropdown Icon" className="absolute right-3 h-[6.01px] w-[9.78px] top-1/2 transform -translate-y-1/2 pointer-events-none"/>
+                                </div>
                         </div>
                         <div className="relative w-full mt-[10px]">
                             <input
@@ -143,7 +143,7 @@ export default function CreateRoom(props: Props) {
                                 <Image src={ICONS.IconCoin} alt="Coin Icon" className="w-5 max-xs:w-[18px]" />
                             </span>
                         </div>
-                    </div>
+                    </div>  
                     <div className="mt-6">
                         {/* <PrimaryButton onClick={() => createRoom()} isDisabled={isProcessing} label="Create room" extraCss="max-xs:text-sm" /> */}
                         <PrimaryButton label="Create room" extraCss="max-xs:text-sm" />
