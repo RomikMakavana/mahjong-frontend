@@ -15,7 +15,7 @@ import { AuthService } from "@/services/firebase/auth";
 import MatchCreated from "@/components/Models/MatchCreated";
 import { useParams, useRouter } from "next/navigation";
 import APIService from "@/services/firebase/api";
-import { GameDetails, MahjongUser, PlayerDetails, GameData } from "@/interfaces";
+import { GameDetails, MahjongUser, PlayerDetails, GameData, MainPlayer } from "@/interfaces";
 import { useNotifications } from "@/utils";
 import Loader from "@/components/Loader";
 import { random, reorderList } from "@/libs/utils";
@@ -46,12 +46,6 @@ type Players = {
 //   player_in_sequence: PlayerDetails[];
 //   will_starts_at: number | null;
 // }
-
-interface MainPlayer {
-  card_list: string[];
-  flower_card_list: string[];
-  matched_list: string[];
-}
 
 interface PlaygroundDetails {
   game_code: string;
@@ -488,7 +482,7 @@ export default function GameLayout() {
                     </div>
                     {
                       gameData.player_in_sequence.length > 0 ?
-                        <BottomUserBlock myTurn={gameData.player_in_sequence[0]._id == activePlayerId()} showBubbleChat={false} gameData={gameData} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
+                        <BottomUserBlock mainPlayer={mainPlayer!} myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}  showBubbleChat={false} gameData={gameData} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
                     }
                   </div>
                 }

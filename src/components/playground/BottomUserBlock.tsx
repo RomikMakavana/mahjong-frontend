@@ -9,12 +9,13 @@ import MainUserCard from '@/assets/images/svg/main_user_card.svg';
 import SmileEmoji from '@/assets/images/svg/smile.svg';
 import SpeechBubble from './SpeechBubble';
 import { useState } from 'react';
-import { PlayerDetails } from '@/interfaces';
+import { MainPlayer, PlayerDetails } from '@/interfaces';
 import { GameData } from '@/interfaces';
 import MahjongModel from '../MahjongModel';
 import APIService from '@/services/firebase/api';
 import { useParams } from 'next/navigation';
 import { useNotifications } from "@/utils";
+import CARDS from '@/helpers/cardsList';
 
 interface BottomUserBlockProps {
   playerData: PlayerDetails,
@@ -22,10 +23,10 @@ interface BottomUserBlockProps {
   showBubbleChat: boolean,
   myTurn: boolean
   gameData: GameData,
-
+  mainPlayer: MainPlayer
 }
 
-export default function BottomUserBlock({ playerData, waiting, showBubbleChat, gameData, myTurn }: BottomUserBlockProps) {
+export default function BottomUserBlock({ playerData, waiting, showBubbleChat, gameData, myTurn, mainPlayer }: BottomUserBlockProps) {
 
   const mainUserCardBlock = [];
   const [activeTile, setActiveTile] = useState<number | null>(null);
@@ -52,7 +53,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
         onTouchStart={() => setActiveTile(i)}
         onTouchEnd={() => setActiveTile(null)}
       >
-        <Image src={waiting ? WaitingCardBackSide : MainUserCard} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
+        <Image src={waiting ? WaitingCardBackSide : mainPlayer?.card_list.length > 0 ? CARDS[mainPlayer.card_list[i].toString()] : WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
       </div>
     );
   }
@@ -77,7 +78,7 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
         </div>
         <div className="user-block w-full flex justify-between items-center">
           <div className="userSection flex items-center gap-3">
-            <PickCard isAnyPlayerWaiting={waiting} />
+            <PickCard flowerCardList={mainPlayer?.flower_card_list.length} isAnyPlayerWaiting={waiting} />
             <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} myTurn={myTurn} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
             <div className="flex items-center sm:mt-2">
               <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px] h-auto border-[1px] border-[#ED9108]  rounded-full" />

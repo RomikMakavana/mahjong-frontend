@@ -118,3 +118,9 @@ export interface Option {
   value: string | number;
   label: string;
 }
+
+export interface MainPlayer {
+  card_list: string[];
+  flower_card_list: string[];
+  matched_list: string[];
+}

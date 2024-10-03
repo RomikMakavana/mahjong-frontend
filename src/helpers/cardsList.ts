@@ -18,6 +18,16 @@ import Circle7 from '@/assets/images/cards/circle/7.png';
 import Circle8 from '@/assets/images/cards/circle/8.png';
 import Circle9 from '@/assets/images/cards/circle/9.png';
 
+import Character1 from '@/assets/images/cards/characters/1.png';
+import Character2 from '@/assets/images/cards/characters/2.png';
+import Character3 from '@/assets/images/cards/characters/3.png';
+import Character4 from '@/assets/images/cards/characters/4.png';
+import Character5 from '@/assets/images/cards/characters/5.png';
+import Character6 from '@/assets/images/cards/characters/6.png';
+import Character7 from '@/assets/images/cards/characters/7.png';
+import Character8 from '@/assets/images/cards/characters/8.png';
+import Character9 from '@/assets/images/cards/characters/9.png';
+
 import DragonGreen from '@/assets/images/cards/dragons/green.png';
 import DragonRed from '@/assets/images/cards/dragons/red.png';
 import DragonWhite from '@/assets/images/cards/dragons/white.png';
@@ -54,6 +64,17 @@ const CARDS:{[key:string]:StaticImageData} = {
     "circles-7": Circle7,
     "circles-8": Circle8,
     "circles-9": Circle9,
+
+    //character cards
+    "characters-1": Character1,
+    "characters-2": Character2,
+    "characters-3": Character3,
+    "characters-4": Character4,
+    "characters-5": Character5,
+    "characters-6": Character6,
+    "characters-7": Character7,
+    "characters-8": Character8,
+    "characters-9": Character9,
 
     // Dragon cards
     "dragons-green": DragonGreen,
