@@ -2,7 +2,7 @@ import FlowerCard1 from '@/assets/images/svg/cards/flower_card_1.svg';
 import Image from 'next/image';
 interface PickCardProps {
     isAnyPlayerWaiting: boolean;
-    flowerCardList: number;
+    flowerCardList?: number;
 }
 export default function PickCard({ isAnyPlayerWaiting, flowerCardList }: PickCardProps) {
 

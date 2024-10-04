@@ -13,6 +13,7 @@ import { MyTournaments } from "./MyTournaments";
 
 interface TournamentAndLeaderBoardProps {
     openLoginModal: () => void;
+    isLoggedIn: boolean;
 }
 
 export const TournamentAndLeaderBoard = (props: TournamentAndLeaderBoardProps) => {
@@ -115,7 +116,7 @@ export const TournamentAndLeaderBoard = (props: TournamentAndLeaderBoardProps) =
                         </div>
                         <div className="w-full mt-[30px] md:mt-0 md:w-[40%]">
                             <h6 className="text-lg font-bold mb-[15px]">My tournaments</h6>
-                            <MyTournaments openLoginModal={props.openLoginModal}/>
+                            <MyTournaments openLoginModal={props.openLoginModal} isLoggedIn={props.isLoggedIn}/>
                         </div>
                     </div>
                     <div className="sm:hidden">
@@ -134,7 +135,7 @@ export const TournamentAndLeaderBoard = (props: TournamentAndLeaderBoardProps) =
                             {
                                 activeTab === 'myMatches' &&
                                 <div className="animate-[fadein_1s_forwards]">
-                                    <MyTournaments openLoginModal={props.openLoginModal}/>
+                                    <MyTournaments openLoginModal={props.openLoginModal} isLoggedIn={props.isLoggedIn}/>
                                 </div>
                             }
                         </div>

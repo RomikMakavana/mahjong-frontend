@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "./config";
-import { ApiResponse, CreateRoomDataType, GameDetails, MahjongUser, Profile, StartGameAPIResponse } from "@/interfaces";
+import { ApiResponse, CreateRoomDataType, GameDetails, MahjongUser, PickedFrom, Profile, StartGameAPIResponse } from "@/interfaces";
 import { AuthService } from "./auth";
 import { User } from "firebase/auth";
 
@@ -138,8 +138,8 @@ const APIService = {
     return res;
   },
 
-  pickCard: async (playerId: string, pickFrom:'rest' | 'discarded') => {
-    const url = `${config.baseUrl}${config.endPoints.pickCard(playerId)}`;
+  pickCard: async (gameId: string, playerId:string, pickFrom:PickedFrom) => {
+    const url = `${config.baseUrl}${config.endPoints.pickCard(gameId)}`;
     const res = await axios.request<ApiResponse<{pick_card: string}>>({
       method: 'POST',
       url: url,
@@ -152,8 +152,8 @@ const APIService = {
     return res;
   },
 
-  dropcard: async (playerId:string, dropedCard:string) => {
-    const url = `${config.baseUrl}${config.endPoints.dropCard(playerId)}`;
+  dropcard: async (gameId: string, playerId:string, dropedCard:string) => {
+    const url = `${config.baseUrl}${config.endPoints.dropCard(gameId)}`;
     const res = await axios.request<ApiResponse<{}>>({
       method: 'POST',
       url: url,

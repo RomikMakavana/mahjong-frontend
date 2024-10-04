@@ -15,7 +15,7 @@ import { AuthService } from "@/services/firebase/auth";
 import MatchCreated from "@/components/Models/MatchCreated";
 import { useParams, useRouter } from "next/navigation";
 import APIService from "@/services/firebase/api";
-import { GameDetails, MahjongUser, PlayerDetails, GameData, MainPlayer } from "@/interfaces";
+import { GameDetails, MahjongUser, PlayerDetails, GameData, MainPlayer, PlaygroundDetails } from "@/interfaces";
 import { useNotifications } from "@/utils";
 import Loader from "@/components/Loader";
 import { random, reorderList } from "@/libs/utils";
@@ -37,26 +37,6 @@ type Player = {
 type Players = {
   [key: string]: PlayerDetails;
 };
-
-// interface GameData {
-//   is_game_completed: boolean;
-//   is_game_started: boolean;
-//   game_code: string;
-//   status: string;
-//   player_in_sequence: PlayerDetails[];
-//   will_starts_at: number | null;
-// }
-
-interface PlaygroundDetails {
-  game_code: string;
-  current_turn_completed: boolean;
-  current_turn_player: string;
-  current_turn_status: string;
-  is_game_completed: boolean;
-  is_game_started: boolean;
-  next_player: string;
-  status: string;
-}
 
 export default function GameLayout() {
   const [orientationType, setOrientationType] = useState<string>('');
@@ -172,6 +152,7 @@ export default function GameLayout() {
         status: snapshotData?.status || ''
       })
     });
+
 
     const dbRef = ref(AuthService.database, 'user-games/' + gameId + '/user-details/' + user?.firebaseUser.uid);
     const unsubscribe = onValue(dbRef, (snapshot) => {
@@ -453,7 +434,12 @@ export default function GameLayout() {
                       {/* User 2 Block */}
                       {
                         gameData.player_in_sequence.length > 3 ?
-                          <LeftUserBlock myTurn={gameData.player_in_sequence[3]._id == activePlayerId()} showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[3]._id]} waiting={!gameData.is_game_started} /> :
+                          <LeftUserBlock
+                            myTurn={gameData.player_in_sequence[3]._id == activePlayerId()}
+                            showBubbleChat={false}
+                            playerData={gamePlayersData[gameData.player_in_sequence[3]._id]}
+                            waiting={!gameData.is_game_started}
+                          /> :
                           <Fragment />
                       }
                       <div className="flex flex-col">
@@ -461,20 +447,33 @@ export default function GameLayout() {
                         <div>
                           {
                             gameData.player_in_sequence.length > 2 ?
-                              <TopUserBlock myTurn={gameData.player_in_sequence[2]._id == activePlayerId()} showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[2]._id]} waiting={!gameData.is_game_started} />
+                              <TopUserBlock
+                                myTurn={gameData.player_in_sequence[2]._id == activePlayerId()}
+                                showBubbleChat={false}
+                                playerData={gamePlayersData[gameData.player_in_sequence[2]._id]}
+                                waiting={!gameData.is_game_started}
+                              />
                               : <Fragment />
                           }
 
                         </div>
                         <div className="h-[100%] flex justify-center flex-col">
-                          <CenterCardBlock gameStatus={gameData.status} seconds={seconds} isAnyPlayerWaiting={!gameData.is_game_started} />
+                          <CenterCardBlock
+                            gameStatus={gameData.status}
+                            seconds={seconds}
+                            isAnyPlayerWaiting={!gameData.is_game_started} />
                         </div>
                       </div>
                       <div className="">
                         <div>
                           {
                             gameData.player_in_sequence.length > 1 ?
-                              <RightUserBlock myTurn={gameData.player_in_sequence[1]._id == activePlayerId()} showBubbleChat={false} playerData={gamePlayersData[gameData.player_in_sequence[1]._id]} waiting={!gameData.is_game_started} /> :
+                              <RightUserBlock
+                                myTurn={gameData.player_in_sequence[1]._id == activePlayerId()}
+                                showBubbleChat={false}
+                                playerData={gamePlayersData[gameData.player_in_sequence[1]._id]}
+                                waiting={!gameData.is_game_started}
+                              /> :
                               <Fragment />
                           }
                         </div>
@@ -482,11 +481,18 @@ export default function GameLayout() {
                     </div>
                     {
                       gameData.player_in_sequence.length > 0 ?
-                        <BottomUserBlock mainPlayer={mainPlayer!} myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}  showBubbleChat={false} gameData={gameData} playerData={gamePlayersData[gameData.player_in_sequence[0]._id]} waiting={isAnyPlayerWaiting()} /> : <Fragment />
+                        <BottomUserBlock
+                          mainPlayer={mainPlayer!}
+                          myTurn={gameData.player_in_sequence[0]._id == activePlayerId()}
+                          showBubbleChat={false}
+                          gameData={gameData}
+                          playerData={gamePlayersData[gameData.player_in_sequence[0]._id]}
+                          waiting={isAnyPlayerWaiting()} 
+                          gamePlaygroundDetails={gamePlaygroundDetails}
+                          /> : <Fragment />
                     }
                   </div>
                 }
-
                 <div>
                   <p>{orientationType}</p>
                 </div>

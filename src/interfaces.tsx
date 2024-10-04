@@ -1,5 +1,7 @@
 import { User } from "firebase/auth";
 
+export type PickedFrom = 'rest' | 'discarded';
+
 export interface TournamentStat {
   icon: string;
   label: string;
@@ -28,6 +30,17 @@ export interface GameData {
 }
 
 
+export interface PlaygroundDetails {
+  game_code: string;
+  current_turn_completed: boolean;
+  current_turn_player: string;
+  current_turn_status: string;
+  is_game_completed: boolean;
+  is_game_started: boolean;
+  next_player: string;
+  status: string;
+}
+
 
 // API Responses
 
@@ -55,7 +68,11 @@ export interface GameDetails {
     begin_time: null | number,
   }
   win_details: {
-    winner: any;
+    winner:{
+      _id: string;
+      card_list: string[];
+      flower_card_list: string[];
+    }
   };
   current_turn_player: string | null;
   next_player: string;
@@ -74,7 +91,7 @@ export interface GameDetails {
     user_id: string | null;
   }[];
   private_detail: {
-    discard_card_list: any;
+    discard_card_list: string[];
   }
 
 }
@@ -122,5 +139,5 @@ export interface Option {
 export interface MainPlayer {
   card_list: string[];
   flower_card_list: string[];
-  matched_list: string[];
+  matched_list: string[][];
 }

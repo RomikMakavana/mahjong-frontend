@@ -2,8 +2,10 @@ import Image from 'next/image';
 import UserProfile from '@/assets/images/svg/user_profile.svg';
 import SpeechBubble from './SpeechBubble';
 import AnimeImg from '@/assets/images/svg/anime_1.png';
+import { PlayerDetails } from '@/interfaces';
 
 interface UserProfileBlockProps {
+  playerData : PlayerDetails,
   rotate: boolean;
   userName: string,
   profileImg?: string,

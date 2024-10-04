@@ -87,7 +87,7 @@ export default function Home() {
             if (res.status) {
                 closeModal();
                 setIsLoggedIn(true);
-                helpers.handleFullscreenAndLock();
+                // helpers.handleFullscreenAndLock();
             }
         } catch (error) {
             console.log(error);
@@ -131,7 +131,7 @@ export default function Home() {
                 closeModal();
                 setIsLoggedIn(true);
                 notification("Logged in successfully.", 'success');
-                helpers.handleFullscreenAndLock();
+                // helpers.handleFullscreenAndLock();
             } else if (res.status && !res.isVerifiedEmail) {
                 setOpenSignInModel(false);
                 setOpenSignUpModel(false);
@@ -312,7 +312,7 @@ export default function Home() {
                     <div className="mt-20 sm:mt-[124px] md:mt-[105px]">
                         <ClaimFreePoints />
                         <MainSection startNewGame={startNewGame} />
-                        <TournamentAndLeaderBoard openLoginModal={openLoginModal} />
+                        <TournamentAndLeaderBoard openLoginModal={openLoginModal} isLoggedIn={isLoggedIn}/>
                         <FeaturedTournaments />
                     </div>
                 </div>

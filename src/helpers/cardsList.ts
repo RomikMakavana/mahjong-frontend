@@ -40,6 +40,8 @@ import WindSouth from '@/assets/images/cards/winds/south.png';
 import Flower1 from '@/assets/images/cards/flowers/flower-1.png';
 import Flower2 from '@/assets/images/cards/flowers/flower-2.png';
 
+import WaitingCard from '@/assets/images/svg/cards/waiting_card_back_side.png';
+
 import { StaticImageData } from 'next/image';
 
 const CARDS:{[key:string]:StaticImageData} = {
@@ -89,15 +91,10 @@ const CARDS:{[key:string]:StaticImageData} = {
 
     // Flower cards
     "flowers-flower-1" : Flower1,
-    "flowers-flower-2" : Flower2
+    "flowers-flower-2" : Flower2,
+
+    // Waiting card
+    "waiting-card": WaitingCard
 }
 
 export default CARDS;
-
-// key suggestion
-
-//characters-1
-//circles-1
-//winds-south
-//dragons-red
-//flowers-flower-1

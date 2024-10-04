@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 
 interface MyTournamentsProps {
     openLoginModal: () => void;
+    isLoggedIn: boolean;
 }
 
 export const MyTournaments = (props: MyTournamentsProps) => {
@@ -81,13 +82,13 @@ export const MyTournaments = (props: MyTournamentsProps) => {
     return (
         <div className="border p-3 xs:p-5 bg-[#0D0D0D]  border-[#1b1b1b] sm:rounded-lg  overflow-y-hidden relative">
             {
-                (user == null || isProcessing) &&
+                (!props.isLoggedIn || isProcessing) &&
                 <div className="absolute top-0 bottom-0  sm:rounded-lg left-0 right-0 z-10 backdrop-blur-sm flex justify-center items-center">
                     {
                         isProcessing && <Loader />
                     }
                     {
-                        !isProcessing && user == null &&
+                        !isProcessing && !props.isLoggedIn &&
                         <div className="flex flex-col items-center justify-center">
                             <p className="mb-2 font-medium">Login to view Tournaments</p>
                             <button onClick={props.openLoginModal} className=" rounded-9 bg-brand-blue px-5 py-2">

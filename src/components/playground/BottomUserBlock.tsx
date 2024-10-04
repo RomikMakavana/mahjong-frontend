@@ -1,21 +1,17 @@
 import Image from 'next/image';
-import UserProfile from '@/assets/images/svg/user_profile.svg';
-import AnimeImg from '@/assets/images/svg/anime_1.png';
-import WaitingCardBackSide from '@/assets/images/svg/cards/waiting_card_back_side.png';
-
 import PickCard from './PickCard';
 import UserProfileBlock from './UserProfileBlock';
-import MainUserCard from '@/assets/images/svg/main_user_card.svg';
 import SmileEmoji from '@/assets/images/svg/smile.svg';
-import SpeechBubble from './SpeechBubble';
-import { useMemo, useState } from 'react';
-import { MainPlayer, PlayerDetails } from '@/interfaces';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { MainPlayer, PickedFrom, PlayerDetails, PlaygroundDetails } from '@/interfaces';
 import { GameData } from '@/interfaces';
 import MahjongModel from '../MahjongModel';
 import APIService from '@/services/firebase/api';
 import { useParams } from 'next/navigation';
 import { useNotifications } from "@/utils";
-import CARDS from '@/helpers/cardsList';
+import CardComponent from '@/components/Cards/CardComponent';
+import Loader from '../Loader';
+
 
 interface BottomUserBlockProps {
   playerData: PlayerDetails,
@@ -23,40 +19,42 @@ interface BottomUserBlockProps {
   showBubbleChat: boolean,
   myTurn: boolean
   gameData: GameData,
-  mainPlayer: MainPlayer
+  mainPlayer: MainPlayer,
+  gamePlaygroundDetails: PlaygroundDetails | null
 }
 
-export default function BottomUserBlock({ playerData, waiting, showBubbleChat, gameData, myTurn, mainPlayer }: BottomUserBlockProps) {
+type PickedFor = 'normal' | 'pong' | 'seung' | null;
 
-  const mainUserCardBlock = [];
-  const [activeTile, setActiveTile] = useState<number | null>(null);
+export default function BottomUserBlock({
+  playerData,
+  waiting,
+  showBubbleChat,
+  gameData,
+  myTurn,
+  mainPlayer,
+  gamePlaygroundDetails
+}: BottomUserBlockProps) {
+
   const [openStartGameModel, setOpenStartGameModel] = useState(false);
   const [gameStartWithSystemPlayers, setGameStartWithSystemPlayers] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isCardPicked, setIsCardPicked] = useState(false);
+  const [cardPickAndDropProcessing, setCardPickAndDropProcessing] = useState(false);
+  const [pickedFor, setPickedFor] = useState<PickedFor>(null);
+  const [droppedCardIndex, setDroppedCardIndex] = useState<number | null>(null);
+
   const { notification } = useNotifications();
 
   const params = useParams();
 
   const { game_id } = params;
-  const cardLength = mainPlayer?.card_list.length > 0 ? mainPlayer?.card_list.length : 13;
 
-  for (let i = 0; i < cardLength; i++) {
-    mainUserCardBlock.push(
-      <div
-        key={i}
-        className={`tile-wrapper relative transition-transform duration-300 ease-in-out ${(activeTile === i && !waiting) ? 'transform -translate-y-3' : ''
-          }`}
-        // Hover effect for desktop
-        onMouseEnter={() => setActiveTile(i)}
-        onMouseLeave={() => setActiveTile(null)}
-        // Touch effect for mobile
-        onTouchStart={() => setActiveTile(i)}
-        onTouchEnd={() => setActiveTile(null)}
-      >
-        <Image src={waiting ? WaitingCardBackSide : mainPlayer?.card_list.length > 0 ? CARDS[mainPlayer.card_list[i]] : WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
-      </div>
-    );
-  }
+
+  useEffect(() => {
+    console.log('droppedCardIndex', droppedCardIndex);
+    console.log('isCardPicked', isCardPicked);
+    console.log('cardPickAndDropProcessing', cardPickAndDropProcessing);
+  }, [droppedCardIndex, isCardPicked, cardPickAndDropProcessing])
 
   const beginGame = async () => {
     setIsProcessing(true);
@@ -70,28 +68,119 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
     }
   }
 
+  useEffect(() => {
+    console.log('gamePlaygroundDetails', gamePlaygroundDetails);
+    if (gamePlaygroundDetails && gamePlaygroundDetails.current_turn_completed === false) {
+      setIsCardPicked(true);
+    } else {
+      setIsCardPicked(false);
+    }
+    setCardPickAndDropProcessing(false);
+    setPickedFor(null);
+    setDroppedCardIndex(null);
+
+  }, [gamePlaygroundDetails])
+
+  const pickCard = async (pickFrom: PickedFrom, pickedFor: PickedFor) => {
+    setCardPickAndDropProcessing(true);
+    setPickedFor(pickedFor);
+    try {
+      const res = await APIService.pickCard(game_id as string, playerData._id, pickFrom);
+      if (res.status === 200 && res.data.success) {
+        notification('Card picked successfully', 'success');
+      } else {
+        notification('Something went wrong', 'error');
+      }
+
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
   const cards = useMemo(() => {
-    const matchedCardList = mainPlayer?.matched_list.flat(Infinity);
+
+    const matchedCardList = mainPlayer?.matched_list.flat();
+    const updatedCardList = mainPlayer ? [...mainPlayer?.card_list] : []
+
+    matchedCardList && matchedCardList.length && matchedCardList.forEach(card => {
+      const cardIndex = updatedCardList.indexOf(card);
+      if (cardIndex !== -1) {
+        updatedCardList.splice(cardIndex, 1);
+      }
+    })
+
+    const isPong = ((cards: string[]): boolean => {
+      const numericValues = cards.map(item => {
+        const match = item.match(/\d+$/); // Extract the numeric part        
+        return match ? parseInt(match[0], 10) : null; // Parse the number
+      });
+
+      // Check if all numeric values are sequential
+      for (let i = 1; i < numericValues.length; i++) {
+        if (numericValues[i] === null || numericValues[i - 1] === null || numericValues[i] !== numericValues[i - 1] as number + 1) {
+          return false;
+        }
+      }
+
+      return true;
+    })
+
+
+    const dropCard = async (cardId: string, index:number) => {
+      if(isCardPicked){
+        setCardPickAndDropProcessing(true);
+        setDroppedCardIndex(index);
+        try {
+          const res = await APIService.dropcard(game_id as string, playerData._id, cardId);
+          if (res.status === 200 && res.data.success) {
+            notification('Card dropped successfully', 'success');
+            // updatedCardList.splice(index, 1);
+          } else {
+            notification('Something went wrong', 'error');
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }else {
+        notification('Please pick a card first', 'info');
+      }
+    }
+
     return (
       <div className='flex gap-[2px]'>
         {
-          Array.from({ length: cardLength }).map((number, index) => {
-            return (
-              <div key={index}
-                className={`tile-wrapper relative transition-transform duration-300 ease-in-out 
-                ${gameData.is_game_started && !matchedCardList?.includes(mainPlayer?.card_list[index]) && myTurn ? 'cursor-pointer hover:transform hover:-translate-y-3' : ''}
-                ${matchedCardList?.includes(mainPlayer?.card_list[index]) ? 'opacity-70 cursor-not-allowed' : ''}
-                `}
-              > {
-                  gameData.is_game_started && mainPlayer ? (
-                    <Image src={CARDS[mainPlayer?.card_list[index]]} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
-                  ) : (
-                    <Image src={WaitingCardBackSide} alt="Tile" priority className="w-[35px] sm:w-[50px] h-auto" />
-                  )
-                }
-              </div>
-            )
-          })
+          gameData.is_game_started && mainPlayer ? (
+            <>
+              {
+                mainPlayer && mainPlayer.matched_list.length > 0 && mainPlayer.matched_list.map((list, indexOfList) => (
+                  <React.Fragment key={indexOfList}>
+                    {list.map((card, index) => (
+                      <CardComponent
+                        key={`${indexOfList}-${index}`}
+                        canDrop={false}
+                        myTurn={myTurn}
+                        cardId={card}
+                        isGameStarted={true}
+                        isPong={isPong(list) ? true : false}
+                      />
+                    ))}
+                  </React.Fragment>
+                ))
+              }
+              {updatedCardList.map((card, index) => {
+                return (
+                  <CardComponent action={() => dropCard(card, index)} isProcessing={droppedCardIndex == index ? true : false} key={index} canDrop={isCardPicked && myTurn} myTurn={myTurn} cardId={card} isGameStarted={true} isPong={null} />
+                )
+              })}
+            </>
+          )
+            : (
+              Array.from({ length: 13 }).map((number, index) => {
+                return (
+                  <CardComponent key={index} canDrop={false} isPong={null} cardId='waiting-card' isGameStarted={false} myTurn={false} />
+                )
+              }))
         }
       </div>
     )
@@ -100,14 +189,11 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
   return (
     <>
       <div className="main-user-block flex flex-col items-center sm:gap-5 gap-3">
-        {/* <div className="flex gap-[2px]">
-          {mainUserCardBlock}
-        </div> */}
         {cards}
         <div className="user-block w-full flex justify-between items-center">
           <div className="userSection flex items-center gap-3">
             <PickCard flowerCardList={mainPlayer?.flower_card_list.length} isAnyPlayerWaiting={waiting} />
-            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} myTurn={myTurn} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
+            <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} playerData={playerData} myTurn={myTurn} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
             <div className="flex items-center sm:mt-2">
               <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px] h-auto border-[1px] border-[#ED9108]  rounded-full" />
             </div>
@@ -119,30 +205,32 @@ export default function BottomUserBlock({ playerData, waiting, showBubbleChat, g
               <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue px-5 py-2 font-medium text-sm rounded-9'>Start Game</button>
             </div>
           }
-          {/* {waiting ? (<></>) : (<>
-            <div className="flex gap-2 ">
-              <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-                <span className="btn-text">Pick</span>
-              </button>
-              <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-                <span className="btn-text text-black">Seung</span>
-              </button>
-              <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-                <span className="btn-text">Gong</span>
-              </button>
-            </div>
-          </>)} */}
           {
             gameData.is_game_started && myTurn &&
+            // true &&
             <div className="flex gap-2 ">
-              <button className="flex flex-1 justify-center items-center  border border-brand-purple rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-                <span className="btn-text">Pick</span>
+              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('rest', 'normal')} className="flex relative flex-1 justify-center items-center  border border-brand-purple rounded-lg min-w-24 h-12 xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
+                {
+                  pickedFor === 'normal' ?
+                    <Loader customClass='!w-4 !h-4' withoutBackground={true} /> :
+                    <span className="btn-text">Pick</span>
+                }
               </button>
-              <button className="flex flex-1 justify-center items-center bg-[#EDF7B9] border rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-                <span className="btn-text text-black">Seung</span>
+              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('discarded', 'pong')} className="flex flex-1 justify-center items-center bg-[#DD6C05] relative min-w-24 h-12 rounded-lg xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
+                {
+                  pickedFor === 'pong' ?
+                    <Loader customClass='!w-4 !h-4' withoutBackground={true} /> :
+                    <span className="btn-text text-white">Pong</span>
+
+                }
               </button>
-              <button className="flex flex-1 justify-center items-center bg-[#739A00] border border-[#739A00] rounded-lg py-[14px] xs:py-3 px-6 xs:mr-3">
-                <span className="btn-text">Gong</span>
+              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('discarded', 'seung')} className="flex flex-1 justify-center items-center relative bg-[#739A00] border min-w-24 h-12 border-[#739A00] rounded-lg xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
+                {
+                  pickedFor === 'seung' ?
+                    <Loader customClass='!w-4 !h-4' withoutBackground={true} /> :
+                    <span className="btn-text">Seung</span>
+
+                }
               </button>
             </div>
           }
