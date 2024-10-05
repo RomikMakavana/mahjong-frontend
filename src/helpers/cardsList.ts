@@ -1,44 +1,44 @@
-import Bamboo1 from '@/assets/images/cards/bamboo/1.png';
-import Bamboo2 from '@/assets/images/cards/bamboo/2.png';
-import Bamboo3 from '@/assets/images/cards/bamboo/3.png';
-import Bamboo4 from '@/assets/images/cards/bamboo/4.png';
-import Bamboo5 from '@/assets/images/cards/bamboo/5.png';
-import Bamboo6 from '@/assets/images/cards/bamboo/6.png';
-import Bamboo7 from '@/assets/images/cards/bamboo/7.png';
-import Bamboo8 from '@/assets/images/cards/bamboo/8.png';
-import Bamboo9 from '@/assets/images/cards/bamboo/9.png';
+import Bamboo1 from '@/assets/images/cards/bamboo-1/1.png';
+import Bamboo2 from '@/assets/images/cards/bamboo-1/2.png';
+import Bamboo3 from '@/assets/images/cards/bamboo-1/3.png';
+import Bamboo4 from '@/assets/images/cards/bamboo-1/4.png';
+import Bamboo5 from '@/assets/images/cards/bamboo-1/5.png';
+import Bamboo6 from '@/assets/images/cards/bamboo-1/6.png';
+import Bamboo7 from '@/assets/images/cards/bamboo-1/7.png';
+import Bamboo8 from '@/assets/images/cards/bamboo-1/8.png';
+import Bamboo9 from '@/assets/images/cards/bamboo-1/9.png';
 
-import Circle1 from '@/assets/images/cards/circle/1.png';
-import Circle2 from '@/assets/images/cards/circle/2.png';
-import Circle3 from '@/assets/images/cards/circle/3.png';
-import Circle4 from '@/assets/images/cards/circle/4.png';
-import Circle5 from '@/assets/images/cards/circle/5.png';
-import Circle6 from '@/assets/images/cards/circle/6.png';
-import Circle7 from '@/assets/images/cards/circle/7.png';
-import Circle8 from '@/assets/images/cards/circle/8.png';
-import Circle9 from '@/assets/images/cards/circle/9.png';
+import Circle1 from '@/assets/images/cards/circle-1/1.png';
+import Circle2 from '@/assets/images/cards/circle-1/2.png';
+import Circle3 from '@/assets/images/cards/circle-1/3.png';
+import Circle4 from '@/assets/images/cards/circle-1/4.png';
+import Circle5 from '@/assets/images/cards/circle-1/5.png';
+import Circle6 from '@/assets/images/cards/circle-1/6.png';
+import Circle7 from '@/assets/images/cards/circle-1/7.png';
+import Circle8 from '@/assets/images/cards/circle-1/8.png';
+import Circle9 from '@/assets/images/cards/circle-1/9.png';
 
-import Character1 from '@/assets/images/cards/characters/1.png';
-import Character2 from '@/assets/images/cards/characters/2.png';
-import Character3 from '@/assets/images/cards/characters/3.png';
-import Character4 from '@/assets/images/cards/characters/4.png';
-import Character5 from '@/assets/images/cards/characters/5.png';
-import Character6 from '@/assets/images/cards/characters/6.png';
-import Character7 from '@/assets/images/cards/characters/7.png';
-import Character8 from '@/assets/images/cards/characters/8.png';
-import Character9 from '@/assets/images/cards/characters/9.png';
+import Character1 from '@/assets/images/cards/characters-1/1.png';
+import Character2 from '@/assets/images/cards/characters-1/2.png';
+import Character3 from '@/assets/images/cards/characters-1/3.png';
+import Character4 from '@/assets/images/cards/characters-1/4.png';
+import Character5 from '@/assets/images/cards/characters-1/5.png';
+import Character6 from '@/assets/images/cards/characters-1/6.png';
+import Character7 from '@/assets/images/cards/characters-1/7.png';
+import Character8 from '@/assets/images/cards/characters-1/8.png';
+import Character9 from '@/assets/images/cards/characters-1/9.png';
 
 import DragonGreen from '@/assets/images/cards/dragons/green.png';
 import DragonRed from '@/assets/images/cards/dragons/red.png';
 import DragonWhite from '@/assets/images/cards/dragons/white.png';
 
-import WindEast from '@/assets/images/cards/winds/east.png';
-import WindWest from '@/assets/images/cards/winds/west.png';
-import WindNorth from '@/assets/images/cards/winds/north.png';
-import WindSouth from '@/assets/images/cards/winds/south.png';
+import WindEast from '@/assets/images/cards/winds-1/east.png';
+import WindWest from '@/assets/images/cards/winds-1/west.png';
+import WindNorth from '@/assets/images/cards/winds-1/north.png';
+import WindSouth from '@/assets/images/cards/winds-1/south.png';
 
-import Flower1 from '@/assets/images/cards/flowers/flower-1.png';
-import Flower2 from '@/assets/images/cards/flowers/flower-2.png';
+import Flower1 from '@/assets/images/cards/flowers-1/flower-1.png';
+import Flower2 from '@/assets/images/cards/flowers-1/flower-2.png';
 
 import WaitingCard from '@/assets/images/svg/cards/waiting_card_back_side.png';
 
@@ -94,7 +94,7 @@ const CARDS:{[key:string]:StaticImageData} = {
     "flowers-flower-2" : Flower2,
 
     // Waiting card
-    "waiting-card": WaitingCard
+    "waiting-card": WaitingCard,
 }
 
 export default CARDS;

@@ -69,7 +69,9 @@ const config: Config = {
         'room-bg-tab': "url('/images/room_bg_tab.avif')",
         'game-page-bg-image': "url('/images/game_page_bg.avif')",
         'campas-bg-image': "url('/images/campas_bg.png')",
-
+        'pong-tile-image':"url('/images/pong_tile.png')",
+        'gong-tile-image':"url('/images/gong_tile.png')",
+        'tile-image':"url('/images/tile.png')"
       },
       boxShadow:{
         'headerShadowLeft': '0 30px 120px 50px rgba(158, 98, 255, 1)',
