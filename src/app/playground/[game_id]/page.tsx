@@ -21,6 +21,9 @@ import Loader from "@/components/Loader";
 import { random, reorderList } from "@/libs/utils";
 import moment from "moment";
 import NotificationModal from "@/components/Models/NotificationModal";
+import { isTablet, isMobile } from 'react-device-detect';
+import { helpers } from "@/helpers/helpers";
+import MahjongModel from "@/components/MahjongModel";
 
 type Player = {
   _id: string;
@@ -42,19 +45,15 @@ export default function GameLayout() {
   const [orientationType, setOrientationType] = useState<string>('');
   const [gameId, setGameId] = useState<string>('');
   const [user, setUser] = useState<MahjongUser | null>(null);
-  const [data, setData] = useState<any>(null);
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [mainPlayer, setMainPlayer] = useState<MainPlayer | null>(null);
   const [gamePlaygroundDetails, setGamePlaygroundDetails] = useState<PlaygroundDetails | null>(null);
   const [seconds, setSeconds] = useState(0);
-
+  const [isFullScreenModeon, setIsFullScreenModeon] = useState(false);
   const [gamePlayersData, setGamePlayersData] = useState<Players>({});
-  const [userUid, setUserUid] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
   const [openMatchStartedModal, setOpenMatchStartedModal] = useState(true);
-  const [isFetchingDetails, setIsFetchingDetails] = useState(true);
-  const [openInformationModal, setOpenInformationModal] = useState(false);
   const [informationMessage, setInformationMessage] = useState<string | null>(null);
+  const [openContinueGameModal, setOpenContinueGameModal] = useState(false)
 
   const [otherDetails, setOtherDetails] = useState<{ label: string, action: () => void }[]>([])
 
@@ -211,20 +210,71 @@ export default function GameLayout() {
   }, [gameData]); // Dependency array includes gameId
 
   const handleOrientationChange = () => {
-    setOrientationType(screen.orientation.type);
+      setOrientationType(screen.orientation.type);
+
+        if ((isMobile || isTablet) && screen.orientation.type == 'portrait-primary') {
+          setOpenContinueGameModal(true);
+        }
+  
+        if(screen.orientation.type == 'landscape-primary' && isFullScreenModeon == true) {
+          setOpenContinueGameModal(false);
+        }
+
+        if(screen.orientation.type == 'landscape-primary' && isFullScreenModeon == false){
+          setOpenContinueGameModal(true);
+        }
+  }
+
+  const fullscreenChangeHandler = () => {
+    if (document.fullscreenElement) {
+      setIsFullScreenModeon(true);
+      setOpenContinueGameModal(false);
+    } else {
+      setOpenContinueGameModal(true);
+      setIsFullScreenModeon(false);
+    }
   }
 
   const isAnyPlayerWaiting = () => {
     return gameData !== null ? !gameData.is_game_started : true;
   };
 
+  // useEffect(() => {
+  //   if(isFullScreenModeon) {
+  //     setOpenContinueGameModal(false);
+  //   }else {
+  //     setOpenContinueGameModal(true);
+  //   }
+  // },[isFullScreenModeon])
+
+  const tournOnFullScreenMode = async () => {
+    const res = await helpers.handleFullscreenAndLock();
+    setIsFullScreenModeon(true);
+    setOpenContinueGameModal(false);
+  }
+
+
   useEffect(() => {
-    screen.orientation.addEventListener('change', handleOrientationChange)
+    tournOnFullScreenMode();
+
+    // handleOrientationChange();
+    screen.orientation.addEventListener('change', handleOrientationChange);
+    document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+    document.addEventListener('webkitfullscreenchange', fullscreenChangeHandler); // Safari
+    document.addEventListener('mozfullscreenchange', fullscreenChangeHandler); // Firefox
+    document.addEventListener('MSFullscreenChange', fullscreenChangeHandler); // Internet Explorer
     return () => {
-      screen.orientation.removeEventListener('change', handleOrientationChange)
+      screen.orientation.removeEventListener('change', handleOrientationChange);
+      document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
+      document.removeEventListener('webkitfullscreenchange', fullscreenChangeHandler);
+      document.removeEventListener('mozfullscreenchange', fullscreenChangeHandler);
+      document.removeEventListener('MSFullscreenChange', fullscreenChangeHandler);
     }
+
   }, []);
   const router = useRouter();
+
+
 
   const activePlayerId = () => {
     if (gamePlaygroundDetails !== null && gamePlaygroundDetails.is_game_started == true) {
@@ -335,20 +385,20 @@ export default function GameLayout() {
     <div>
       {
         !(gameData !== null) ? <Loader /> : <Fragment>
-          <div className="flex m-auto h-screen bg-game-page-bg-image bg-cover bg-no-repeat w-full  ">
-            <div className="flex m-auto overflow-hidden h-[100%] w-[100%]  max-h-[900px] max-w-[1600px] border rounded-sm border-solid border-black ">
+          <div className="flex m-auto h-screen bg-game-page-bg-image bg-cover bg-no-repeat w-full  overflow-hidden">
+            <div className="flex  overflow-hidden  border rounded-sm border-solid border-black w-full">
               {/**Message Block */}
-              <div className="flex-shrink-0 flex flex-col ml-7 min-w-fit border-r-2 border-red w-[20%] sm:w-1/4">
+              <div className="flex-shrink-0 flex flex-col ml-4 between-lg-and-2xl:ml-7 min-w-fit border-r-2 border-red w-[20%] between-lg-and-2xl:w-1/4">
                 <div className="header flex text-white justify-between mt-6 mb-4 gap-3  items-center">
                   <div className="logo">
                     <Image src={logoWhite} alt="Logo Image" priority className="w-[65px]   between-md-and-sm:w-[125px] h-auto" />
                   </div>
-                  <div className=" points-details pr-5">
+                  {/* <div className=" points-details pr-5">
                     <span className="hidden sm:block">
                       <p>Minimum level : <span>5</span></p>
                       <p>Points per level : <span>50</span></p>
                     </span>
-                  </div>
+                  </div> */}
                   {
                     otherDetails.length > 0 &&
                     <div className="relative group/menu w-fit cursor-pointer items-center rounded-9">
@@ -426,7 +476,8 @@ export default function GameLayout() {
               </div>
 
               {/**Playground */}
-              <div className="w-full overflow-auto">
+              <div className="w-full">
+              <p className="text-white">{screen.orientation.type} {openContinueGameModal ? 'true' : 'false'}</p>
                 {
                   Object.keys(gamePlayersData).length > 0 &&
                   <div className="playground flex flex-col h-full justify-between ml-5 mr-5 sm:pt-9 sm:pb-7 pb-4 pt-4">
@@ -457,7 +508,7 @@ export default function GameLayout() {
                           }
 
                         </div>
-                        <div className="h-[100%] flex justify-center flex-col">
+                        <div className="h-full flex justify-center flex-col">
                           <CenterCardBlock
                             gameStatus={gameData.status}
                             seconds={seconds}
@@ -487,9 +538,9 @@ export default function GameLayout() {
                           showBubbleChat={false}
                           gameData={gameData}
                           playerData={gamePlayersData[gameData.player_in_sequence[0]._id]}
-                          waiting={isAnyPlayerWaiting()} 
+                          waiting={isAnyPlayerWaiting()}
                           gamePlaygroundDetails={gamePlaygroundDetails}
-                          /> : <Fragment />
+                        /> : <Fragment />
                     }
                   </div>
                 }
@@ -516,6 +567,18 @@ export default function GameLayout() {
           }
         </Fragment>
       }
+
+      <MahjongModel open={openContinueGameModal} extraCss="w-[363px]">
+        <div>
+          <div className="flex flex-col gap-4 items-center">
+            <h2 className="text-2xl font-bold text-white">Continue Game?</h2>
+          </div>
+          <div className='flex items-center gap-2 mt-5'>
+            <button onClick={() => router.replace('/')} className='flex-1 text-white py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9 max-xs:text-sm'>Close</button>
+            <button onClick={() => tournOnFullScreenMode()} className='flex-1 bg-brand-blue py-3.5 text-base font-bold text-white rounded-9 max-xs:text-sm'>Continue</button>
+          </div>
+        </div>
+      </MahjongModel>
     </div>
   );
 }

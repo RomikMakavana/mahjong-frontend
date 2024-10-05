@@ -6,9 +6,10 @@ export const helpers = {
         if (isMobile || isTablet) {
             try {
 
-                if (!document.fullscreenElement) {
-                    await document.documentElement.requestFullscreen();
-                }
+                // if (!document.fullscreenElement) {
+                //     await document.documentElement.requestFullscreen();
+                // }
+                helpers.tournOnFullScreenMode();
                 //@ts-ignore
                 if ('orientation' in screen && typeof screen.orientation.lock === 'function') {
                     await (screen.orientation as any).lock('landscape-primary');
@@ -31,6 +32,20 @@ export const helpers = {
                 }
             }
         }
-
+    },
+    tournOnFullScreenMode: async () => {
+        try {
+            if (!document.fullscreenElement) {
+                await document.documentElement.requestFullscreen();
+            }
+            return true
+        } catch (error) {
+            return false;
+        }
+    },
+    isDeviceinFillscreenMode: () => {
+        if(isMobile || isTablet) {
+            return document.fullscreenElement ? true : false;
+        }
     }
 }

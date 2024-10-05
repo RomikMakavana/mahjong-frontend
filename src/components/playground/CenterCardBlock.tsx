@@ -17,14 +17,14 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
   const FlowerCardBlock = [];
   for (let i = 0; i < 12; i++) {
     FlowerCardBlock.push(
-      <Image key={`flower-${i}`} src={FlowerCard1} alt="Logo Image" priority className="w-[auto] sm:w-[auto] h-[38px]" />
+      <Image key={`flower-${i}`} src={FlowerCard1} alt="Logo Image" priority className="w-[auto] sm:w-[auto] h-[28px] between-lg-and-2xl:h-[38px]" />
     );
   }
 
   const BacksideOfSoftwareHorizontalCardBlock = [];
   for (let i = 0; i < 8; i++) {
     BacksideOfSoftwareHorizontalCardBlock.push(
-      <Image key={`horizontal-${i}`} src={BacksideOfSoftwareCardHorizontal} alt="Logo Image" priority className="w-[auto] sm:w-[auto] h-[28px]" />
+      <Image key={`horizontal-${i}`} src={BacksideOfSoftwareCardHorizontal} alt="Logo Image" priority className="w-[auto] sm:w-[auto] h-[21px] between-lg-and-2xl:h-[28px]" />
     );
   }
 
@@ -33,13 +33,13 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
   const BacksideOfSoftwareCardVerticalCardBlockBottom = [];
   for (let i = 0; i < 12; i++) {
     BacksideOfSoftwareCardVerticalCardBlock.push(
-      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[28px] sm:w-[28px] h-[auto]" />
+      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[18px] between-lg-and-2xl:w-[28px] h-[auto]" />
     );
   }
 
   for (let i = 0; i < 12; i++) {
     BacksideOfSoftwareCardVerticalCardBlockBottom.push(
-      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[28px] sm:w-[28px] h-[auto] rotate-180" />
+      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[18px] between-lg-and-2xl:w-[28px] h-[auto] rotate-180" />
     );
   }
 
@@ -50,7 +50,7 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
 
   return (
     <div className="">
-      <div className="flex justify-between">
+      <div className="flex justify-between mx-auto w-fit">
         {!isAnyPlayerWaiting && (
           <div className="grid grid-cols-2 gap-[1px]">
             {FlowerCardBlock}
@@ -83,9 +83,9 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
                 </div> : <p className='m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>
-                    <Image src={MainUserCard} alt="Logo Image" priority className="w-[50px]   sm:w-[50px] h-auto m-3" />
+                    <Image src={MainUserCard} alt="Logo Image" priority className="w-[35px]   between-lg-and-2xl:w-[50px] h-auto m-1.5 between-lg-and-2xl:m-3" />
                   </div>
-                  <span>Time left - 45</span>
+                  {/* <span>Time left - 45</span> */}
                 </>
               )
             }

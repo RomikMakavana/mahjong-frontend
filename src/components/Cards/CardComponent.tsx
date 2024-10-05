@@ -39,7 +39,7 @@ export default function GlobalCard(props: Props) {
         `}
     >
       { props.isGameStarted ? <div
-        className={`relative bg-contain bg-no-repeat  w-[35px] sm:w-[60px] h-[100px] pl-1 pr-2 py-2
+        className={`relative bg-contain bg-no-repeat  w-[40px] h-[60px] between-lg-and-2xl:w-[60px] between-lg-and-2xl:h-[80px] pl-1 pr-2 py-2
             ${isPong === null && "bg-tile-image"}
             ${isPong === true && "bg-pong-tile-image"} 
             ${isPong === false && "bg-gong-tile-image"}
@@ -50,7 +50,7 @@ export default function GlobalCard(props: Props) {
             src={CARDS[cardId]}
             alt="Card"
             priority
-            className="h-[55px] object-contain"
+            className="h-[35px] between-lg-and-2xl:h-[55px] object-contain"
           />
         </div>
       </div> :

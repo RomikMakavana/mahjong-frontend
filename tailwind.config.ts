@@ -19,6 +19,7 @@ const config: Config = {
       },
       screens: {
         '2xl': '1600px',
+        'between-lg-and-2xl': '1300px',
         'lg': '1201px',
         'md': '997px',
         'between-md-and-sm': '800px',

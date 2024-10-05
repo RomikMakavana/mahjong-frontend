@@ -15,7 +15,7 @@ export default function TopUserBlock({playerData , waiting, showBubbleChat, myTu
     const hiddenCardsBlock = [];
     for (let i = 0; i < 14; i++) {
       hiddenCardsBlock.push(
-        <Image key={i} src={HiddenCard} alt="Logo Image" priority className="pt-0 origin-left w-[30px] h-auto" />
+        <Image key={i} src={HiddenCard} alt="Logo Image" priority className="pt-0 origin-left w-[25px]  between-lg-and-2xl:w-[30px] h-auto" />
       );
     }
 

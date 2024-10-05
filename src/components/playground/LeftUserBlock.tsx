@@ -17,7 +17,7 @@ export default function LeftUserBlock({ playerData, waiting, showBubbleChat, myT
   const hiddenCardsBlock = [];
   for (let i = 0; i < 14; i++) {
     hiddenCardsBlock.push(
-      <Image key={i} src={HiddenCard} alt="Logo Image" priority className="w-[20px]  sm:w-[20px] h-auto mt-[1px]" />
+      <Image key={i} src={HiddenCard} alt="Logo Image" priority className="w-[15px]  between-lg-and-2xl:w-[20px] h-auto mt-[1px]" />
     );
   }
 

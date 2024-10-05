@@ -25,7 +25,7 @@ export default function UserProfileBlock({ rotate, userName, profileImg, isWait,
       <span className={`${myTurn ? 'animate-ping' : 'hidden'} absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
 
       <Image src={profileImg ? profileImg : UserProfile} alt="Logo Image" priority className="z-10  w-[24px] sm:w-[34px] bg-[#080C23] p-[1px] h-auto border-[2px] border-[#60F8F8]  rounded-full" />
-      <p className={`border-[2px] border-[#B5B5B5] rounded-full sm:text-base text-xs  text-white ${rotate ? 'whitespace-nowrap pt-10 pr-1 pb-4 pl-1  ml-auto mt-[-35px]' : 'py-1 pl-10 pr-4 sm:ml-[-35px] ml-[-25px] '} ${isWait ? 'bg-[#D99D02] text-white border-[#D99D02]' : ''}`} style={styles} >{isWait ? 'Waiting...' : userName}</p>
+      <p className={`border-[2px] border-[#B5B5B5] truncate rounded-full sm:text-base text-xs  text-white ${rotate ? 'whitespace-nowrap max-h-44 pt-10 pr-1 pb-4 pl-1  ml-auto mt-[-35px]' : 'py-1 pl-10 pr-4 sm:ml-[-35px] ml-[-25px] '} ${isWait ? 'bg-[#D99D02] text-white border-[#D99D02]' : ''}`} style={styles} >{isWait ? 'Waiting...' : userName}</p>
       {
         showChatBubble ? (<>
           <SpeechBubble className={` ${speechBubbleClasses} `} arrowSide={arrowSide} >
