@@ -31,7 +31,7 @@
   }
 
   .btn-text {
-   @apply text-white font-bold text-sm md:text-base
+   @apply text-white font-bold text-xs md:text-base
   }
   .scale-15{
     transform: scale(1.1);
@@ -131,6 +131,10 @@
       @apply top-[-50px] opacity-0;
     }
   }
+
+  body {
+    @apply lg:!overflow-y-auto
+  }
 }
 
 @font-face {
@@ -171,8 +175,7 @@
 body {
 padding: 0;
 margin: 0; 
-overflow-y:auto !important;
-/* overflow-y: hidden; */
+/* overflow-y:auto !important; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'satoshi', Arial, Helvetica, sans-serif !important;
@@ -193,6 +196,17 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
+/* .card {
+  width: 100px; 
+  height: 150px; 
+  background-color: #ffcc99; 
+  border: 5px solid #cc6600; 
+  border-radius: 15px; 
+  box-shadow: 5px 5px 0px 0px #e0af7d;
+} */
+
 
 
 

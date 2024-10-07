@@ -14,8 +14,8 @@ import Circle3 from '@/assets/images/cards/circle-1/3.png';
 import Circle4 from '@/assets/images/cards/circle-1/4.png';
 import Circle5 from '@/assets/images/cards/circle-1/5.png';
 import Circle6 from '@/assets/images/cards/circle-1/6.png';
-import Circle7 from '@/assets/images/cards/circle-1/7.png';
-import Circle8 from '@/assets/images/cards/circle-1/8.png';
+import Circle7 from '@/assets/images/cards/circle-1/circle7.png';
+import Circle8 from '@/assets/images/cards/circle-1/circle8.png';
 import Circle9 from '@/assets/images/cards/circle-1/9.png';
 
 import Character1 from '@/assets/images/cards/characters-1/1.png';
@@ -28,9 +28,9 @@ import Character7 from '@/assets/images/cards/characters-1/7.png';
 import Character8 from '@/assets/images/cards/characters-1/8.png';
 import Character9 from '@/assets/images/cards/characters-1/9.png';
 
-import DragonGreen from '@/assets/images/cards/dragons/green.png';
-import DragonRed from '@/assets/images/cards/dragons/red.png';
-import DragonWhite from '@/assets/images/cards/dragons/white.png';
+import DragonGreen from '@/assets/images/cards/dragons-1/green.png';
+import DragonRed from '@/assets/images/cards/dragons-1/red.png';
+import DragonWhite from '@/assets/images/cards/dragons-1/white.png';
 
 import WindEast from '@/assets/images/cards/winds-1/east.png';
 import WindWest from '@/assets/images/cards/winds-1/west.png';

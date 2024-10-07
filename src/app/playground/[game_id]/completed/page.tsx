@@ -9,11 +9,12 @@ import ImgAvatar from "@/assets/images/avatar.png";
 import CARDS from "@/helpers/cardsList";
 import IconLeftArrow from "@/assets/images/svg/left_arrow.svg";
 import Loader from "@/components/Loader";
+import CardComponent from "@/components/Cards/CardComponent";
 
 export default function PlaygroundCompleted() {
     const params = useParams();
     const router = useRouter();
-    const [isProcessing, setIsProcessing] = useState(true);
+    const [isProcessing, setIsProcessing] = useState(false);
     const [wonPlayerDetails, setWonPlayerDetails] = useState<{
         playerName: string,
         tiles: string[],
@@ -63,46 +64,49 @@ export default function PlaygroundCompleted() {
         <div className="h-screen bg-black relative">
             <MahjongModel open={true} extraCss="xs:w-[332px] sm:w-[450px]">
                 {
-                    isProcessing ? <Loader/> :
+                    isProcessing ? <Loader /> :
 
-                <div>
-                    <span className="flex justify-center items-center">
-                        <Image
-                            src={ImgAvatar}
-                            alt="Avatar Image"
-                            className="rounded-full border-[#60F8F8] w-[43px] h-auto object-cover border"
-                        />
-
-                        <p className="text-white font-medium text-base py-[14.5px] ml-[14px]">
-                            {wonPlayerDetails?.playerName} won the game
-                        </p>
-                    </span>
-                    <div className="grid grid-cols-7 gap-1 mt-7">
-                        {wonPlayerDetails?.tiles.map((tile, index) => {
-                            return (
+                        <div>
+                            <span className="flex justify-center items-center">
                                 <Image
-                                    key={index}
-                                    src={CARDS[tile]}
-                                    alt="Flower Image"
-                                    className="w-[38] min-h-[28.5] h-full"
+                                    src={ImgAvatar}
+                                    alt="Avatar Image"
+                                    className="rounded-full border-[#60F8F8] w-[43px] h-auto object-cover border"
                                 />
-                            )
-                        })}
-                    </div>
-                    <button onClick={() => router.push('/')} className="w-full mt-7 py-[14px] rounded-9 border border-white border-opacity-60">
 
-                        <span className="flex justify-center items-center">
-                            <Image
-                                src={IconLeftArrow}
-                                alt="Left Arrow Icon"
-                                className="w-4 h-auto mr-[10px]"
-                            />
-                            <span className="text-white opacity-60 font-medium text-base">
-                                Back Home
+                                <p className="text-white font-medium text-base py-[14.5px] ml-[14px]">
+                                    {wonPlayerDetails?.playerName} won the game
+                                </p>
                             </span>
-                        </span>
-                    </button>
-                </div>
+                            <div className="flex flex-wrap justify-center items-center gap-2 mt-7">
+                                {wonPlayerDetails?.tiles.map((tile, index) => {
+                                    return (
+                                        
+                                        <CardComponent
+                                            key={index}
+                                            cardId={tile}
+                                            myTurn={false}
+                                            canDrop={false}
+                                            isGameStarted={true}
+                                            isPong={null}
+                                            isProcessing={false} />
+                                    )
+                                })}
+                            </div>
+                            <button onClick={() => router.push('/')} className="w-full mt-7 py-[14px] rounded-9 border border-white border-opacity-60">
+
+                                <span className="flex justify-center items-center">
+                                    <Image
+                                        src={IconLeftArrow}
+                                        alt="Left Arrow Icon"
+                                        className="w-4 h-auto mr-[10px]"
+                                    />
+                                    <span className="text-white opacity-60 font-medium text-base">
+                                        Back Home
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
                 }
             </MahjongModel>
         </div>

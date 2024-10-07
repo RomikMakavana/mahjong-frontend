@@ -42,18 +42,19 @@ type Players = {
 };
 
 export default function GameLayout() {
-  const [orientationType, setOrientationType] = useState<string>('');
   const [gameId, setGameId] = useState<string>('');
   const [user, setUser] = useState<MahjongUser | null>(null);
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [mainPlayer, setMainPlayer] = useState<MainPlayer | null>(null);
   const [gamePlaygroundDetails, setGamePlaygroundDetails] = useState<PlaygroundDetails | null>(null);
   const [seconds, setSeconds] = useState(0);
-  const [isFullScreenModeon, setIsFullScreenModeon] = useState(false);
+  const [isFullScreenModeon, setIsFullScreenModeon] = useState(true);
   const [gamePlayersData, setGamePlayersData] = useState<Players>({});
-  const [openMatchStartedModal, setOpenMatchStartedModal] = useState(true);
+  const [openMatchStartedModal, setOpenMatchStartedModal] = useState(false);
   const [informationMessage, setInformationMessage] = useState<string | null>(null);
-  const [openContinueGameModal, setOpenContinueGameModal] = useState(false)
+  const [openExitGameComfirmationModal, setOpenExitGameConfirmationGameModal] = useState(false);
+  const [openInformationModal, setOpenInformationModal] = useState(false);
+  const [currentOrientation, setCurrentOrientation] = useState('');
 
   const [otherDetails, setOtherDetails] = useState<{ label: string, action: () => void }[]>([])
 
@@ -210,27 +211,28 @@ export default function GameLayout() {
   }, [gameData]); // Dependency array includes gameId
 
   const handleOrientationChange = () => {
-      setOrientationType(screen.orientation.type);
-
-        if ((isMobile || isTablet) && screen.orientation.type == 'portrait-primary') {
-          setOpenContinueGameModal(true);
-        }
-  
-        if(screen.orientation.type == 'landscape-primary' && isFullScreenModeon == true) {
-          setOpenContinueGameModal(false);
-        }
-
-        if(screen.orientation.type == 'landscape-primary' && isFullScreenModeon == false){
-          setOpenContinueGameModal(true);
-        }
+    setCurrentOrientation(screen.orientation.type);
+    if ((isMobile || isTablet) && screen.orientation.type == 'portrait-primary') {
+      // setOpenContinueGameModal(true);
+      setOpenExitGameConfirmationGameModal(false);
+      setOpenInformationModal(true);
+      // setIsFullScreenModeon(false);
+    }
+    if ((isMobile || isTablet) && screen.orientation.type == 'landscape-primary') {
+      // setOpenContinueGameModal(true);
+      setOpenInformationModal(false);
+      setIsFullScreenModeon(false);
+      
+    }
+    fullscreenChangeHandler()
   }
 
   const fullscreenChangeHandler = () => {
     if (document.fullscreenElement) {
       setIsFullScreenModeon(true);
-      setOpenContinueGameModal(false);
+      setOpenExitGameConfirmationGameModal(false);
     } else {
-      setOpenContinueGameModal(true);
+      setOpenExitGameConfirmationGameModal(true);
       setIsFullScreenModeon(false);
     }
   }
@@ -239,30 +241,26 @@ export default function GameLayout() {
     return gameData !== null ? !gameData.is_game_started : true;
   };
 
-  // useEffect(() => {
-  //   if(isFullScreenModeon) {
-  //     setOpenContinueGameModal(false);
-  //   }else {
-  //     setOpenContinueGameModal(true);
-  //   }
-  // },[isFullScreenModeon])
-
   const tournOnFullScreenMode = async () => {
     const res = await helpers.handleFullscreenAndLock();
     setIsFullScreenModeon(true);
-    setOpenContinueGameModal(false);
+    setOpenExitGameConfirmationGameModal(false);
   }
 
 
   useEffect(() => {
-    tournOnFullScreenMode();
-
-    // handleOrientationChange();
-    screen.orientation.addEventListener('change', handleOrientationChange);
-    document.addEventListener('fullscreenchange', fullscreenChangeHandler);
-    document.addEventListener('webkitfullscreenchange', fullscreenChangeHandler); // Safari
-    document.addEventListener('mozfullscreenchange', fullscreenChangeHandler); // Firefox
-    document.addEventListener('MSFullscreenChange', fullscreenChangeHandler); // Internet Explorer
+    if(isMobile || isTablet) {
+      tournOnFullScreenMode();
+      screen.orientation.addEventListener('change', handleOrientationChange);
+      document.addEventListener('fullscreenchange', fullscreenChangeHandler);
+      document.addEventListener('webkitfullscreenchange', fullscreenChangeHandler); // Safari
+      document.addEventListener('mozfullscreenchange', fullscreenChangeHandler); // Firefox
+      document.addEventListener('MSFullscreenChange', fullscreenChangeHandler); // Internet Explorer
+      setTimeout(() => {
+        handleOrientationChange();
+        fullscreenChangeHandler();
+      }, 1500)
+    }
     return () => {
       screen.orientation.removeEventListener('change', handleOrientationChange);
       document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
@@ -477,10 +475,10 @@ export default function GameLayout() {
 
               {/**Playground */}
               <div className="w-full">
-              <p className="text-white">{screen.orientation.type} {openContinueGameModal ? 'true' : 'false'}</p>
+                {/* <p className="text-white"> full Screen {isFullScreenModeon ? 'true' : 'false'} <br/> orientation {currentOrientation}</p> */}
                 {
                   Object.keys(gamePlayersData).length > 0 &&
-                  <div className="playground flex flex-col h-full justify-between ml-5 mr-5 sm:pt-9 sm:pb-7 pb-4 pt-4">
+                  <div className="playground flex flex-col h-full justify-between mx-2 md:ml-5 md:mr-5  py-4 md:pb-7 md:pt-7">
                     <div className="flex justify-between another-user-block h-[100%]">
                       {/* User 2 Block */}
                       {
@@ -545,7 +543,6 @@ export default function GameLayout() {
                   </div>
                 }
                 <div>
-                  <p>{orientationType}</p>
                 </div>
               </div>
             </div>
@@ -568,16 +565,21 @@ export default function GameLayout() {
         </Fragment>
       }
 
-      <MahjongModel open={openContinueGameModal} extraCss="w-[363px]">
+      <MahjongModel open={openExitGameComfirmationModal} extraCss="w-[400px]">
         <div>
           <div className="flex flex-col gap-4 items-center">
-            <h2 className="text-2xl font-bold text-white">Continue Game?</h2>
+            <h2 className="text-2xl font-bold text-white">Are you sure you want to exit the game?</h2>
           </div>
           <div className='flex items-center gap-2 mt-5'>
-            <button onClick={() => router.replace('/')} className='flex-1 text-white py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9 max-xs:text-sm'>Close</button>
+            <button onClick={() => router.replace('/')} className='flex-1 text-white py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9 max-xs:text-sm'>Exit</button>
             <button onClick={() => tournOnFullScreenMode()} className='flex-1 bg-brand-blue py-3.5 text-base font-bold text-white rounded-9 max-xs:text-sm'>Continue</button>
           </div>
         </div>
+      </MahjongModel>
+      <MahjongModel open={openInformationModal} extraCss="w-[400px]">
+          <div className="">
+            <h2 className="text-2xl font-bold text-white">Please rotate your phone for batter user experience.</h2>
+          </div>
       </MahjongModel>
     </div>
   );

@@ -17,9 +17,9 @@ export default function GlobalCard(props: Props) {
     const { cardId, myTurn, canDrop, isGameStarted, isPong, action, isProcessing } = props;
 
   const dropCard = () => {
-    if (myTurn && canDrop && !isProcessing) {
+    // if (myTurn && canDrop && !isProcessing) {
       action && action();
-    }
+    // }
   };
 
   return (
@@ -39,7 +39,7 @@ export default function GlobalCard(props: Props) {
         `}
     >
       { props.isGameStarted ? <div
-        className={`relative bg-contain bg-no-repeat  w-[40px] h-[60px] between-lg-and-2xl:w-[60px] between-lg-and-2xl:h-[80px] pl-1 pr-2 py-2
+        className={`relative bg-contain bg-no-repeat w-8 h-[50px] md:w-[40px] md:h-[60px] between-lg-and-2xl:w-[60px] between-lg-and-2xl:h-[80px] pr-[2px] pb-[5px] pt-[6px] md:pl-1 md:pr-2 md:py-2
             ${isPong === null && "bg-tile-image"}
             ${isPong === true && "bg-pong-tile-image"} 
             ${isPong === false && "bg-gong-tile-image"}
@@ -50,11 +50,11 @@ export default function GlobalCard(props: Props) {
             src={CARDS[cardId]}
             alt="Card"
             priority
-            className="h-[35px] between-lg-and-2xl:h-[55px] object-contain"
+            className="h-6 md:h-[35px] between-lg-and-2xl:h-[55px] object-contain"
           />
         </div>
       </div> :
-        <Image src={CARDS["waiting-card"]} alt="Card" priority className={`w-[35px] sm:w-[60px] h-full`} /> 
+        <Image src={CARDS["waiting-card"]} alt="Card" priority className={`w-[35px] between-lg-and-2xl:w-[60px] h-full`} /> 
       
     }
 
@@ -63,7 +63,9 @@ export default function GlobalCard(props: Props) {
                 ${isPong === false ? 'mix-blend-difference' : ''}
                 `} />            */}
       {isProcessing && isProcessing === true && (
-        <Loader customClass="!w-4 !h-4" withoutBackground={true} />
+        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+          <Loader customClass="!w-4 !h-4" withoutBackground={true} />
+        </div>
       )}
     </div>
 

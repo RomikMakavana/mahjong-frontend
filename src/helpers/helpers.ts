@@ -1,4 +1,4 @@
-import { isTablet, isMobile } from 'react-device-detect';
+import { isTablet, isMobile, } from 'react-device-detect';
 
 
 export const helpers = {

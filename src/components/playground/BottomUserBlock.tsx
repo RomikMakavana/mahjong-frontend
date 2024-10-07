@@ -43,18 +43,12 @@ export default function BottomUserBlock({
   const [pickedFor, setPickedFor] = useState<PickedFor>(null);
   const [droppedCardIndex, setDroppedCardIndex] = useState<number | null>(null);
 
+
   const { notification } = useNotifications();
 
   const params = useParams();
 
   const { game_id } = params;
-
-
-  useEffect(() => {
-    console.log('droppedCardIndex', droppedCardIndex);
-    console.log('isCardPicked', isCardPicked);
-    console.log('cardPickAndDropProcessing', cardPickAndDropProcessing);
-  }, [droppedCardIndex, isCardPicked, cardPickAndDropProcessing])
 
   const beginGame = async () => {
     setIsProcessing(true);
@@ -77,7 +71,7 @@ export default function BottomUserBlock({
     }
     setCardPickAndDropProcessing(false);
     setPickedFor(null);
-    setDroppedCardIndex(null);
+    // setDroppedCardIndex(null);
 
   }, [gamePlaygroundDetails])
 
@@ -127,8 +121,9 @@ export default function BottomUserBlock({
     })
 
 
-    const dropCard = async (cardId: string, index:number) => {
-      if(isCardPicked){
+    const dropCard = async (cardId: string, index: number) => {
+
+      if (isCardPicked) {
         setCardPickAndDropProcessing(true);
         setDroppedCardIndex(index);
         try {
@@ -142,13 +137,14 @@ export default function BottomUserBlock({
         } catch (error) {
           console.log(error);
         }
-      }else {
+      } else {
         notification('Please pick a card first', 'info');
       }
     }
 
     return (
       <div className='flex gap-[2px]'>
+
         {
           gameData.is_game_started && mainPlayer ? (
             <>
@@ -188,15 +184,15 @@ export default function BottomUserBlock({
 
   return (
     <>
-      <div className="main-user-block flex flex-col items-center sm:gap-5 gap-3">
+      <div className="main-user-block flex flex-col items-center  md:gap-5">
         {cards}
         <div className="user-block w-full flex justify-between items-center">
           <div className="userSection flex items-center gap-3">
             <PickCard flowerCardList={mainPlayer?.flower_card_list.length} isAnyPlayerWaiting={waiting} />
             <UserProfileBlock showChatBubble={showBubbleChat} userName={playerData.player_name} playerData={playerData} myTurn={myTurn} profileImg={playerData.profile_img} isWait={waiting && playerData.user_id == null} rotate={false} speechBubbleClasses='bottom-[150%] mb-3 left-[-20%]' arrowSide='bottom' />
-            <div className="flex items-center sm:mt-2">
+            {/* <div className="flex items-center sm:mt-2">
               <Image src={SmileEmoji} alt="Smile Image" priority className="z-10 w-[25px] sm:w-[45px] p-[4px] sm:p-[10px] h-auto border-[1px] border-[#ED9108]  rounded-full" />
-            </div>
+            </div> */}
 
           </div>
           {
@@ -208,15 +204,15 @@ export default function BottomUserBlock({
           {
             gameData.is_game_started && myTurn &&
             // true &&
-            <div className="flex gap-2 ">
-              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('rest', 'normal')} className="flex relative flex-1 justify-center items-center  border border-brand-purple rounded-lg min-w-24 h-12 xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
+            <div className="flex md:gap-2 ">
+              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('rest', 'normal')} className="flex relative flex-1 justify-center items-center  border border-brand-purple rounded-lg min-w-16 md:min-w-24 h-10 md:h-12 xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
                 {
                   pickedFor === 'normal' ?
                     <Loader customClass='!w-4 !h-4' withoutBackground={true} /> :
                     <span className="btn-text">Pick</span>
                 }
               </button>
-              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('discarded', 'pong')} className="flex flex-1 justify-center items-center bg-[#DD6C05] relative min-w-24 h-12 rounded-lg xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
+              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('discarded', 'pong')} className="flex flex-1 justify-center items-center bg-[#DD6C05] relative min-w-16 md:min-w-24 h-10 md:h-12 rounded-lg xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
                 {
                   pickedFor === 'pong' ?
                     <Loader customClass='!w-4 !h-4' withoutBackground={true} /> :
@@ -224,7 +220,7 @@ export default function BottomUserBlock({
 
                 }
               </button>
-              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('discarded', 'seung')} className="flex flex-1 justify-center items-center relative bg-[#739A00] border min-w-24 h-12 border-[#739A00] rounded-lg xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
+              <button disabled={isCardPicked || cardPickAndDropProcessing} onClick={() => pickCard('discarded', 'seung')} className="flex flex-1 justify-center items-center relative bg-[#739A00] border min-w-16 md:min-w-24 h-10 md:h-12 border-[#739A00] rounded-lg xs:mr-3 disabled:opacity-55 disabled:cursor-not-allowed">
                 {
                   pickedFor === 'seung' ?
                     <Loader customClass='!w-4 !h-4' withoutBackground={true} /> :

@@ -10,8 +10,8 @@ export default function PickCard({ isAnyPlayerWaiting, flowerCardList }: PickCar
         <div className="flex flex-col items-end">
             {!isAnyPlayerWaiting && (
                 <>
-                    <p className="bg-[#FFF4E3] text-[#643B00] text-xs font-extrabold pl-1 pr-1 rounded-full z-10 ">{flowerCardList}</p>
-                    <Image src={FlowerCard1} alt="Logo Image" priority className="w-[27px] sm:w-[27px] h-auto mt-[-8px] mr-[5px] " />
+                    <p className="bg-[#FFF4E3] text-[#643B00] text-[8px] md:text-xs font-extrabold px-[3px] md:pl-1 md:pr-1 rounded-full z-10 ">{flowerCardList}</p>
+                    <Image src={FlowerCard1} alt="Logo Image" priority className="w-[15px] md:w-[27px] h-auto mt-[-5px] mr-[5px] md:mt-[-8px] md:mr-[5px] " />
                 </>
             )}
         </div>

@@ -17,14 +17,14 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
   const FlowerCardBlock = [];
   for (let i = 0; i < 12; i++) {
     FlowerCardBlock.push(
-      <Image key={`flower-${i}`} src={FlowerCard1} alt="Logo Image" priority className="w-[auto] sm:w-[auto] h-[28px] between-lg-and-2xl:h-[38px]" />
+      <Image key={`flower-${i}`} src={FlowerCard1} alt="Logo Image" priority className="w-[auto] sm:w-auto h-[18px] md:h-[28px] between-lg-and-2xl:h-[38px]" />
     );
   }
 
   const BacksideOfSoftwareHorizontalCardBlock = [];
   for (let i = 0; i < 8; i++) {
     BacksideOfSoftwareHorizontalCardBlock.push(
-      <Image key={`horizontal-${i}`} src={BacksideOfSoftwareCardHorizontal} alt="Logo Image" priority className="w-[auto] sm:w-[auto] h-[21px] between-lg-and-2xl:h-[28px]" />
+      <Image key={`horizontal-${i}`} src={BacksideOfSoftwareCardHorizontal} alt="Logo Image" priority className="w-[auto] sm:w-auto h-[14px] md:h-[21px] between-lg-and-2xl:h-[28px]" />
     );
   }
 
@@ -33,13 +33,13 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
   const BacksideOfSoftwareCardVerticalCardBlockBottom = [];
   for (let i = 0; i < 12; i++) {
     BacksideOfSoftwareCardVerticalCardBlock.push(
-      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[18px] between-lg-and-2xl:w-[28px] h-[auto]" />
+      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[14px] md:w-[18px] between-lg-and-2xl:w-[28px] h-[auto]" />
     );
   }
 
   for (let i = 0; i < 12; i++) {
     BacksideOfSoftwareCardVerticalCardBlockBottom.push(
-      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[18px] between-lg-and-2xl:w-[28px] h-[auto] rotate-180" />
+      <Image key={`vertical-${i}`} src={BacksideOfSoftwareCardVertical} alt="Logo Image" priority className="w-[14px] md:w-[18px] between-lg-and-2xl:w-[28px] h-[auto] rotate-180" />
     );
   }
 
@@ -57,7 +57,7 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
           </div>
         )}
 
-        <div className="  text-white flex  justify-between items-center gap-[6px]">
+        <div className="  text-white flex  justify-between items-center gap-1 md:gap-[6px]">
           <div className='left-block flex flex-col gap-[1px]'>
             {BacksideOfSoftwareHorizontalCardBlock}
           </div>
@@ -75,15 +75,15 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
                     <p className={`${animate ? 'animate-fade-out' : ''} absolute`}>{seconds}</p>
                   </div> : 
                     <div className="flex h-full items-center justify-center flex-row gap-2">
-                      <div className="w-3 h-3 rounded-full bg-light-blue  animate-bounce"></div>
-                      <div className="w-3 h-3 rounded-full bg-light-blue  animate-bounce [animation-delay:-.3s]"></div>
-                      <div className="w-3 h-3 rounded-full bg-light-blue  animate-bounce [animation-delay:-.5s]"></div>
+                      <div className="w-3 h-3 rounded-full bg-white  animate-bounce"></div>
+                      <div className="w-3 h-3 rounded-full bg-white  animate-bounce [animation-delay:-.3s]"></div>
+                      <div className="w-3 h-3 rounded-full bg-white  animate-bounce [animation-delay:-.5s]"></div>
                     </div>
                   }
                 </div> : <p className='m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>
-                    <Image src={MainUserCard} alt="Logo Image" priority className="w-[35px]   between-lg-and-2xl:w-[50px] h-auto m-1.5 between-lg-and-2xl:m-3" />
+                    <Image src={MainUserCard} alt="Logo Image" priority className="w-7 md:w-[35px]   between-lg-and-2xl:w-[50px] h-auto m-1.5 between-lg-and-2xl:m-3" />
                   </div>
                   {/* <span>Time left - 45</span> */}
                 </>
@@ -94,7 +94,7 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
               {BacksideOfSoftwareCardVerticalCardBlockBottom}
             </div>
           </div>
-          <div className='right-block flex flex-col gap-[1px]'>
+          <div className='right-block flex flex-col mr-[1px] gap-[1px]'>
             {BacksideOfSoftwareHorizontalCardBlock}
           </div>
         </div>
