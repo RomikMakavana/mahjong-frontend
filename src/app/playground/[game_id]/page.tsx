@@ -178,6 +178,7 @@ export default function GameLayout() {
     const dbRef = ref(AuthService.database, 'game-list/' + gameId);
     const unsubscribe = onValue(dbRef, (snapshot) => {
       const snapshotData = snapshot.val();
+      
       if (!snapshotData || snapshotData.is_game_started != gameData.is_game_started || snapshotData.status != gameData.status) {
         loadGameDetails();
       } else {
@@ -326,6 +327,22 @@ export default function GameLayout() {
           })
 
           setGamePlayersData(_players);
+        }
+
+        if(data.is_game_started == false) {
+          setOtherDetails(prevItems => {
+            // Ensure it is not added twice
+            if (prevItems.some(item => item.label === 'Get Code')) return prevItems;
+            return [
+              ...prevItems,
+              {
+                label: 'Get Code',
+                action: () => {
+                  setOpenMatchStartedModal(true);
+                },
+              },
+            ];
+          });
         }
 
         // setGameDetails(data);
@@ -559,7 +576,7 @@ export default function GameLayout() {
           {/* <CompleteGameModel /> */}
 
           {
-            gameDetails && gameDetails.is_game_started === false && gameDetails.game_code &&
+            gameDetails && gameDetails.is_game_started === false && gameDetails.game_code && openMatchStartedModal &&
             <MatchCreated open={openMatchStartedModal} closeModal={setOpenMatchStartedModal} gameCode={gameDetails.game_code} />
           }
         </Fragment>

@@ -75,12 +75,12 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
                     <p className={`${animate ? 'animate-fade-out' : ''} absolute`}>{seconds}</p>
                   </div> : 
                     <div className="flex h-full items-center justify-center flex-row gap-2">
-                      <div className="w-3 h-3 rounded-full bg-white  animate-bounce"></div>
-                      <div className="w-3 h-3 rounded-full bg-white  animate-bounce [animation-delay:-.3s]"></div>
-                      <div className="w-3 h-3 rounded-full bg-white  animate-bounce [animation-delay:-.5s]"></div>
+                      <div className="w-1.5 h-1.2 md:w-3 md:h-3 rounded-full bg-white  animate-bounce"></div>
+                      <div className="w-1.5 h-1.2 md:w-3 md:h-3 rounded-full bg-white  animate-bounce [animation-delay:-.3s]"></div>
+                      <div className="w-1.5 h-1.2 md:w-3 md:h-3 rounded-full bg-white  animate-bounce [animation-delay:-.5s]"></div>
                     </div>
                   }
-                </div> : <p className='m-auto'> Waiting for players...</p>) : (
+                </div> : <p className='max-md:text-xs m-auto'> Waiting for players...</p>) : (
                 <>
                   <div className='border-[#FFA62D] w-fit m-auto border-[0.3px] rounded-9 shadow-inner shadow-[#FFA62D]' style={{ boxShadow: 'inset 0 0 10px #f8a100' }}>
                     <Image src={MainUserCard} alt="Logo Image" priority className="w-7 md:w-[35px]   between-lg-and-2xl:w-[50px] h-auto m-1.5 between-lg-and-2xl:m-3" />

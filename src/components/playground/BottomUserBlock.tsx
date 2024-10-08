@@ -122,7 +122,6 @@ export default function BottomUserBlock({
 
 
     const dropCard = async (cardId: string, index: number) => {
-
       if (isCardPicked) {
         setCardPickAndDropProcessing(true);
         setDroppedCardIndex(index);
@@ -143,7 +142,7 @@ export default function BottomUserBlock({
     }
 
     return (
-      <div className='flex gap-[2px]'>
+      <div className='flex gap-[6px] md:gap-2'>
 
         {
           gameData.is_game_started && mainPlayer ? (
@@ -180,7 +179,7 @@ export default function BottomUserBlock({
         }
       </div>
     )
-  }, [mainPlayer, myTurn])
+  }, [mainPlayer, myTurn, droppedCardIndex])
 
   return (
     <>
@@ -198,7 +197,7 @@ export default function BottomUserBlock({
           {
             gameData.status == 'created' && gameData.is_game_started == false &&
             <div>
-              <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue px-5 py-2 font-medium text-sm rounded-9'>Start Game</button>
+              <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue text-xs px-3 py-1 md:px-5 md:py-2 font-medium md:text-sm rounded-9'>Start Game</button>
             </div>
           }
           {

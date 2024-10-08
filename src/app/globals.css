@@ -131,9 +131,18 @@
       @apply top-[-50px] opacity-0;
     }
   }
+  .pong-bg {
+    @apply bg-[#ffcc99] shadow-[3px_3px_0px_0px_#e0af7d] border-[3px] border-solid border-[#cc6600];
+  }
+  .default-bg {
+    @apply bg-[#F3E2C6] shadow-[3px_3px_0px_0px_#c4996e] border-[3px] border-solid border-[#F3E2C6];
+  }
 
+  .gong-bg {
+    @apply bg-[#edf3cf] shadow-[3px_3px_0px_0px_#94b024] border-[3px] border-solid border-[#94b024];
+  }
   body {
-    @apply lg:!overflow-y-auto
+    @apply between-lg-and-2xl:!overflow-y-auto
   }
 }
 
@@ -198,14 +207,6 @@ input[type=number] {
 }
 
 
-/* .card {
-  width: 100px; 
-  height: 150px; 
-  background-color: #ffcc99; 
-  border: 5px solid #cc6600; 
-  border-radius: 15px; 
-  box-shadow: 5px 5px 0px 0px #e0af7d;
-} */
 
 
 
