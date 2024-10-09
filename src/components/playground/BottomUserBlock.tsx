@@ -71,7 +71,7 @@ export default function BottomUserBlock({
     }
     setCardPickAndDropProcessing(false);
     setPickedFor(null);
-    // setDroppedCardIndex(null);
+    setDroppedCardIndex(null);
 
   }, [gamePlaygroundDetails])
 
@@ -89,6 +89,15 @@ export default function BottomUserBlock({
     } catch (error) {
       console.log(error);
 
+    }
+  }
+
+  const startGame = () => {
+    if(gameData.status == 'created'){
+      setOpenStartGameModel(true)
+    }else if(gameData.status == 'ready_to_start'){
+      setGameStartWithSystemPlayers(false);
+      beginGame();
     }
   }
 
@@ -195,9 +204,9 @@ export default function BottomUserBlock({
 
           </div>
           {
-            gameData.status == 'created' && gameData.is_game_started == false &&
+            ((gameData.status == 'created' || gameData.status == 'ready_to_start') && gameData.is_game_started == false) &&
             <div>
-              <button onClick={() => setOpenStartGameModel(true)} className='text-white bg-brand-blue text-xs px-3 py-1 md:px-5 md:py-2 font-medium md:text-sm rounded-9'>Start Game</button>
+              <button onClick={() => startGame()} className={`text-white bg-brand-blue text-xs px-3 py-1 md:px-5 md:py-2 font-medium md:text-sm rounded-9 ${gameData.status == 'ready_to_start' && 'animate-bounce'}`}>Start Game</button>
             </div>
           }
           {

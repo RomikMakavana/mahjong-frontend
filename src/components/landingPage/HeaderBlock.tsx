@@ -209,7 +209,7 @@ export const HeaderBlock = (props: HeaderBlockProps) => {
               />
                 <div>
                     <span className="text-white text-base font-bold">dakshjoshi66758</span>
-                    <p className="text-xs">romikmakavana532@gmail.com</p>
+                    <p className="text-xs">{AuthService.user?.email}</p>
                 </div>
             </div>
             <div>

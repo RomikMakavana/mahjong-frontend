@@ -71,7 +71,7 @@ export default function CenterCardBlock({ isAnyPlayerWaiting, gameStatus, second
                 <div className={`text-4xl h-full font-bold`}>
                   {seconds != 0 ?
                   <div className='relative h-full flex justify-center items-center' >
-                    <p className='absolute top-4 text-xl'>Match starts in</p>
+                    <p className='absolute top-2 between-lg-and-2xl:top-4 text-lg  md:text-xl between-lg-and-2xl:text-xl'>Match starts in</p>
                     <p className={`${animate ? 'animate-fade-out' : ''} absolute`}>{seconds}</p>
                   </div> : 
                     <div className="flex h-full items-center justify-center flex-row gap-2">

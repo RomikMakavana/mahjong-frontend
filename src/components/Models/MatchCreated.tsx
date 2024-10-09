@@ -34,15 +34,15 @@ export default function MatchCreated(props: Props) {
 
             <div className="w-full">
               <Image
+                width={30}
+                height={30}
                 src="/images/checklist.avif"
-                width={53}
-                height={53}
                 alt="Checklist"
-                className="mx-auto"
+                className="mx-auto max-lg:w-9 max-lg:h-9 w-[53px] h-[53px]"
               />
 
               <div className="w-full text-center">
-                <h2 className="mt-3.5 text-lg sm:text-xl text-white font-bold">
+                <h2 className="mt-1 lg:mt-3.5 text-base lg:text-xl text-white font-bold">
                   Match started
                 </h2>
                 <p className="mt-[6px] font-medium text-center text-xs sm:text-sm text-white opacity-50">
@@ -51,7 +51,7 @@ export default function MatchCreated(props: Props) {
               </div>
             </div>
 
-            <div className="w-full mt-7 py-[15.5px] rounded-[5px] border border-dashed border-pale-lavender border-opacity-40">
+            <div className="w-full mt-4 lg:mt-7 py-3 lg:py-[15.5px] rounded-[5px] border border-dashed border-pale-lavender border-opacity-40">
 
               <span className="flex justify-center items-center">
 
@@ -74,12 +74,12 @@ export default function MatchCreated(props: Props) {
 
       <div className="w-full">
 
-        <button onClick={() => props.closeModal(false)} className="w-full bg-brand-blue py-3.5 text-base font-bold text-white rounded-9">
+        <button onClick={() => props.closeModal(false)} className="w-full bg-brand-blue py-2 lg:py-3.5 text-base font-bold text-white rounded-9">
           Lets start
         </button>
 
 
-        <button onClick={() => props.closeModal(false)} className="w-full text-white mt-2.5 py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9">
+        <button onClick={() => props.closeModal(false)} className="w-full text-white mt-2.5 py-2 lg:py-3.5 text-sm sm:text-base font-bold opacity-60 border border-white border-opacity-10 rounded-9">
           Close
         </button>
 
