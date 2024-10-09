@@ -51,11 +51,14 @@ type Players = {
 export default function GameLayout() {
   const [gameId, setGameId] = useState<string>("");
   const [user, setUser] = useState<MahjongUser | null>(null);
+
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [mainPlayer, setMainPlayer] = useState<MainPlayer | null>(null);
   const [gamePlaygroundDetails, setGamePlaygroundDetails] =
     useState<PlaygroundDetails | null>(null);
+
   const [seconds, setSeconds] = useState(0);
+  const [turnSeconds, setTurnSeconds] = useState(0);
   const [isFullScreenModeon, setIsFullScreenModeon] = useState(true);
   const [gamePlayersData, setGamePlayersData] = useState<Players>({});
   const [openMatchStartedModal, setOpenMatchStartedModal] = useState(false);
@@ -96,20 +99,35 @@ export default function GameLayout() {
   useEffect(() => {
     // Set up the timer
     const timer = setInterval(() => {
-      const _second =
-        gameData !== null &&
-        gameData.is_game_started == false &&
-        gameData.status == "ready_to_start" &&
-        gameData.will_starts_at !== null &&
-        gameData.will_starts_at > 0
+      let _second = 0;
+      let _turnSeconds = 0;
+
+      if (gameData !== null && gameData.is_game_started == false) {
+        _second = gameData.status == "ready_to_start" &&
+          gameData.will_starts_at !== null &&
+          gameData.will_starts_at > 0
           ? gameData.will_starts_at - Number(moment().format("X"))
           : 0;
+      }
+
+      if(gameData !== null && gamePlaygroundDetails) {
+        _turnSeconds = gamePlaygroundDetails && gamePlaygroundDetails.last_term_ends_at > 0
+          ? gamePlaygroundDetails.last_term_ends_at - Number(moment().format("X")) : 0;
+        
+        if(_turnSeconds < 0) _turnSeconds = 0;  
+        if(_turnSeconds > gameData.turn_timeout) _turnSeconds = gameData.turn_timeout;  
+
+      }
+
       setSeconds((prevSeconds) => (_second < 0 ? 0 : _second));
+      // if(gamePlaygroundDetails) console.log("turnSeconds", gamePlaygroundDetails.last_term_ends_at, Number(moment().format("X")), gamePlaygroundDetails.last_term_ends_at- Number(moment().format("X")), _turnSeconds);
+      setTurnSeconds((prevSeconds) => (_turnSeconds));
+
     }, 1000);
 
     // Clean up the timer
     return () => clearInterval(timer);
-  }, [seconds, gameData]);
+  }, [seconds, gameData, gamePlaygroundDetails]);
 
   // const [gamePlayersData, setGamePlayersData] = useState<{ [kay: string]: Player }>({
   //   player1: {
@@ -166,11 +184,13 @@ export default function GameLayout() {
         game_code: snapshotData?.game_code || "",
         current_turn_completed: snapshotData?.current_turn_completed || false,
         current_turn_player: snapshotData?.current_turn_player || "",
-        current_turn_status: snapshotData?.current_turn_status || "",
+        current_turn_status: snapshotData?.current_turn_status || null,
+        discard_card: snapshotData?.discard_card || "",
         is_game_completed: snapshotData?.is_game_completed || false,
         is_game_started: snapshotData?.is_game_started || false,
         next_player: snapshotData?.next_player || "",
         status: snapshotData?.status || "",
+        last_term_ends_at: snapshotData?.last_term_ends_at || 0,
       });
     });
 
@@ -320,9 +340,16 @@ export default function GameLayout() {
       gamePlaygroundDetails !== null &&
       gamePlaygroundDetails.is_game_started == true
     ) {
-      return gamePlaygroundDetails.current_turn_completed == true
-        ? gamePlaygroundDetails.next_player
-        : gamePlaygroundDetails.current_turn_player;
+      return gamePlaygroundDetails.current_turn_player;
+    }
+    return null;
+  };
+  const discardCardID = () => {
+    if (
+      gamePlaygroundDetails !== null &&
+      gamePlaygroundDetails.is_game_started == true
+    ) {
+      return gamePlaygroundDetails.discard_card;
     }
     return null;
   };
@@ -340,64 +367,65 @@ export default function GameLayout() {
         } else {
           // let user = await AuthService.getAuthDetails();
 
-            let _player_in_sequence = reorderList(
-              data.players,
-              user?.apiUser._id as string
-            );
-            let _players: Players = {};
-            for (const key in _player_in_sequence) {
-              const player = _player_in_sequence[key];
-              _players[player._id] = {
-                _id: player._id,
-                player_name: player.player_name,
-                player_index: player.player_index,
-                user_id: player.user_id,
-                profile_img: "",
-              };
-            }
-  
-            if (!data.is_game_started && data.usersPlayingOtherGames.length > 0) {
-              const getPlayingOtherGamesUsersName = data.players
-                .filter((player) =>
-                  data.usersPlayingOtherGames.includes(player.user_id as string)
-                )
-                .map((player) => player.player_name);
-              setInformationMessage(
-                `${getPlayingOtherGamesUsersName.length > 1 ? 'Players' : 'Player'}  ${getPlayingOtherGamesUsersName.join(
-                  ", "
-                )} ${getPlayingOtherGamesUsersName.length > 1 ? 'are' : 'is'} playing other games.`
-              );
-            }
-  
-            setGameData({
-              is_game_completed: data.is_game_completed,
-              is_game_started: data.is_game_started,
-              game_code: data.game_code,
-              status: data.status,
-              player_in_sequence: Object.values(_players),
-              will_starts_at: data.not_started_details.begin_time,
-            });
-  
-            setGamePlayersData(_players);
+          let _player_in_sequence = reorderList(
+            data.players,
+            user?.apiUser._id as string
+          );
+          let _players: Players = {};
+          for (const key in _player_in_sequence) {
+            const player = _player_in_sequence[key];
+            _players[player._id] = {
+              _id: player._id,
+              player_name: player.player_name,
+              player_index: player.player_index,
+              user_id: player.user_id,
+              profile_img: "",
+            };
+          }
 
-            if (data.is_game_started == false) {
-              setOtherDetails((prevItems) => {
-                // Ensure it is not added twice
-                if (prevItems.some((item) => item.label === "Get Code"))
-                  return prevItems;
-                return [
-                  ...prevItems,
-                  {
-                    label: "Get Code",
-                    action: () => {
-                      setOpenMatchStartedModal(true);
-                    },
+          if (!data.is_game_started && data.usersPlayingOtherGames.length > 0) {
+            const getPlayingOtherGamesUsersName = data.players
+              .filter((player) =>
+                data.usersPlayingOtherGames.includes(player.user_id as string)
+              )
+              .map((player) => player.player_name);
+            setInformationMessage(
+              `${getPlayingOtherGamesUsersName.length > 1 ? 'Players' : 'Player'}  ${getPlayingOtherGamesUsersName.join(
+                ", "
+              )} ${getPlayingOtherGamesUsersName.length > 1 ? 'are' : 'is'} playing other games.`
+            );
+          }
+
+          setGameData({
+            is_game_completed: data.is_game_completed,
+            turn_timeout: data.turn_timeout,
+            is_game_started: data.is_game_started,
+            game_code: data.game_code,
+            status: data.status,
+            player_in_sequence: Object.values(_players),
+            will_starts_at: data.not_started_details.begin_time,
+          });
+
+          setGamePlayersData(_players);
+
+          if (data.is_game_started == false) {
+            setOtherDetails((prevItems) => {
+              // Ensure it is not added twice
+              if (prevItems.some((item) => item.label === "Get Code"))
+                return prevItems;
+              return [
+                ...prevItems,
+                {
+                  label: "Get Code",
+                  action: () => {
+                    setOpenMatchStartedModal(true);
                   },
-                ];
-              });
-            }
-  
-  
+                },
+              ];
+            });
+          }
+
+
           // setGameDetails(data);
           // if (!data.is_game_started) {
           //   setOpenMatchStartedModal(true);
@@ -415,32 +443,32 @@ export default function GameLayout() {
           //     ];
           //   });
           // }
-  
+
           // //Set players.
           // const players = data.players.map((player) => ({ userName: player.player_name, profileImg: UserProfile, isWait: false, showChatBubble: false, player_id: player._id, userId: player.user_id }))
           // console.log('[playears', players);
-  
+
           // const mainPlayer = players.find((player) => player.userId != null);
           // const otherPlayers = players.filter((player) => player.userId == null);
           // const playersList: Players = {}
           // if (mainPlayer) {
           //   playersList['mainPlayer'] = mainPlayer
           // }
-  
+
           // otherPlayers.forEach((player, index) => {
           //   playersList[`player${index + 1}`] = player
           // })
-  
+
           // setGamePlayersData({ ...playersList })
           // console.log('ploayear', playersList);
-          }
+        }
       } else {
         /**
          * TODO: Game not found UI
          */
-        if(res.data.code == 'you_are_not_game_player' || res.data.code == 'not_found' || res.data.code == 'invalid_id'){
+        if (res.data.code == 'you_are_not_game_player' || res.data.code == 'not_found' || res.data.code == 'invalid_id') {
           router.replace(`/playground/${gameId}/info`);
-        }else {
+        } else {
           router.replace('/')
         }
       }
@@ -591,7 +619,7 @@ export default function GameLayout() {
                               showBubbleChat={false}
                               playerData={
                                 gamePlayersData[
-                                  gameData.player_in_sequence[2]._id
+                                gameData.player_in_sequence[2]._id
                                 ]
                               }
                               waiting={!gameData.is_game_started}
@@ -602,9 +630,13 @@ export default function GameLayout() {
                         </div>
                         <div className="h-full flex justify-center flex-col">
                           <CenterCardBlock
+                          gameData={gameData}
                             gameStatus={gameData.status}
                             seconds={seconds}
+                            turnSeconds={turnSeconds}
                             isAnyPlayerWaiting={!gameData.is_game_started}
+                            card_id={discardCardID() ?? ''}
+                            gamePlaygroundDetails={gamePlaygroundDetails}
                           />
                         </div>
                       </div>
@@ -619,7 +651,7 @@ export default function GameLayout() {
                               showBubbleChat={false}
                               playerData={
                                 gamePlayersData[
-                                  gameData.player_in_sequence[1]._id
+                                gameData.player_in_sequence[1]._id
                                 ]
                               }
                               waiting={!gameData.is_game_started}
@@ -649,9 +681,9 @@ export default function GameLayout() {
                     )}
                   </div>
                 )}
-                
 
-                
+
+
               </div>
             </div>
           </div>

@@ -63,11 +63,10 @@ export default function BottomUserBlock({
   }
 
   useEffect(() => {
-    console.log('gamePlaygroundDetails', gamePlaygroundDetails);
-    if (gamePlaygroundDetails && gamePlaygroundDetails.current_turn_completed === false) {
-      setIsCardPicked(true);
-    } else {
+    if (gamePlaygroundDetails && gamePlaygroundDetails.current_turn_status === null) {
       setIsCardPicked(false);
+    } else {
+      setIsCardPicked(true);
     }
     setCardPickAndDropProcessing(false);
     setPickedFor(null);

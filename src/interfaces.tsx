@@ -23,6 +23,7 @@ export interface Notification {
 export interface GameData {
   is_game_completed: boolean;
   is_game_started: boolean;
+  turn_timeout: number;
   game_code: string;
   status: string;
   player_in_sequence: PlayerDetails[];
@@ -34,10 +35,12 @@ export interface PlaygroundDetails {
   game_code: string;
   current_turn_completed: boolean;
   current_turn_player: string;
-  current_turn_status: string;
+  current_turn_status: string | null;
+  last_term_ends_at: number;
   is_game_completed: boolean;
   is_game_started: boolean;
   next_player: string;
+  discard_card: string;
   status: string;
 }
 
@@ -60,6 +63,7 @@ export interface GameDetails {
   usersPlayingOtherGames: string[];
   status: string;
   game_code: string;
+  turn_timeout: number;
   is_game_started: boolean;
   start_with_system_players: boolean;
   is_game_completed: boolean;
